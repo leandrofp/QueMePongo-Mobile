@@ -3,14 +3,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from 'react-navigation';
 import PrecargadasScreen from './PrecargadasScreen';
 import EscanerScreen from './EscanerScreen';
+import FavoritasScreen from './FavoritasScreen';
+import SugeridasScreen from './SugeridasScreen';
+import GuardarropasScreen from './GuardarropasScreen'
 
 export default createBottomTabNavigator(
   {
     Escaner: EscanerScreen,
     Precargadas: PrecargadasScreen,
-    //Favoritos: FavoritasScreen,
-    //Sugeridas: SugeridasScreen,
-    //Guardarroppas: GuardarropasScreen,
+    Favoritos: FavoritasScreen,
+    Sugeridas: SugeridasScreen,
+    Guardarropas: GuardarropasScreen,
    
   },
   {
@@ -23,15 +26,15 @@ export default createBottomTabNavigator(
         } else if (routeName === 'Precargadas') {
             iconName = `ios-options${focused ? '' : '-outline'}`;
         }
-        //   else if (routeName === 'Settings') {
-        //     iconName = `ios-options${focused ? '' : '-outline'}`;
+          else if (routeName === 'Favoritos') {
+            iconName = `ios-options${focused ? '' : '-outline'}`;
         
-        // } else if (routeName === 'Settings') {
-        //     iconName = `ios-options${focused ? '' : '-outline'}`;
+        } else if (routeName === 'Sugeridas') {
+            iconName = `ios-options${focused ? '' : '-outline'}`;
         
-        // } else if (routeName === 'Settings') {
-        //     iconName = `ios-options${focused ? '' : '-outline'}`;
-        //   }
+        } else if (routeName === 'Guardarropas') {
+            iconName = `ios-options${focused ? '' : '-outline'}`;
+          }
 
         // You can return any component that you like here! We usually use an
         // icon component from react-native-vector-icons

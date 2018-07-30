@@ -3,7 +3,7 @@ import React from 'react';
 
 console.ignoredYellowBox=true;
 
-export default class EscanerScreen extends React.Component {
+export default class GuardarropasScreen extends React.Component {
     render() {
       return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
