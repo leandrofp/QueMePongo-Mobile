@@ -7,11 +7,8 @@ export default class GuardarropasScreen extends React.Component {
     render() {
       return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text>Home!</Text>
-          <Button
-            title="Go to Settings"
-            onPress={() => this.props.navigation.navigate('Settings')}
-          />
+          <Text>GUARDARROPAS!</Text>
+          
         </View>
       );
     }
