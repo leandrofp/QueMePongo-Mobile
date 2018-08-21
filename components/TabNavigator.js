@@ -12,8 +12,9 @@ console.disableYellowBox=true
 
 export default createBottomTabNavigator(
   {
-    Escaner: EscanerScreen,                         // FALLA EL RUTEO , OSEA NO CARGA LOS COMOPNENTES DEL TODO BIEN (MOVER BARRA A ABAJO TMB)
+    
     Precargadas: PrecargadasScreen,
+    Escaner: EscanerScreen,                         // FALLA EL RUTEO , OSEA NO CARGA LOS COMOPNENTES DEL TODO BIEN (MOVER BARRA A ABAJO TMB)
     Favoritos: FavoritasScreen,
     Sugeridas: SugeridasScreen,
     Guardarropas: GuardarropasScreen,

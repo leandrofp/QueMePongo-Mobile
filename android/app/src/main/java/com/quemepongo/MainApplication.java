@@ -2,6 +2,7 @@ package com.quemepongo;
 
 import android.app.Application;
 
+import org.pgsqlite.SQLitePluginPackage;
 import com.facebook.react.ReactApplication;
 import org.reactnative.camera.RNCameraPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -26,7 +27,8 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new RNCameraPackage(),
-            new VectorIconsPackage()
+            new VectorIconsPackage(),
+            new SQLitePluginPackage()   // register SQLite Plugin here    
       );
     }
 
