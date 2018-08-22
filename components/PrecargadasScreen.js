@@ -4,6 +4,8 @@ import React from 'react';
 console.ignoredYellowBox=true;
 
 var SQLite = require('react-native-sqlite-storage')
+SQLite.DEBUG(true);
+SQLite.enablePromise(true);
 var ropa;
 
 export default class PrecargadasScreen extends React.Component {
@@ -11,195 +13,148 @@ export default class PrecargadasScreen extends React.Component {
     constructor(props){
     super(props)
     this.state = {
-      done : 0 ,
-      data: null , 
-      flag: 0
+    
+      data: [], 
+      flag: 10
     }
 
-    this.Apretame = this.Apretame.bind(this);
+    this.apretame = this.apretame.bind(this);
+    this.agregar = this.agregar.bind(this);
+    //this.errorCB = this.errorCB.bind(this)
+    }
+
+    errorCB = (err) => {
+      console.log("error: ",err);
+      //this.updateProgress("Error " + (err.message || err));
     }
     
-    componentWillMount(){
-  
-      ropa = SQLite.openDatabase("./Ropa.db")
-   
-      console.log(ropa)
-    }
-
-    Apretame(){
-      //console.log(ropa)
-      ropa.transaction(tx => {
-        tx.executeSql(
-          `select Ropa_Id from Ropa;`,
-          (_, { rows: { _array } }) => this.setState({ data : _array , flag: 1 })
-        );
+    componentWillMount(){  
+      //ropa = SQLite.openDatabase("Ropa.db")
+      SQLite.openDatabase("ropa.bd").then((DB) => {
+        ropa = DB;                            // lo asigna a la global, supongo para poder usar esa despues
+        console.log("BD ABIERTA")               // hasta aca anda...
+        this.postOpenDatabase(DB);
+      }).catch((error) => {
+        console.log(error);
       });
     }
 
+    postOpenDatabase = (db) => {
+        db.transaction(this.createTables).then(() =>{
+          console,log("Transaccion Finalizada")
+            //this.closeDatabase()});
+        });
+        
+    }
+
+    createTables = (tx) => {
+     
+      
+      tx.executeSql('CREATE TABLE IF NOT EXISTS Ropa( '
+      + 'Ropa_Id INTEGER  NOT NULL PRIMARY KEY,'
+      + 'Tipo_Id INTEGER  NOT NULL ,'
+      + 'Estilo_Id INTEGER  NOT NULL ,'  
+      +	'Imagen BLOB);' ).catch((error) => {
+        this.errorCB(error)
+      });
+      
+
+      tx.executeSql('CREATE TABLE IF NOT EXISTS Tipo_ropa( '
+      + 'Tipo_Id INTEGER  PRIMARY KEY NOT NULL, '
+      + 'Name VARCHAR(50) NOT NULL  ); ').catch((error) => {
+      this.errorCB(error)
+      });
+      
+      tx.executeSql('CREATE TABLE IF NOT EXISTS Estilo_ropa( '
+      + 'Estilo_Id INTEGER  NOT NULL PRIMARY KEY,  '
+      + 'Name VARCHAR(50)  NOT NULL);').catch((error) => {
+      this.errorCB(error)
+      });
+
+      //Para eliminar las tablas (tipo un truncate que no se si existe)
+      // tx.executeSql('DROP TABLE IF EXISTS Ropa;');
+      // tx.executeSql('DROP TABLE IF EXISTS Tipo_ropa;');
+      // tx.executeSql('DROP TABLE IF EXISTS Estilo_ropa;');
+
+    // DEBERIA VALIDAR QUE NO LOS INSERTE SI LA TABLA NO ESTA VACIA, PERO POR AHORA REBOTA POR PK 
+
+      tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (1,"Pantalon");');
+      tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (2,"Remera");');
+      tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (3,"Buzo");');
+      tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (4,"Vestido");');
+      tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (5,"Pulover");');
+      tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (6,"Camisa");');
+   
+
+    console.log("all config SQL done");
+
+
+    }
+
+    apretame(){
+     
+      ropa.transaction(tx => {
+        tx.executeSql(
+          `select * from Tipo_ropa;`).then(([tx,results]) => {
+          
+            console.log("Query completed");
+
+            let array=[]
+
+            var len = results.rows.length;
+            
+            for (let i = 0; i < len; i++) {
+              let row = results.rows.item(i);
+              //console.log(row.Name)
+              array.push(row.Name)
+            }
+            //console.log(array)
+            this.setState({data:array})
+          }).catch((error) => {
+            console.log(error);
+          });
+        
+      });
+    }
+
+    agregar(){
+
+      ropa.transaction(tx => { 
+        tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (7,"Corpiño");');
+        tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (8,"Boxer");');
+      });
+
+    }
 
     render() {
+
+      //data = this.state.data;
+
+      const data= this.state.data
+      //console.log(this.state.data , data , "TEXTO")
+
       return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>PRECARGADAS!</Text>
           <TouchableOpacity
-          onPress = {this.Apretame}
+          onPress = {this.agregar}
           >
-            <Text style={{fontSize: 14}}> Apretame </Text>
-          </TouchableOpacity>
-          <Text> {this.state.data} {this.state.flag} </Text>
-          
-           
-          
-        </View>
-      );
-    }
-  }
-
-  /*
-
-  import Expo, { SQLite } from 'expo';
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-
-const db = SQLite.openDatabase('db.db');
-
-class Items extends React.Component {
-  state = {
-    items: null,
-  };
-
-  componentDidMount() {
-    this.update();
-  }
-
-  render() {
-    const { items } = this.state;
-    if (items === null || items.length === 0) {
-      return null;
-    }
-
-    return (
-      <View style={{ margin: 5 }}>
-        {items.map(({ id, done, value }) => (
+            <Text style={{fontSize: 14}}> Agregar Corpiño y Boxer </Text>
+          </TouchableOpacity>    
           <TouchableOpacity
-            key={id}
-            onPress={() => this.props.onPressItem && this.props.onPressItem(id)}
-            style={{
-              padding: 5,
-              backgroundColor: done ? '#aaffaa' : 'white',
-              borderColor: 'black',
-              borderWidth: 1,
-            }}>
-            <Text>{value}</Text>
+          onPress = {this.apretame}
+          >
+          <Text style={{fontSize: 14}}> Apretame para ver datos </Text>
           </TouchableOpacity>
-        ))}
-      </View>
-    );
-  }
-
-  update() {
-    db.transaction(tx => {
-      tx.executeSql(
-        `select * from items where done = ?;`,
-        [this.props.done ? 1 : 0],
-        (_, { rows: { _array } }) => this.setState({ items: _array })
-      );
-    });
-  }
-}
-
-export default class App extends React.Component {
-  state = {
-    text: null,
-  };
-
-  componentDidMount() {
-    db.transaction(tx => {
-      tx.executeSql(
-        'create table if not exists items (id integer primary key not null, done int, value text);'
-      );
-    });
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <View
-          style={{
-            flexDirection: 'row',
-          }}>
-          <TextInput
-            style={{
-              flex: 1,
-              padding: 5,
-              height: 40,
-              borderColor: 'gray',
-              borderWidth: 1,
-            }}
-            placeholder="what do you need to do?"
-            value={this.state.text}
-            onChangeText={text => this.setState({ text })}
-            onSubmitEditing={() => {
-              this.add(this.state.text);
-              this.setState({ text: null });
-            }}
-          />
+          
+          {/* <Text>{this.state.flag}</Text>      */}
+          
+          {data.map((item,index) => <Text>{item}</Text> )}
+       
+          
         </View>
-        <View style={{ flex: 1, backgroundColor: 'gray' }}>
-          <Items
-            done={false}
-            ref={todo => (this.todo = todo)}
-            onPressItem={id =>
-              db.transaction(
-                tx => {
-                  tx.executeSql(`update items set done = 1 where id = ?;`, [id]);
-                },
-                null,
-                this.update
-              )}
-          />
-          <Items
-            done={true}
-            ref={done => (this.done = done)}
-            onPressItem={id =>
-              db.transaction(
-                tx => {
-                  tx.executeSql(`delete from items where id = ?;`, [id]);
-                },
-                null,
-                this.update
-              )}
-          />
-        </View>
-      </View>
-    );
+      );
+    }
   }
 
-  add(text) {
-    db.transaction(
-      tx => {
-        tx.executeSql('insert into items (done, value) values (0, ?)', [text]);
-        tx.executeSql('select * from items', [], (_, { rows }) =>
-          console.log(JSON.stringify(rows))
-        );
-      },
-      null,
-      this.update
-    );
-  }
-
-  update = () => {
-    this.todo && this.todo.update();
-    this.done && this.done.update();
-  };
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: Expo.Constants.statusBarHeight,
-  },
-});
-
-*/
+ 
