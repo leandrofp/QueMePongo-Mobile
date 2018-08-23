@@ -4,7 +4,7 @@ import React from 'react';
 console.ignoredYellowBox=true;
 
 var SQLite = require('react-native-sqlite-storage')
-SQLite.DEBUG(true);
+//SQLite.DEBUG(true);
 SQLite.enablePromise(true);
 var ropa;
 
