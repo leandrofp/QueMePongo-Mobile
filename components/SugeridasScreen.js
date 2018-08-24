@@ -7,100 +7,97 @@ const apikey = '0efd092318208df58c1aa6a0a64c4ec6' ;
 
 export default class SugeridasScreen extends React.Component {
 
-  // POCO PRECISA, BUSCAR ALTERNATIVA (SIRVE DE ENTRADA)
-       
   
-  state = {
+	
+	state = {
 		loading: false,
 		error: false,
 		location: '',
-		temperature: 0,
-		humidity: 0,
+		temperature: 999,
 		weather: '',
-		minTemp: 0,
-		maxTemp: 0,
-		windSpeed: 0
+		message : '' 
 	};
 
- 
-  fetchLocationId = async city => {  // busca el ID de la ciudad que necesites el clima, despues ver como la obtengo  automatico
-    const response = await fetch(
-      `https://www.metaweather.com/api/location/search/?query=${city}`      // ACTUALIZAR!!!!!
-
-      
-    );
-    const locations = await response.json();
-    return locations[0].woeid;
-  }
-  
-  fetchWeather = async woeid => {   // y esta traeria los datos del clima en relacion a mi ciudad , 464979 es castelar
-    const response = await fetch(
-      `http://api.openweathermap.org/data/2.5/weather?lat=-34.6556&lon=-58.6426&APPID=0efd092318208df58c1aa6a0a64c4ec6`
-      //[-34.6556, -58.6426] CASTELAR
-		);
-		
-    const { title, consolidated_weather } = await response.json();
-    const {
-      weather_state_name,
-      the_temp,
-      humidity,
-      min_temp,
-      max_temp,
-      wind_speed
-    } = consolidated_weather[0];
-  }
-
+	constructor(props){
+		super(props)
+		this.handleLocation = this.handleLocation.bind(this)
+	}
+	
   componentDidMount(){
-    this.handleUpdateLocation("castelar")
+		if(this.state.temperature==999)			// para que no la vuelva a llamar si cambio de tab, me ahorraria bloqueos
+    	this.handleLocation()
   }
 
-  handleUpdateLocation = async city => {
-		if (!city) return;
-
-		this.setState({ loading: true }, async () => {
-			try {
-				const locationId = await fetchLocationId(city);
-				const {
-					location,
-					weather,
-					temperature,
-					humidity,
-					minTemp,
-					maxTemp,
-					windSpeed
-				} = await fetchWeather(locationId);
-
-				this.setState({
-					loading: false,
-					error: false,
-					location,
-					weather,
-					temperature,
-					humidity,
-					minTemp,
-					maxTemp,
-					windSpeed
-				});
-			} catch (e) {
-				this.setState({
-					loading: false,
-					error: true
-				});
+  handleLocation = async () => {
+				
+			if(!this.state.loading){
+				try {
+					this.setState({loading : true})
+		
+					clima = await this.fetchWeather();
+					
+					//console.log("DEBERIA TENER LA TEMPERATURA , SE PUEDE AGREGAR LLUVIA")
+					//console.log(clima)
+					//console.log(clima.weather[0].main)
+					//console.log(clima.main.temp)
+					
+					const weather = clima.weather[0].main
+					const temp = Math.round( parseFloat(clima.main.temp))
+				
+					this.setState({
+						loading: false,
+						error: false,
+						temperature : temp ,
+						weather: weather
+					});
+				
+				}catch (e) {
+					this.setState({
+						loading: false,
+						error: true,
+						message: "Error al obtener clima actual"
+					});
+				}
 			}
-		});
+			else{
+				//TODO: ESTA CARGANDO
+		
+			}
 	};
+
+  
+	  fetchWeather = async () => {   // y esta traeria los datos del clima en relacion a mi ciudad 
+
+		console.log("ENTRE A FETCHWEATHER")
+
+		const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?lat=-34.6556&lon=-58.6426&APPID=0efd092318208df58c1aa6a0a64c4ec6&units=Metric`);
+		//Latitud: -34.6556    Longitud: -58.6426				CASTELAR
+
+		//Latitud: -41.1500000 Longitud: -71.3000000	 	BARILOCHE
+
+
+		var a = response.json();
+		return a;
+		
+  }
   
 
   render() {
+
+		console.log(this.state.temperature , this.state.weather)
+		const temperature = this.state.temperature
+		const weather = this.state.weather
+		
+
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>SUGERIDAS</Text>
-        {/* <View>
-          <Text>TEMPERATURA</Text>
-          <Text>{this.state.temperature}</Text>
+        <Text>SUGERIDAS!</Text>
+         <View>   
+					<Text style={{fontSize:22}}>TEMPERATURA: {temperature+'º    '} { weather}  </Text>
 
-
-        </View> */}
+					<Text> {this.state.message}</Text>
+				
+        </View>
      
       </View>
     );
