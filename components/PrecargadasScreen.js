@@ -78,13 +78,13 @@ export default class PrecargadasScreen extends React.Component {
 
     // DEBERIA VALIDAR QUE NO LOS INSERTE SI LA TABLA NO ESTA VACIA, PERO POR AHORA REBOTA POR PK 
 
-      tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (1,"Pantalon");');
+      /*tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (1,"Pantalon");');
       tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (2,"Remera");');
       tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (3,"Buzo");');
       tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (4,"Vestido");');
       tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (5,"Pulover");');
       tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (6,"Camisa");');
-   
+      */
 
     console.log("all config SQL done");
 
