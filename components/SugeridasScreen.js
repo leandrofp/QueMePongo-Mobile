@@ -30,8 +30,7 @@ export default class SugeridasScreen extends React.Component {
 	
   componentDidMount(){
 		
-	
-			if(this.state.temperature==999)		// para que no la vuelva a llamar si cambio de tab, me ahorraria bloqueos (testear si hace falta)
+			//if(this.state.temperature==999)		// para que no la vuelva a llamar si cambio de tab, me ahorraria bloqueos (testear si hace falta)
 					this.handleLocation()
 
   }
@@ -102,23 +101,11 @@ export default class SugeridasScreen extends React.Component {
 		const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&APPID=0efd092318208df58c1aa6a0a64c4ec6&units=Metric`);
 		
 		//Latitud: -34.6556    Longitud: -58.6426				CASTELAR
-		//Latitud: -41.1500000 Longitud: -71.3000000	 	BARILOCHE
 		var a = response.json();
 		return a;
 
 	}
 	
-	/*const locationId = await fetchLocationId(city);
-				const {
-					location,
-					weather,
-					temperature,
-					humidity,
-					minTemp,
-					maxTemp,
-					windSpeed
-				} = await fetchWeather(locationId);*/
-  
 
   render() {
 
@@ -133,8 +120,9 @@ export default class SugeridasScreen extends React.Component {
          <View>   
 				  <Text>Latitude: {this.state.latitude}</Text>
           <Text>Longitude: {this.state.longitude}</Text>
-					<Text style={{fontSize:22}}>TEMPERATURA: {temperature+'º    '} { weather}  </Text>
-
+					{temperature != 999 &&
+						<Text style={{fontSize:22}}>TEMPERATURA: {temperature+'º    '} { weather}  </Text>
+					}
 					<Text> {this.state.message}</Text>
 				
         </View>

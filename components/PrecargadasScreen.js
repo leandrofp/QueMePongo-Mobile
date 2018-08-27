@@ -1,5 +1,9 @@
-import { Button, Text, View , TouchableOpacity } from 'react-native';
+import { Button, Text, View , TouchableOpacity , Image } from 'react-native';
 import React from 'react';
+
+
+const img1 = require('../ropa/RN1.jpg')
+const img2 = require('../ropa/PA1.jpg')
 
 console.ignoredYellowBox=true;
 
@@ -15,7 +19,7 @@ export default class PrecargadasScreen extends React.Component {
     this.state = {
     
       data: [], 
-      flag: 10
+      //flag: 10
     }
 
     this.apretame = this.apretame.bind(this);
@@ -58,7 +62,6 @@ export default class PrecargadasScreen extends React.Component {
         this.errorCB(error)
       });
       
-
       tx.executeSql('CREATE TABLE IF NOT EXISTS Tipo_ropa( '
       + 'Tipo_Id INTEGER  PRIMARY KEY NOT NULL, '
       + 'Name VARCHAR(50) NOT NULL  ); ').catch((error) => {
@@ -76,18 +79,24 @@ export default class PrecargadasScreen extends React.Component {
       // tx.executeSql('DROP TABLE IF EXISTS Tipo_ropa;');
       // tx.executeSql('DROP TABLE IF EXISTS Estilo_ropa;');
 
-    // DEBERIA VALIDAR QUE NO LOS INSERTE SI LA TABLA NO ESTA VACIA, PERO POR AHORA REBOTA POR PK 
+    
+      // INSERCION DE TIPOS DE ROPA ACA ------------------------
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, name) VALUES (1,"Pantalon");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, name) VALUES (2,"Remera");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, name) VALUES (3,"Buzo");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, name) VALUES (4,"Vestido");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, name) VALUES (5,"Pulover");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, name) VALUES (6,"Camisa");');
+      //-----------------------------------------------------------------------------------//
 
-      /*tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (1,"Pantalon");');
-      tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (2,"Remera");');
-      tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (3,"Buzo");');
-      tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (4,"Vestido");');
-      tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (5,"Pulover");');
-      tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (6,"Camisa");');
-      */
+
+      // INSERCION  DE ROPA ACA ------------------------
+
+
+      //-----------------------------------------------------------------------------------//
+
 
     console.log("all config SQL done");
-
 
     }
 
@@ -131,11 +140,16 @@ export default class PrecargadasScreen extends React.Component {
       //data = this.state.data;
 
       const data= this.state.data
-      //console.log(this.state.data , data , "TEXTO")
+
+      console.log(img1);
+      console.log(img2);
+      console.log("LALALALALALAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLLLLL")
+     
 
       return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>PRECARGADAS!</Text>
+         
           <TouchableOpacity
           onPress = {this.agregar}
           >
