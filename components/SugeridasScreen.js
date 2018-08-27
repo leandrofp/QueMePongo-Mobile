@@ -43,21 +43,11 @@ export default class SugeridasScreen extends React.Component {
 					this.setState({loading : true})
 
 					
-					a = await this.fetchLocation().then( (pos) => console.log(pos));
-				
-					/*clima = await this.fetchWeather(this.state.latitude,this.state.longitude)
-
+					await this.fetchLocation()
+					
 					//console.log(clima)
 						
-					const weather = clima.weather[0].main
-					const temp = Math.round( parseFloat(clima.main.temp))
-				
-					this.setState({
-						loading: false,
-						error: false,
-						temperature : temp ,
-						weather: weather
-					});*/
+					
 				
 				}catch (e) {
 					this.setState({
@@ -77,19 +67,32 @@ export default class SugeridasScreen extends React.Component {
 
 		navigator.geolocation.getCurrentPosition(
 			async (position) => {	
-				console.log("FUNCIONE")
+				console.log("FUNCIONE")	
 				this.setState({
 					latitude: position.coords.latitude,
 					longitude: position.coords.longitude,
 					error: false,
-					
 				});
+		
+				clima = await this.fetchWeather(position.coords.latitude , position.coords.longitude)
 				
+				//console.log(clima)
+				
+				const weather = clima.weather[0].main
+				const temp = Math.round( parseFloat(clima.main.temp))
+				
+				this.setState({
+					loading: false,
+					error: false,
+					temperature : temp ,
+					weather: weather
+				});
+
 			},
 			(error) => { console.log("ERROR") , this.setState({ message : error.message , error : true })} , 
 			{ enableHighAccuracy: false, timeout: 10000, maximumAge: 1000 },
 		);
-
+		
 	}
 
 	fetchWeather = async (lat,long) => {   // y esta traeria los datos del clima en relacion a mi ciudad 
@@ -97,13 +100,12 @@ export default class SugeridasScreen extends React.Component {
 		console.log("ENTRE A FETCHWEATHER" , lat , long)
 
 		const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&APPID=0efd092318208df58c1aa6a0a64c4ec6&units=Metric`);
-		//const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?lat=-34.6556&lon=-586426&APPID=0efd092318208df58c1aa6a0a64c4ec6&units=Metric`);
 		
 		//Latitud: -34.6556    Longitud: -58.6426				CASTELAR
 		//Latitud: -41.1500000 Longitud: -71.3000000	 	BARILOCHE
 		var a = response.json();
 		return a;
-		
+
 	}
 	
 	/*const locationId = await fetchLocationId(city);
