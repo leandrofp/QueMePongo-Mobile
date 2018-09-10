@@ -60,7 +60,7 @@ export default class PrecargadasScreen extends React.Component {
       tx.executeSql('CREATE TABLE IF NOT EXISTS Ropa( '
       + 'Ropa_Id INTEGER  NOT NULL PRIMARY KEY,'
       + 'Tipo_Id INTEGER  NOT NULL , Precargada INTEGER NOT NULL , '  
-      +	'Cantidad INTEGER , Imagen blob);' ).catch((error) => {
+      +	'Cantidad INTEGER , cod_processing INTEGER NOT NULL);' ).catch((error) => {
         this.errorCB(error)
       });
       
@@ -72,7 +72,7 @@ export default class PrecargadasScreen extends React.Component {
       
   
       //Para eliminar las tablas (tipo un truncate que no se si existe)
-      tx.executeSql('DROP TABLE IF EXISTS Ropa;');
+      //tx.executeSql('DROP TABLE IF EXISTS Ropa;');
       // tx.executeSql('DROP TABLE IF EXISTS Tipo_ropa;');
 
 
@@ -88,9 +88,11 @@ export default class PrecargadasScreen extends React.Component {
 
 
       // INSERCION  DE ROPA ACA ------------------------
-      console.log(img1,img2 , "PEPEPEPEPE")
-      tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Imagen ) VALUES (1 ,2 , 1 , -1 , ? );', img1);
-      tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Imagen ) VALUES (2 ,1 , 1 , -1 , ? );', img2);
+      // console.log(img1,img2 , "PEPEPEPEPE")
+       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Imagen ) VALUES (1 ,2 , ? , -1 , ? );', [1, 5]);
+       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Imagen ) VALUES (2 ,1 , ? , -1 , ? );', [1, 6]);
+
+       // el 5 seria remera, el 6 pantalon por ahora
 
 
       //-----------------------------------------------------------------------------------//

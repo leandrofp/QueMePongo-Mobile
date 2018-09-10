@@ -11,8 +11,11 @@ import {
   Image
 } from 'react-native';
 import { RNCamera } from 'react-native-camera';
+import Clarifai from 'clarifai'
 
 
+const img1 = require('./RN1.jpg')
+const img2 = require('./PA1.jpg')
 
 console.disableYellowBox = true;
 
@@ -21,8 +24,8 @@ export default class EscanerScreen extends Component {
   constructor(props){
     super(props);
     this.state = {data:'', modal:false}
-    this.sendImage = this.sendImage.bind(this)
-    this.handleResponse = this.handleResponse.bind(this)
+    this.escaneo = this.escaneo.bind(this)
+    //this.handleResponse = this.handleResponse.bind(this)
   }
 
   takePicture = async function() {
@@ -32,40 +35,50 @@ export default class EscanerScreen extends Component {
       //console.log(data)                 // DATA ES LA FOTO TOMADA, URI ES LA UBICACION EN CACHE DONDE LA GUARDA
       this.setState({data:data.uri, modal:false})
       
-      //const a =(this.sendImage(data.base64))
+      const a =(this.escaneo(data.base64))
       
     }
   }
 
-  /*async*/ sendImage(data){
-       
-
-    /* envio el texto base64 plano, sin formato json */
-    var params = {
-      data, 
-    }
-    //console.log(data)
-    const requestOptions = {
-      method: 'POST',
-      /*headers: {
-        'Content-Type': 'application/json',
-      },*/
-      body: data,
-    };
-
-      // TODO: RESOLVER COMUNICACION CON ESCRITORIO NO CREO SALGA CON FETCH
-    return /*await*/ fetch('http://192.168.101.249:8080/savePhoto' , requestOptions )//.then(this.handleResponse) // NO ANDA LOCALHOST USAR IP MAQUINA
+    escaneo(data){
+        const clarifai = new Clarifai.App({
+          apiKey: '2a02c3c45bf54fc0b8f4d95af5b97f12'
+        })
     
-    }
+        process.nextTick = setImmediate // RN polyfill
+    
+        console.log("PASE POR NEXTICK")
 
-  handleResponse(response) {
-    console.log("entre")
-    if (!response.ok) {
-        return Promise.reject(response.statusText); // retorna cadena vacia
-    }
-    return response.json();
-  }
- 
+        //const { data } = data
+        //const file = { base64: data }
+        const file = data
+        
+        clarifai.models.predict(Clarifai.APPAREL_MODEL, file)
+          .then(response => {
+            const { concepts } = response.outputs[0].data
+            console.log("CONCEPTS : " , concepts[0] , concepts[1] , concepts[2] )
+            if (concepts && concepts.length > 0) {
+              for (const prediction of concepts) {
+                if (prediction.name === 'pizza' && prediction.value >= 0.99) {
+                  return this.setState({ loading: false, result: 'Pizza' })
+                }
+                this.setState({ result: 'Not Pizza' })
+              }
+            }
+    
+            this.setState({ loading: false })
+          })
+          .catch(e => {
+            Alert.alert(
+              'ROMPI TODO VIEJA',
+              [
+                { text: 'OK', onPress: () => this._cancel() },
+              ],
+              { cancelable: false }
+            )
+          })
+      }
+
   render() {
 
     return (
