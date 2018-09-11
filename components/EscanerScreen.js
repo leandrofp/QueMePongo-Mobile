@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   View,
   Modal,
-  Image
+  Image,
+  Alert
 } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import Clarifai from 'clarifai'
@@ -57,16 +58,20 @@ export default class EscanerScreen extends Component {
           .then(response => {
             const { concepts } = response.outputs[0].data
             console.log("CONCEPTS : " , concepts[0] , concepts[1] , concepts[2] )
+            Alert.alert(concepts[0].name + ' ' + concepts[0].value + '    ' + concepts[1].name + '  ' + concepts[1].value )
             if (concepts && concepts.length > 0) {
-              for (const prediction of concepts) {
+              
+              
+              
+              
+              /*for (const prediction of concepts) {
                 if (prediction.name === 'pizza' && prediction.value >= 0.99) {
                   return this.setState({ loading: false, result: 'Pizza' })
                 }
                 this.setState({ result: 'Not Pizza' })
-              }
+              }*/
             }
-    
-            this.setState({ loading: false })
+            //this.setState({ loading: false })
           })
           .catch(e => {
             Alert.alert(
