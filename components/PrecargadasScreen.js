@@ -2,8 +2,8 @@ import { Button, Text, View , TouchableOpacity , Image } from 'react-native';
 import React from 'react';
 
 
-const img1 = require('../ropa/RN1.jpg')
-const img2 = require('../ropa/PA1.jpg')
+const img1 = require('./RN1.jpg')
+const img2 = require('./PA1.jpg')
 
 console.ignoredYellowBox=true;
 
@@ -33,6 +33,9 @@ export default class PrecargadasScreen extends React.Component {
     }
     
     componentWillMount(){  
+
+
+
       //ropa = SQLite.openDatabase("Ropa.db")
       SQLite.openDatabase("ropa.bd").then((DB) => {
         ropa = DB;                            // lo asigna a la global, supongo para poder usar esa despues
@@ -56,9 +59,8 @@ export default class PrecargadasScreen extends React.Component {
       
       tx.executeSql('CREATE TABLE IF NOT EXISTS Ropa( '
       + 'Ropa_Id INTEGER  NOT NULL PRIMARY KEY,'
-      + 'Tipo_Id INTEGER  NOT NULL ,'
-      + 'Estilo_Id INTEGER  NOT NULL ,'  
-      +	'Imagen BLOB);' ).catch((error) => {
+      + 'Tipo_Id INTEGER  NOT NULL , Precargada INTEGER NOT NULL , '  
+      +	'Cantidad INTEGER , cod_processing INTEGER NOT NULL);' ).catch((error) => {
         this.errorCB(error)
       });
       
@@ -68,29 +70,29 @@ export default class PrecargadasScreen extends React.Component {
       this.errorCB(error)
       });
       
-      tx.executeSql('CREATE TABLE IF NOT EXISTS Estilo_ropa( '
-      + 'Estilo_Id INTEGER  NOT NULL PRIMARY KEY,  '
-      + 'Name VARCHAR(50)  NOT NULL);').catch((error) => {
-      this.errorCB(error)
-      });
-
+  
       //Para eliminar las tablas (tipo un truncate que no se si existe)
-      // tx.executeSql('DROP TABLE IF EXISTS Ropa;');
+      //tx.executeSql('DROP TABLE IF EXISTS Ropa;');
       // tx.executeSql('DROP TABLE IF EXISTS Tipo_ropa;');
-      // tx.executeSql('DROP TABLE IF EXISTS Estilo_ropa;');
+
 
     
       // INSERCION DE TIPOS DE ROPA ACA ------------------------
-      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, name) VALUES (1,"Pantalon");');
-      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, name) VALUES (2,"Remera");');
-      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, name) VALUES (3,"Buzo");');
-      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, name) VALUES (4,"Vestido");');
-      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, name) VALUES (5,"Pulover");');
-      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, name) VALUES (6,"Camisa");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (1,"Pantalon");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (2,"Remera");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (3,"Buzo");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (4,"Vestido");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (5,"Pulover");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (6,"Camisa");');
       //-----------------------------------------------------------------------------------//
 
 
       // INSERCION  DE ROPA ACA ------------------------
+      // console.log(img1,img2 , "PEPEPEPEPE")
+       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Imagen ) VALUES (1 ,2 , ? , -1 , ? );', [1, 5]);
+       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Imagen ) VALUES (2 ,1 , ? , -1 , ? );', [1, 6]);
+
+       // el 5 seria remera, el 6 pantalon por ahora
 
 
       //-----------------------------------------------------------------------------------//
@@ -122,6 +124,27 @@ export default class PrecargadasScreen extends React.Component {
           }).catch((error) => {
             console.log(error);
           });
+
+        tx.executeSql(
+            `select * from Ropa;`).then(([tx,results]) => {
+            
+              console.log("Query completed");
+  
+              let array=[]
+  
+              var len = results.rows.length;
+              
+              for (let i = 0; i < len; i++) {
+                let row = results.rows.item(i);
+                console.log(row)
+                //array.push(row.Name)
+              }
+              //console.log(array)
+              //this.setState({data:array})
+            }).catch((error) => {
+              console.log(error);
+            });
+
         
       });
     }
@@ -141,9 +164,9 @@ export default class PrecargadasScreen extends React.Component {
 
       const data= this.state.data
 
-      console.log(img1);
-      console.log(img2);
-      console.log("LALALALALALAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLLLLL")
+      // console.log(img1);
+      // console.log(img2);
+      // console.log("LALALALALALAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLLLLL")
      
 
       return (
@@ -164,6 +187,8 @@ export default class PrecargadasScreen extends React.Component {
           {/* <Text>{this.state.flag}</Text>      */}
           
           {data.map((item,index) => <Text>{item}</Text> )}
+
+          {/* <Image source={img1} /> */}
        
           
         </View>
