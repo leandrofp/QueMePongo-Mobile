@@ -1,4 +1,4 @@
-import { Button, Text, View , TouchableOpacity , Image } from 'react-native';
+import {  Text, View , TouchableOpacity ,   PermissionsAndroid } from 'react-native';
 import React from 'react';
 
 
@@ -34,7 +34,25 @@ export default class PrecargadasScreen extends React.Component {
     
     componentWillMount(){  
 
-
+      async function requestGPSPermission() {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+              'title': 'Que Me Pongo GPS',
+              'message': 'Que me pongo needs access to your location for weather data '
+            }
+          )
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            console.log("You can use QMP")
+          } else {
+            console.log("GPS permission denied")
+          }
+        } catch (err) {
+          console.warn(err)
+        }
+      }
+      requestGPSPermission();
 
       //ropa = SQLite.openDatabase("Ropa.db")
       SQLite.openDatabase("ropa.bd").then((DB) => {
