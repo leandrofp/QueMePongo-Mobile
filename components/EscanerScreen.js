@@ -57,30 +57,50 @@ export default class EscanerScreen extends Component {
         clarifai.models.predict(Clarifai.APPAREL_MODEL, file)
         .then(response => {
             const { concepts } = response.outputs[0].data
-            console.log("CONCEPTS : " , concepts[0] , concepts[1] , concepts[2] )
+            //console.log("CONCEPTS : " , concepts[0] , concepts[1] , concepts[2] )
             
             if (concepts && concepts.length > 0) {
             
-            concepts[0].name = this.tipoPrenda(concepts[0].name)
-            concepts[1].name = this.tipoPrenda(concepts[1].name)
+              concepts[0].name = this.tipoPrenda(concepts[0].name)
+              concepts[1].name = this.tipoPrenda(concepts[1].name)
+      
+              if(concepts[0].name != '0'){
 
 
-            if(concepts[0].name != '0')
-              Alert.alert(concepts[0].name + ' ' + concepts[0].value /*+ '    ' + concepts[1].name + '  ' + concepts[1].value*/ )
-            else
-              Alert.alert("No se reconocio el tipo de prenda")
-              /*for (const prediction of concepts) {
-                if (prediction.name === 'pizza' && prediction.value >= 0.99) {
-                  return this.setState({ loading: false, result: 'Pizza' })
-                }
-                this.setState({ result: 'Not Pizza' })
-              }*/
+                let tipo1name =concepts[0].name
+                let tipo1value = concepts[0].value
+
+                
+                clarifai.models.predict(Clarifai.COLOR_MODEL, file).then(response => {
+                
+              
+                let color1name = response.outputs[0].data.colors[0].w3c.name
+                let color1value = response.outputs[0].data.colors[0].value
+
+                console.log(response.outputs[0].data.colors[0].w3c.name , )
+                console.log(response.outputs[0].data.colors[0].value , )
+                Alert.alert(tipo1name + ' ' + tipo1value + '    ' + color1name + '  ' + color1value)
+                  
+                }).catch(e => {
+                  Alert.alert(
+                    'Error en el reconocimiento de color, intente nuevamente',
+                    [
+                      { text: 'OK', onPress: () => this._cancel() },
+                    ],
+                    { cancelable: false }
+                    )
+                })
+              }
+              else{
+                //console.log("No se reconocio el tipo de prenda")
+                Alert.alert("No se reconocio el tipo de prenda")
+              }
             }
-            //this.setState({ loading: false })
+            
         })
         .catch(e => {
           Alert.alert(
-            'ROMPI TODO VIEJA',
+            'Error en el reconcimiento de ropa, intente nuevamente',
             [
               { text: 'OK', onPress: () => this._cancel() },
             ],
@@ -92,30 +112,31 @@ export default class EscanerScreen extends Component {
   tipoPrenda = (prenda) => {
       console.log("LLEGO PRENDA" , prenda)
       let tipoPrenda;
+
       if( prenda == "Shirt" || prenda == "T-Shirt" || prenda == "Tank Top" || prenda == "Activewear" || prenda == "T Shirt" || prenda == "Polos")
           tipoPrenda = "Remera"			// polo = Chomba
       else if(prenda == "Capris" || prenda == "Jeans" || prenda == "Skinny Pants" || prenda == "Tracksuit" || prenda == "Overalls" ||
           prenda ==  "Relaxed Pants" || prenda == "Wide Leg Pants" || prenda == "Pant Suit")
           tipoPrenda = "Pantalon"		// PANT SUIT creo que es pantalón formal, de traje
-      else  if("Fleece Jacket" || "Sweatshirt" || "Leather Jacket" || "Denim Jacket" || "Bomber Jacket")
+      else  if(prenda == "Fleece Jacket" || prenda == "Sweatshirt" || prenda == "Leather Jacket" || prenda == "Denim Jacket" || prenda == "Bomber Jacket")
           tipoPrenda ="Buzo"	
       else  if(prenda == "Sweater" )
-          tipoPrenda ="Pulove"	
+          tipoPrenda ="Pulover"	
       else  if(prenda == "Peacoat")
           tipoPrenda ="Saco"			// DE TRAJE
-      /*else  If()
+      else  if(prenda == "Women's Short" || prenda == "Men's Shorts" || prenda=="Cargo Shorts")
         "Pantalon Corto"
-      else  If()
-        "Vestido"
-      else  If()
-        "Pollera"*/
-      else if("Spring Jacket" || "Blazer")        // ver el buttom-down
+      else  if(prenda == "Cocktail Dress" || prenda == "Maxi Skirt" || prenda== "Sarong" || prenda == "Casual Dress")
+        tipoPrenda = "Vestido"
+      else  if(prenda == "Women's Short Shorts" || prenda == "Jean Skirt" || prenda == "Women's Jean Shorts" || prenda=="Knee Length Skirt" || prenda=="Mini Skirt")
+        tipoPrenda = "Pollera"
+      else if(prenda == "Spring Jacket" || prenda == "Blazer" || prenda == "Button-Down")        // ver el buttom-down
         tipoPrenda = Camisa // VER SI APLICA PARA SACO DE TRAJE
       /*else If()
         "Calza"
       else  If()
         "Toleras"*/
-      else if("Raincoats")
+      else if(prenda == "Raincoats")
         tipoPrenda = "Campera de lluvia"
       else
         tipoPrenda = '0'    // no la reconocio
