@@ -131,11 +131,11 @@ export default class EscanerScreen extends Component {
       else  if(prenda == "Women's Short Shorts" || prenda == "Jean Skirt" || prenda == "Women's Jean Shorts" || prenda=="Knee Length Skirt" || prenda=="Mini Skirt")
         tipoPrenda = "Pollera"
       else if(prenda == "Spring Jacket" || prenda == "Blazer" || prenda == "Button-Down")        // ver el buttom-down
-        tipoPrenda = Camisa // VER SI APLICA PARA SACO DE TRAJE
-      /*else If()
-        "Calza"
-      else  If()
-        "Toleras"*/
+        tipoPrenda = "Camisa" // VER SI APLICA PARA SACO DE TRAJE
+      else if(prenda == "Skinny Pants")
+        tipoPrenda = "Calza"
+      /*else  if()
+      tipoPrenda "Toleras"*/
       else if(prenda == "Raincoats")
         tipoPrenda = "Campera de lluvia"
       else
