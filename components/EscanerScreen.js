@@ -55,15 +55,20 @@ export default class EscanerScreen extends Component {
         const file = data
         
         clarifai.models.predict(Clarifai.APPAREL_MODEL, file)
-          .then(response => {
+        .then(response => {
             const { concepts } = response.outputs[0].data
             console.log("CONCEPTS : " , concepts[0] , concepts[1] , concepts[2] )
-            Alert.alert(concepts[0].name + ' ' + concepts[0].value + '    ' + concepts[1].name + '  ' + concepts[1].value )
+            
             if (concepts && concepts.length > 0) {
-              
-              
-              
-              
+            
+            concepts[0].name = this.tipoPrenda(concepts[0].name)
+            concepts[1].name = this.tipoPrenda(concepts[1].name)
+
+
+            if(concepts[0].name != '0')
+              Alert.alert(concepts[0].name + ' ' + concepts[0].value /*+ '    ' + concepts[1].name + '  ' + concepts[1].value*/ )
+            else
+              Alert.alert("No se reconocio el tipo de prenda")
               /*for (const prediction of concepts) {
                 if (prediction.name === 'pizza' && prediction.value >= 0.99) {
                   return this.setState({ loading: false, result: 'Pizza' })
@@ -72,17 +77,60 @@ export default class EscanerScreen extends Component {
               }*/
             }
             //this.setState({ loading: false })
-          })
-          .catch(e => {
-            Alert.alert(
-              'ROMPI TODO VIEJA',
-              [
-                { text: 'OK', onPress: () => this._cancel() },
-              ],
-              { cancelable: false }
+        })
+        .catch(e => {
+          Alert.alert(
+            'ROMPI TODO VIEJA',
+            [
+              { text: 'OK', onPress: () => this._cancel() },
+            ],
+            { cancelable: false }
             )
-          })
-      }
+        })
+    }
+
+  tipoPrenda = (prenda) => {
+      console.log("LLEGO PRENDA" , prenda)
+      let tipoPrenda;
+      if( prenda == "Shirt" || prenda == "T-Shirt" || prenda == "Tank Top" || prenda == "Activewear" || prenda == "T Shirt" || prenda == "Polos")
+          tipoPrenda = "Remera"			// polo = Chomba
+      else if(prenda == "Capris" || prenda == "Jeans" || prenda == "Skinny Pants" || prenda == "Tracksuit" || prenda == "Overalls" ||
+          prenda ==  "Relaxed Pants" || prenda == "Wide Leg Pants" || prenda == "Pant Suit")
+          tipoPrenda = "Pantalon"		// PANT SUIT creo que es pantalón formal, de traje
+      else  if("Fleece Jacket" || "Sweatshirt" || "Leather Jacket" || "Denim Jacket" || "Bomber Jacket")
+          tipoPrenda ="Buzo"	
+      else  if(prenda == "Sweater" )
+          tipoPrenda ="Pulove"	
+      else  if(prenda == "Peacoat")
+          tipoPrenda ="Saco"			// DE TRAJE
+      /*else  If()
+        "Pantalon Corto"
+      else  If()
+        "Vestido"
+      else  If()
+        "Pollera"*/
+      else if("Spring Jacket" || "Blazer")        // ver el buttom-down
+        tipoPrenda = Camisa // VER SI APLICA PARA SACO DE TRAJE
+      /*else If()
+        "Calza"
+      else  If()
+        "Toleras"*/
+      else if("Raincoats")
+        tipoPrenda = "Campera de lluvia"
+      else
+        tipoPrenda = '0'    // no la reconocio
+      return tipoPrenda
+  }
+
+  /*colorPrenda = (data) => {
+
+  }
+
+  errorTipo = (porcentaje) =>{
+    if( parseInt(porcentaje) < 0.6)
+      return false
+    return true
+  }*/
 
   render() {
 
