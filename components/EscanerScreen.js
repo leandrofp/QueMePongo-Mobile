@@ -74,13 +74,16 @@ export default class EscanerScreen extends Component {
                 clarifai.models.predict(Clarifai.COLOR_MODEL, file).then(response => {
                 
               
-                let color1name = response.outputs[0].data.colors[0].w3c.name
+                //let color1name = response.outputs[0].data.colors[0].w3c.name
+                let color1name = this.colorPrenda(response.outputs[0].data.colors[0].w3c.name)
                 let color1value = response.outputs[0].data.colors[0].value
 
                 console.log(response.outputs[0].data.colors[0].w3c.name , )
                 console.log(response.outputs[0].data.colors[0].value , )
-                Alert.alert(tipo1name + ' ' + tipo1value + '    ' + color1name + '  ' + color1value)
-                  
+                if(color1name != '0')
+                  Alert.alert(tipo1name + ' ' + tipo1value + ' \r   ' + color1name + '  ' + color1value)
+                else
+                  Alert.alert("No se pudo reconocer el color")
                 }).catch(e => {
                   Alert.alert(
                     'Error en el reconocimiento de color, intente nuevamente',
@@ -113,7 +116,8 @@ export default class EscanerScreen extends Component {
       console.log("LLEGO PRENDA" , prenda)
       let tipoPrenda;
 
-      if( prenda == "Shirt" || prenda == "T-Shirt" || prenda == "Tank Top" || prenda == "Activewear" || prenda == "T Shirt" || prenda == "Polos")
+      if( prenda == "Shirt" || prenda == "T-Shirt" || prenda == "Tank Top" || prenda == "Activewear" || prenda == "T Shirt" || 
+          prenda == "Polos" || prenda == "Sleepwear")
           tipoPrenda = "Remera"			// polo = Chomba
       else if(prenda == "Capris" || prenda == "Jeans" || prenda == "Skinny Pants" || prenda == "Tracksuit" || prenda == "Overalls" ||
           prenda ==  "Relaxed Pants" || prenda == "Wide Leg Pants" || prenda == "Pant Suit")
@@ -132,7 +136,7 @@ export default class EscanerScreen extends Component {
         tipoPrenda = "Pollera"
       else if(prenda == "Spring Jacket" || prenda == "Blazer" || prenda == "Button-Down")        // ver el buttom-down
         tipoPrenda = "Camisa" // VER SI APLICA PARA SACO DE TRAJE
-      else if(prenda == "Skinny Pants")
+      else if(prenda == "Skinny Pants" || prenda == "Leggings")
         tipoPrenda = "Calza"
       /*else  if()
       tipoPrenda "Toleras"*/
@@ -143,11 +147,38 @@ export default class EscanerScreen extends Component {
       return tipoPrenda
   }
 
-  /*colorPrenda = (data) => {
+  colorPrenda = (colorname) => {
 
+    if(colorname.includes("Gray"))
+      colorname = "Gris"
+    else if(colorname.includes("Brown"))
+      colorname = "Marron"
+    else if(colorname.includes("Red"))
+      colorname = "Rojo"
+    else if(colorname.includes("Green"))
+      colorname = "Verde"
+    else if(colorname.includes("Yellow"))
+      colorname = "Amarillo"
+    else if(colorname.includes("Blue"))
+      colorname = "Azul"
+    else if(colorname.includes("Black"))
+      colorname = "Negro"
+    else if(colorname.includes("White"))
+      colorname = "Blanco"
+    else if(colorname.includes("Violet"))
+      colorname = "Violeta"
+    else if(colorname.includes("Tan"))
+      colorname = "Ocre"
+    else if(colorname.includes("Pink"))
+      colorname = "Rosa"
+    else if(colorname.includes("Purple"))
+      colorname = "Purpura"
+    else
+      colorname = "0"
+    return colorname
   }
 
-  errorTipo = (porcentaje) =>{
+  /*errorTipo = (porcentaje) =>{
     if( parseInt(porcentaje) < 0.6)
       return false
     return true
