@@ -24,8 +24,10 @@ export default class EscanerScreen extends Component {
   
   constructor(props){
     super(props);
-    this.state = {data:'', modal:false}
+    this.state = {data:'', modal:false, loading:false}
     this.escaneo = this.escaneo.bind(this)
+
+
     //this.handleResponse = this.handleResponse.bind(this)
   }
 
@@ -34,7 +36,7 @@ export default class EscanerScreen extends Component {
       const options = { quality: 0.5, base64: true };
       const data = await this.camera.takePictureAsync(options)
       //console.log(data)                 // DATA ES LA FOTO TOMADA, URI ES LA UBICACION EN CACHE DONDE LA GUARDA
-      this.setState({data:data.uri, modal:false})
+      this.setState({data:data.uri, modal:false , loading:true})
       
       const a =(this.escaneo(data.base64))
       
@@ -45,7 +47,7 @@ export default class EscanerScreen extends Component {
         const clarifai = new Clarifai.App({
           apiKey: '2a02c3c45bf54fc0b8f4d95af5b97f12'
         })
-    
+      
         process.nextTick = setImmediate // RN polyfill
     
         console.log("PASE POR NEXTICK")
@@ -72,8 +74,8 @@ export default class EscanerScreen extends Component {
 
                 
                 clarifai.models.predict(Clarifai.COLOR_MODEL, file).then(response => {
-                
-              
+                this.setState({loading:false})
+                  
                 //let color1name = response.outputs[0].data.colors[0].w3c.name
                 let color1name = this.colorPrenda(response.outputs[0].data.colors[0].w3c.name)
                 let color1value = response.outputs[0].data.colors[0].value
@@ -85,6 +87,7 @@ export default class EscanerScreen extends Component {
                 else
                   Alert.alert("No se pudo reconocer el color")
                 }).catch(e => {
+                  this.setState({loading:false})
                   Alert.alert(
                     'Error en el reconocimiento de color, intente nuevamente',
                     [
@@ -97,11 +100,13 @@ export default class EscanerScreen extends Component {
               else{
                 //console.log("No se reconocio el tipo de prenda")
                 Alert.alert("No se reconocio el tipo de prenda")
+                this.setState({loading:0})
               }
             }
             
         })
         .catch(e => {
+          this.setState({loading:0})
           Alert.alert(
             'Error en el reconcimiento de ropa, intente nuevamente',
             [
@@ -137,11 +142,11 @@ export default class EscanerScreen extends Component {
       else if(prenda == "Spring Jacket" || prenda == "Blazer" || prenda == "Button-Down")        // ver el buttom-down
         tipoPrenda = "Camisa" // VER SI APLICA PARA SACO DE TRAJE
       else if(prenda == "Skinny Pants" || prenda == "Leggings")
-        tipoPrenda = "Calza"
+        tipoPrenda = "Pantalon"   // En realidad son calzas, pero para generalizar
       /*else  if()
       tipoPrenda "Toleras"*/
-      else if(prenda == "Raincoats")
-        tipoPrenda = "Campera de lluvia"
+      else if(prenda == "Raincoats" || prenda == "Puffy Coat")
+        tipoPrenda = "Campera"    // o las hipermeables
       else
         tipoPrenda = '0'    // no la reconocio
       return tipoPrenda
@@ -194,7 +199,7 @@ export default class EscanerScreen extends Component {
             }}
             style = {styles.preview}
             type={RNCamera.Constants.Type.back}
-            flashMode={RNCamera.Constants.FlashMode.on}
+            flashMode={RNCamera.Constants.FlashMode.off}
             permissionDialogTitle={'Permission to use camera'}
             permissionDialogMessage={'We need your permission to use your camera phone'}
         />
@@ -202,6 +207,7 @@ export default class EscanerScreen extends Component {
         <TouchableOpacity
             onPress={this.takePicture.bind(this)}
             style = {styles.capture}
+            disabled= {this.state.loading}
         >
             <Text style={{fontSize: 14}}> Escanear prenda </Text>
         </TouchableOpacity>

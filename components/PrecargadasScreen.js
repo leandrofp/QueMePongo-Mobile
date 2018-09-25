@@ -2,8 +2,7 @@ import {  Text, View , TouchableOpacity ,   PermissionsAndroid } from 'react-nat
 import React from 'react';
 
 
-const img1 = require('./RN1.jpg')
-const img2 = require('./PA1.jpg')
+
 
 console.ignoredYellowBox=true;
 
@@ -23,7 +22,7 @@ export default class PrecargadasScreen extends React.Component {
     }
 
     this.apretame = this.apretame.bind(this);
-    this.agregar = this.agregar.bind(this);
+ 
     //this.errorCB = this.errorCB.bind(this)
     }
 
@@ -78,7 +77,8 @@ export default class PrecargadasScreen extends React.Component {
       tx.executeSql('CREATE TABLE IF NOT EXISTS Ropa( '
       + 'Ropa_Id INTEGER  NOT NULL PRIMARY KEY,'
       + 'Tipo_Id INTEGER  NOT NULL , Precargada INTEGER NOT NULL , '  
-      +	'Cantidad INTEGER , cod_processing INTEGER NOT NULL);' ).catch((error) => {
+      +	'Cantidad INTEGER , Cod_Processing INTEGER NOT NULL , '
+      +	'Uso INTEGER NOT NULL);' ).catch((error) => {
         this.errorCB(error)
       });
       
@@ -91,7 +91,7 @@ export default class PrecargadasScreen extends React.Component {
   
       //Para eliminar las tablas (tipo un truncate que no se si existe)
       //tx.executeSql('DROP TABLE IF EXISTS Ropa;');
-      // tx.executeSql('DROP TABLE IF EXISTS Tipo_ropa;');
+      //tx.executeSql('DROP TABLE IF EXISTS Tipo_ropa;');
 
 
     
@@ -102,15 +102,23 @@ export default class PrecargadasScreen extends React.Component {
       tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (4,"Vestido");');
       tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (5,"Pulover");');
       tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (6,"Camisa");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (7,"Campera");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (8,"Pollera");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (9,"Saco");');
+      tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (10,"Short");');
       //-----------------------------------------------------------------------------------//
 
 
       // INSERCION  DE ROPA ACA ------------------------
+      // CANTIDAD = -1 es porque es precargada, no se puede modificar
       // console.log(img1,img2 , "PEPEPEPEPE")
-       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Imagen ) VALUES (1 ,2 , ? , -1 , ? );', [1, 5]);
-       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Imagen ) VALUES (2 ,1 , ? , -1 , ? );', [1, 6]);
-
-       // el 5 seria remera, el 6 pantalon por ahora
+       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , cod_processing , uso ) VALUES (1 ,2 , 1 , -1 , ? , 0 );', [5]);
+       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , cod_processing , uso ) VALUES (2 ,1 , 1 , -1 , ? , 0 );', [6]);
+       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , cod_processing , uso ) VALUES (3 ,2 , 0 , 0 , ? , 0 );', [5]);
+       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , cod_processing , uso ) VALUES (4 ,1 , 0 , 0 , ? , 0 );', [6]);
+       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , cod_processing , uso ) VALUES (5 ,1 , 0 , 0 , ? , 5 );', [6]);
+      
+       // el 5 seria remera, el 6 pantalon por ahora en processing por suponer algo
 
 
       //-----------------------------------------------------------------------------------//
@@ -167,14 +175,14 @@ export default class PrecargadasScreen extends React.Component {
       });
     }
 
-    agregar(){
+    /*agregar(){
 
       ropa.transaction(tx => { 
         tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (7,"Corpiño");');
         tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (8,"Boxer");');
       });
 
-    }
+    }*/
 
     render() {
 
@@ -191,22 +199,16 @@ export default class PrecargadasScreen extends React.Component {
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>PRECARGADAS!</Text>
          
-          <TouchableOpacity
-          onPress = {this.agregar}
-          >
-            <Text style={{fontSize: 14}}> Agregar Corpiño y Boxer </Text>
-          </TouchableOpacity>    
+         
           <TouchableOpacity
           onPress = {this.apretame}
           >
           <Text style={{fontSize: 14}}> Apretame para ver datos </Text>
           </TouchableOpacity>
-          
-          {/* <Text>{this.state.flag}</Text>      */}
-          
+                    
           {data.map((item,index) => <Text>{item}</Text> )}
 
-          {/* <Image source={img1} /> */}
+
        
           
         </View>
