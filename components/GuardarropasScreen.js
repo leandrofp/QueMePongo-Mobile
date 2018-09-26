@@ -21,14 +21,18 @@ export default class GuardarropasScreen extends React.Component {
   }
   componentWillMount(){  
 
-    //ropa = SQLite.openDatabase("Ropa.db")
+    console.log(SQLite)
+
     /*SQLite.openDatabase("ropa.bd").then((DB) => {
       ropa = DB;                            // lo asigna a la global, supongo para poder usar esa despues
-      console.log("BD ABIERTA")               // hasta aca anda...
+      //console.log("BD ABIERTA")           
       this.postOpenDatabase(DB);
     }).catch((error) => {
-      console.log(error);
+      console.log(error, "A");
+    
     });*/
+
+
   
   postOpenDatabase = (db) => {
       console.log("LLEGUE")
@@ -67,7 +71,7 @@ export default class GuardarropasScreen extends React.Component {
   console.log("all config SQL done");
   }
 
-  this.postOpenDatabase(DB);
+
 
 }
   render() {

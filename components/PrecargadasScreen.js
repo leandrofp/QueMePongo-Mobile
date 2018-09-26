@@ -31,6 +31,11 @@ export default class PrecargadasScreen extends React.Component {
       //this.updateProgress("Error " + (err.message || err));
     }
     
+    /*componentWillUnmount(){
+      console.log("ABASDAF")
+      this.closeDatabase();
+    }*/
+
     componentWillMount(){  
 
       async function requestGPSPermission() {
@@ -53,7 +58,7 @@ export default class PrecargadasScreen extends React.Component {
       }
       requestGPSPermission();
 
-      //ropa = SQLite.openDatabase("Ropa.db")
+  
       SQLite.openDatabase("ropa.bd").then((DB) => {
         ropa = DB;                            // lo asigna a la global, supongo para poder usar esa despues
         console.log("BD ABIERTA")               // hasta aca anda...
