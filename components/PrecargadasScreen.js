@@ -201,7 +201,7 @@ export default class PrecargadasScreen extends React.Component {
      
 
       return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' , backgroundColor:'orange' }}>
           <Text>PRECARGADAS!</Text>
          
          
