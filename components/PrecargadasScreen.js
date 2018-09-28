@@ -1,4 +1,4 @@
-import {  Text, View , TouchableOpacity ,   PermissionsAndroid } from 'react-native';
+import {  Text, View , TouchableOpacity ,   PermissionsAndroid , Alert } from 'react-native';
 import React from 'react';
 
 
@@ -64,6 +64,7 @@ export default class PrecargadasScreen extends React.Component {
         console.log("BD ABIERTA")               // hasta aca anda...
         this.postOpenDatabase(DB);
       }).catch((error) => {
+        Alert.alert("Error abriendo la Base de datos")
         console.log(error);
       });
     }

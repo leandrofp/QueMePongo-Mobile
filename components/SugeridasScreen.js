@@ -77,9 +77,22 @@ export default class SugeridasScreen extends React.Component {
 				
 				//console.log(clima)
 				
-				const weather = clima.weather[0].main
+				let weather = clima.weather[0].main
 				const temp = Math.round( parseFloat(clima.main.temp))
-				
+
+
+				/* TRADUCCION CLIMA */
+
+				if(weather == 'Rainy')
+					weather = 'Lluvia'
+				else if(weather == 'Cloudy')
+					weather = 'Nublado'
+				else if(weather == 'Clear' || weather == 'Sunny')
+					weather = 'Despejado'
+				else if(weather == 'Haze')
+					weather = 'Neblina'		// nublado ponele
+			
+
 				this.setState({
 					loading: false,
 					error: false,

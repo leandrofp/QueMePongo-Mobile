@@ -83,7 +83,7 @@ export default class EscanerScreen extends Component {
                 console.log(response.outputs[0].data.colors[0].w3c.name , )
                 console.log(response.outputs[0].data.colors[0].value , )
                 if(color1name != '0')
-                  Alert.alert(tipo1name + ' ' + tipo1value + ' \r   ' + color1name + '  ' + color1value)
+                  Alert.alert("Usted Escaneo: " + tipo1name + ' ' + tipo1value + ' \r \r \r   ' + color1name + '  ' + color1value)
                 else
                   Alert.alert("No se pudo reconocer el color")
                 }).catch(e => {
