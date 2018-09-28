@@ -82,8 +82,10 @@ export default class EscanerScreen extends Component {
 
                 console.log(response.outputs[0].data.colors[0].w3c.name , )
                 console.log(response.outputs[0].data.colors[0].value , )
-                if(color1name != '0')
+                if(color1name != '0'){
+                  this.setState({modal:true})
                   Alert.alert("Usted Escaneo: " + tipo1name + ' ' + tipo1value + ' \r \r \r   ' + color1name + '  ' + color1value)
+                }
                 else
                   Alert.alert("No se pudo reconocer el color")
                 }).catch(e => {
@@ -204,22 +206,27 @@ export default class EscanerScreen extends Component {
             permissionDialogMessage={'We need your permission to use your camera phone'}
         />
         <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center',}}>
-        <TouchableOpacity
-            onPress={this.takePicture.bind(this)}
-            style = {styles.capture}
-            disabled= {this.state.loading}
-        >
-            <Text style={{fontSize: 14}}> Escanear prenda </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+              onPress={this.takePicture.bind(this)}
+              style = {styles.capture}
+              disabled= {this.state.loading}
+          >
+              <Text style={{fontSize: 14}}> Escanear prenda </Text>
+          </TouchableOpacity>
         </View>
-        <Modal visible={this.state.modal} >
+        {/* <Modal visible={this.state.modal} >
             <View>
-            <Image
-              style={{width: 600, height: 600}}
-              source={{uri: this.state.data}}
-            />
+              <Image
+                style={{width: 350, height: 450}}
+                source={{uri: this.state.data}}
+              />
+              <TouchableOpacity
+              onPress = { () => {this.setState({modal:false})}}
+              >
+              <Text style={{fontSize: 14}}> Salir </Text>
+              </TouchableOpacity>
             </View>
-        </Modal>
+        </Modal> */}
             
       </View>
     );
