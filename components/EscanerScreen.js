@@ -36,7 +36,8 @@ export default class EscanerScreen extends Component {
       const options = { quality: 0.5, base64: true };
       const data = await this.camera.takePictureAsync(options)
       //console.log(data)                 // DATA ES LA FOTO TOMADA, URI ES LA UBICACION EN CACHE DONDE LA GUARDA
-      this.setState({data:data.uri, modal:false , loading:true})
+      this.setState({data:data.uri, modal:false , loading:true , 
+                     prendaEscaneadaNombre:'', prendaEscaneadaAcierto:'', colorPrendaEscaneadaNombre:'',colorPrendaEscaneadaAcierto:''})
       
       const a =(this.escaneo(data.base64))
       
@@ -83,8 +84,9 @@ export default class EscanerScreen extends Component {
                 console.log(response.outputs[0].data.colors[0].w3c.name , )
                 console.log(response.outputs[0].data.colors[0].value , )
                 if(color1name != '0'){
-                  this.setState({modal:true})
-                  Alert.alert("Usted Escaneo: " + tipo1name + ' ' + tipo1value + ' \r \r \r   ' + color1name + '  ' + color1value)
+                  this.setState({modal:true, prendaEscaneadaNombre:tipo1name,prendaEscaneadaAcierto:tipo1value,
+                                  colorPrendaEscaneadaNombre:color1name,colorPrendaEscaneadaAcierto:color1value})
+                  //Alert.alert("Usted Escaneo: " + tipo1name + ' ' + tipo1value + ' \r \r \r   ' + color1name + '  ' + color1value)
                 }
                 else
                   Alert.alert("No se pudo reconocer el color")
@@ -214,26 +216,32 @@ export default class EscanerScreen extends Component {
               <Text style={{fontSize: 14}}> Escanear prenda </Text>
           </TouchableOpacity>
         </View>
-        {/* <Modal visible={this.state.modal} >
-            <View>
+        <Modal visible={this.state.modal} >
+            <View style={{backgroundColor:'orange', flex:1}}>
               <Image
-                style={{width: 350, height: 450}}
+                style={{width: 350, height: 350, transform: [{ rotate: '90deg'}], margin:2 , alignSelf:'center'}}
                 source={{uri: this.state.data}}
               />
-              <TouchableOpacity
+              <Text> Usted escaneo:  {this.state.prendaEscaneadaNombre + '  ' + this.state.colorPrendaEscaneadaNombre}</Text>
+              <Text>Desea Agregarla al Guardarropas?</Text>
+              <TouchableOpacity style = {styles.send}
+              //onPress = { () => {this.setState({modal:false})}}
+              >
+              <Text style={{fontSize: 14}}> Agregar </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style = {styles.send}
               onPress = { () => {this.setState({modal:false})}}
               >
-              <Text style={{fontSize: 14}}> Salir </Text>
+              <Text style={{fontSize: 14}}> Cancelar </Text>
               </TouchableOpacity>
             </View>
-        </Modal> */}
+        </Modal>
             
       </View>
     );
   }
 
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -254,6 +262,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignSelf: 'center',
     margin: 20
+  },
+  send: {
+    margin: 2 ,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    paddingHorizontal: 22,
+    alignSelf: 'center',
+    justifyContent: 'flex-end',
+    //fontSize:20,
+    padding : 8
   }
 });
 

@@ -91,6 +91,8 @@ export default class SugeridasScreen extends React.Component {
 					weather = 'Despejado'
 				else if(weather == 'Haze')
 					weather = 'Neblina'		// nublado ponele
+				else if(weather == 'Thunderstorm')
+					weather = 'Tormenta Electrica'		// nublado ponele
 			
 
 				this.setState({
