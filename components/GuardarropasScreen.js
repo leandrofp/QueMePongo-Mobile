@@ -222,8 +222,8 @@ export default class GuardarropasScreen extends React.Component {
           
           <FlatList keyExtractor={this.keyExtractor} data={this.state.ropa} renderItem={this.renderItem} />
         
-        <View>
-          <Modal visible={this.state.modalRopa}>
+        <View style={{backgroundColor:'orange', flex:1}}>
+          <Modal visible={this.state.modalRopa} >
           
           <Text>
             {"Nombre: " + this.state.prenda.Name }

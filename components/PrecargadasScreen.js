@@ -1,5 +1,7 @@
 import {  Text, View , TouchableOpacity ,   PermissionsAndroid , Alert } from 'react-native';
 import React from 'react';
+import { updateClothes } from '../actions/ropaActions'
+import { connect } from 'react-redux';
 
 
 
@@ -11,7 +13,7 @@ var SQLite = require('react-native-sqlite-storage')
 SQLite.enablePromise(true);
 var ropa;
 
-export default class PrecargadasScreen extends React.Component {
+class PrecargadasScreen extends React.Component {
 
     constructor(props){
     super(props)
@@ -59,7 +61,7 @@ export default class PrecargadasScreen extends React.Component {
       requestGPSPermission();
 
   
-      SQLite.openDatabase("ropa.bd").then((DB) => {
+    SQLite.openDatabase("ropa.bd").then((DB) => {
         ropa = DB;                            // lo asigna a la global, supongo para poder usar esa despues
         console.log("BD ABIERTA")               // hasta aca anda...
         this.postOpenDatabase(DB);
@@ -117,7 +119,7 @@ export default class PrecargadasScreen extends React.Component {
 
       // INSERCION  DE ROPA ACA ------------------------
       // CANTIDAD = -1 es porque es precargada, no se puede modificar
-      // console.log(img1,img2 , "PEPEPEPEPE")
+     
        tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , cod_processing , uso ) VALUES (1 ,2 , 1 , -1 , ? , 0 );', [5]);
        tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , cod_processing , uso ) VALUES (2 ,1 , 1 , -1 , ? , 0 );', [6]);
        tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , cod_processing , uso ) VALUES (3 ,2 , 0 , 0 , ? , 0 );', [5]);
@@ -135,7 +137,15 @@ export default class PrecargadasScreen extends React.Component {
     }
 
     apretame(){
-     
+
+      
+      console.log("APRETAME")
+      const {dispatch} = this.props
+      
+
+      dispatch( updateClothes() );
+      
+
       ropa.transaction(tx => {
         tx.executeSql(
           `select * from Tipo_ropa;`).then(([tx,results]) => {
@@ -153,52 +163,22 @@ export default class PrecargadasScreen extends React.Component {
             }
             //console.log(array)
             this.setState({data:array})
+           
           }).catch((error) => {
             console.log(error);
           });
-
-        tx.executeSql(
-            `select * from Ropa;`).then(([tx,results]) => {
-            
-              console.log("Query completed");
-  
-              let array=[]
-  
-              var len = results.rows.length;
-              
-              for (let i = 0; i < len; i++) {
-                let row = results.rows.item(i);
-                console.log(row)
-                //array.push(row.Name)
-              }
-              //console.log(array)
-              //this.setState({data:array})
-            }).catch((error) => {
-              console.log(error);
-            });
 
         
       });
     }
 
-    /*agregar(){
-
-      ropa.transaction(tx => { 
-        tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (7,"Corpiño");');
-        tx.executeSql('INSERT INTO Tipo_ropa (Tipo_id, name) VALUES (8,"Boxer");');
-      });
-
-    }*/
 
     render() {
 
       //data = this.state.data;
 
-      const data= this.state.data
+      const data = this.state.data
 
-      // console.log(img1);
-      // console.log(img2);
-      // console.log("LALALALALALAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLLLLL")
      
 
       return (
@@ -221,5 +201,14 @@ export default class PrecargadasScreen extends React.Component {
       );
     }
   }
+
+  const mapStateToProps = state => {
+    const { ropa } = state;
+        return {
+           ropa
+        };
+  };
+  
+  export default connect(mapStateToProps)(PrecargadasScreen);
 
  
