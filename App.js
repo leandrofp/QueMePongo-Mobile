@@ -6,9 +6,6 @@
 
 console.ignoredYellowBox=true;
 
-
-
-
 import React, { Component } from 'react';
 import {
   Platform,
@@ -17,6 +14,11 @@ import {
   View
 } from 'react-native';
 import TabNavigator from './components/TabNavigator';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import { combineReducers } from 'redux';
+import thunk from 'redux-thunk';
+import { ropa } from './reducers/ropaReducer';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -27,10 +29,21 @@ const instructions = Platform.select({
 
 //type Props = {};
 export default class App extends Component {
+
+  
   render() {
+
+    const appReducer = combineReducers({
+      ropa
+    });
+
+    const createStoreWithMidddleware = applyMiddleware(thunk)(createStore);
+    const store = createStoreWithMidddleware(appReducer);
+
     return (
-      
+      <Provider store={store}>
         <TabNavigator/>
+      </Provider>
       
 
     );
