@@ -1,5 +1,5 @@
 const initialState = {
-    prendasPrecargadas:[],
+    //prendasPrecargadas:[],
     prendasFavoritas:[],
     prendasGuardarropas:[],
     prendasSugeridas:[],
@@ -28,7 +28,7 @@ export function ropa(state = initialState, action) {
           ...state,
           prendasFavoritas : action.arrayFavoritas,
           prendasGuardarropas : action.arrayGuardarropas,
-          prendasPrecargadas : action.arrayPrecargadas,
+          //prendasPrecargadas : action.arrayPrecargadas,
           prueba: 123
       };  
         

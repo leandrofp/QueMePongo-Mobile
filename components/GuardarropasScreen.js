@@ -12,10 +12,6 @@ var SQLite = require('react-native-sqlite-storage')
 SQLite.enablePromise(true);
 var ropa;
 
-let arrayPrecargadas=[];
-let arrayGuardarropas=[];
-let arrayFavoritas=[];
-
 
 class GuardarropasScreen extends React.Component {
 
@@ -83,6 +79,10 @@ class GuardarropasScreen extends React.Component {
 
   usarRopa = () => {
 
+
+    let arrayGuardarropas;
+    let arrayFavoritas;
+
     ropa.transaction(tx => {
       tx.executeSql(
           `UPDATE Ropa SET Uso = ? where Ropa_Id = ?;`,[this.state.prenda.Uso +1 , this.state.prenda.Ropa_Id]).then(([tx,results]) => {
@@ -136,35 +136,14 @@ class GuardarropasScreen extends React.Component {
                       console.log(error);
                     });
 
-                    tx.executeSql(
-                      `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 1;`).then(([tx,results]) => {
-                      
-                        console.log("Query completed");
-            
-                        arrayPrecargadas=[]
-            
-                        var len = results.rows.length;
-                        
-                        for (let i = 0; i < len; i++) {
-                          let row = results.rows.item(i);
-                          //console.log(row)
-                          arrayPrecargadas.push(row)      // GUARDO SOLO NOMBRE
-                        }
-                     
-                        //this.setState({ropa:arrayGuardarropas,modalRopa:false})
-                      }).catch((error) => {
-                        this.setState({modalRopa:false})
-                        Alert.alert("Fallo la Busqueda en la Base de datos")
-                        console.log(error);
-                      });
-         
+                
             }).then( () => {   
               
               //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
               //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
               
               const {dispatch} = this.props
-              dispatch( updateClothes(arrayFavoritas,arrayGuardarropas,arrayPrecargadas) );
+              dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
              
             });
 
@@ -179,6 +158,9 @@ class GuardarropasScreen extends React.Component {
 
   restarDisponibilidadRopa = () => {
 
+    let arrayGuardarropas;
+    let arrayFavoritas;
+
     ropa.transaction(tx => {
       tx.executeSql(
           `UPDATE Ropa SET Cantidad = ? where Ropa_Id = ?;`,[this.state.prenda.Cantidad - 1 , this.state.prenda.Ropa_Id]).then(([tx,results]) => {
@@ -186,31 +168,61 @@ class GuardarropasScreen extends React.Component {
             console.log("Query completed");
 
                // Tengo que volver a cargar la Ropa con los datos nuevos,  ver si puedo simplemente recargar el registro afectado y no todo
-            ropa.transaction(tx => {
-              tx.executeSql(
-                  `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
-                  
-                    console.log("Query completed");
-        
-                    let array=[]
-        
-                    var len = results.rows.length;
+              ropa.transaction(tx => {
+                tx.executeSql(
+                    `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
                     
-                    for (let i = 0; i < len; i++) {
-                      let row = results.rows.item(i);
-                      //console.log(row)
-                      array.push(row)      // GUARDO SOLO NOMBRE
-                    }
-                 
-                    this.setState({ropa:array,modalRopa:false})
-                  }).catch((error) => {
-                    this.setState({modalRopa:false})
-                    Alert.alert("Fallo la Busqueda en la Base de datos")
-                    console.log(error);
-                  });
-        
-              
-            });
+                      console.log("Query completed");
+          
+                      arrayGuardarropas=[]
+          
+                      var len = results.rows.length;
+                      
+                      for (let i = 0; i < len; i++) {
+                        let row = results.rows.item(i);
+                        //console.log(row)
+                        arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
+                      }
+                   
+                      this.setState({/*ropa:arrayGuardarropas,*/modalRopa:false})
+                    }).catch((error) => {
+                      this.setState({modalRopa:false})
+                      Alert.alert("Fallo la Busqueda en la Base de datos")
+                      console.log(error);
+                    });
+  
+                    tx.executeSql(
+                      `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                      
+                        console.log("Query completed");
+            
+                        arrayFavoritas=[]
+            
+                        var len = results.rows.length;
+                        
+                        for (let i = 0; i < len; i++) {
+                          let row = results.rows.item(i);
+                          //console.log(row)
+                          arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+                        }
+                     
+                        //this.setState({ropa:arrayGuardarropas,modalRopa:false})
+                      }).catch((error) => {
+                        this.setState({modalRopa:false})
+                        Alert.alert("Fallo la Busqueda en la Base de datos")
+                        console.log(error);
+                      });
+  
+                  
+              }).then( () => {   
+                
+                //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+                //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
+                
+                const {dispatch} = this.props
+                dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+               
+              });
           }).catch((error) => {
             this.setState({modalRopa:false})
             Alert.alert("Fallo la actualizacion en la base de datos")
@@ -221,6 +233,9 @@ class GuardarropasScreen extends React.Component {
 
   sumarDisponibilidadRopa = () => {
 
+    let arrayGuardarropas;
+    let arrayFavoritas;
+
     ropa.transaction(tx => {
       tx.executeSql(
           `UPDATE Ropa SET Cantidad = ? where Ropa_Id = ?;`,[this.state.prenda.Cantidad + 1 , this.state.prenda.Ropa_Id]).then(([tx,results]) => {
@@ -228,31 +243,138 @@ class GuardarropasScreen extends React.Component {
             console.log("Query completed");
 
                // Tengo que volver a cargar la Ropa con los datos nuevos,  ver si puedo simplemente recargar el registro afectado y no todo
-            ropa.transaction(tx => {
-              tx.executeSql(
-                  `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
-                  
-                    console.log("Query completed");
-        
-                    let array=[]
-        
-                    var len = results.rows.length;
+               ropa.transaction(tx => {
+                tx.executeSql(
+                    `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
                     
-                    for (let i = 0; i < len; i++) {
-                      let row = results.rows.item(i);
-                      //console.log(row)
-                      array.push(row)      // GUARDO SOLO NOMBRE
-                    }
-                 
-                    this.setState({ropa:array,modalRopa:false})
-                  }).catch((error) => {
-                    this.setState({modalRopa:false})
-                    Alert.alert("Fallo la Busqueda en la Base de datos")
-                    console.log(error);
-                  });
-        
-              
-            });
+                      console.log("Query completed");
+          
+                      arrayGuardarropas=[]
+          
+                      var len = results.rows.length;
+                      
+                      for (let i = 0; i < len; i++) {
+                        let row = results.rows.item(i);
+                        //console.log(row)
+                        arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
+                      }
+                   
+                      this.setState({/*ropa:arrayGuardarropas,*/modalRopa:false})
+                    }).catch((error) => {
+                      this.setState({modalRopa:false})
+                      Alert.alert("Fallo la Busqueda en la Base de datos")
+                      console.log(error);
+                    });
+  
+                    tx.executeSql(
+                      `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                      
+                        console.log("Query completed");
+            
+                        arrayFavoritas=[]
+            
+                        var len = results.rows.length;
+                        
+                        for (let i = 0; i < len; i++) {
+                          let row = results.rows.item(i);
+                          //console.log(row)
+                          arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+                        }
+                     
+                        //this.setState({ropa:arrayGuardarropas,modalRopa:false})
+                      }).catch((error) => {
+                        this.setState({modalRopa:false})
+                        Alert.alert("Fallo la Busqueda en la Base de datos")
+                        console.log(error);
+                      });
+  
+                  
+              }).then( () => {   
+                
+                //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+                //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
+                
+                const {dispatch} = this.props
+                dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+               
+              });
+
+          }).catch((error) => {
+            this.setState({modalRopa:false})
+            Alert.alert("Fallo la actualizacion en la base de datos")
+            console.log(error);
+          });      
+    });
+  }
+
+  eliminarPrenda = () =>{
+    
+    let arrayGuardarropas;
+    let arrayFavoritas;
+
+    ropa.transaction(tx => {
+      tx.executeSql(
+          `DELETE from Ropa where Ropa_Id = ?;`,[this.state.prenda.Ropa_Id]).then(([tx,results]) => {
+          
+            console.log("Query completed");
+
+               // Tengo que volver a cargar la Ropa con los datos nuevos,  ver si puedo simplemente recargar el registro afectado y no todo
+               ropa.transaction(tx => {
+                tx.executeSql(
+                    `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
+                    
+                      console.log("Query completed");
+          
+                      arrayGuardarropas=[]
+          
+                      var len = results.rows.length;
+                      
+                      for (let i = 0; i < len; i++) {
+                        let row = results.rows.item(i);
+                        //console.log(row)
+                        arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
+                      }
+                   
+                      this.setState({/*ropa:arrayGuardarropas,*/modalRopa:false})
+                    }).catch((error) => {
+                      this.setState({modalRopa:false})
+                      Alert.alert("Fallo la Busqueda en la Base de datos")
+                      console.log(error);
+                    });
+  
+                    tx.executeSql(
+                      `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                      
+                        console.log("Query completed");
+            
+                        arrayFavoritas=[]
+            
+                        var len = results.rows.length;
+                        
+                        for (let i = 0; i < len; i++) {
+                          let row = results.rows.item(i);
+                          //console.log(row)
+                          arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+                        }
+                     
+                        //this.setState({ropa:arrayGuardarropas,modalRopa:false})
+                      }).catch((error) => {
+                        this.setState({modalRopa:false})
+                        Alert.alert("Fallo la Busqueda en la Base de datos")
+                        console.log(error);
+                      });
+  
+                  
+              }).then( () => {   
+                
+                //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+                //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
+                
+                const {dispatch} = this.props
+                dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+               
+              });
+
           }).catch((error) => {
             this.setState({modalRopa:false})
             Alert.alert("Fallo la actualizacion en la base de datos")
@@ -311,24 +433,35 @@ class GuardarropasScreen extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             style = {styles.send}
-            onPress ={this.usarRopa}    // LLAMAR a una funcion que use una trasaccion para sumar 1 a USO
+            onPress ={this.usarRopa}   
           >
             <Text>Usar</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style = {styles.send}
-            onPress ={ this.restarDisponibilidadRopa }    // LLAMAR a una funcion que use una trasaccion para cambiar cantidad de prendas de tipo color
+            onPress ={ this.restarDisponibilidadRopa }    
             disabled= {this.state.prenda.Cantidad == 0}
           >
             <Text>Restar cantidad disponible</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style = {styles.send}
-            onPress ={ this.sumarDisponibilidadRopa}    // LLAMAR a una funcion que use una trasaccion para cambiar cantidad de prendas de tipo color
-            disabled= {this.state.prenda.Cantidad == 10}  // TODO: VALIDAR
+            onPress ={ this.sumarDisponibilidadRopa}    
+            disabled= {this.state.prenda.Cantidad == 10}  
           >
             <Text>Sumar cantidad disponible</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style = {styles.send}
+            onPress ={ this.eliminarPrenda}   
+          >
+            <Text>Eliminar Prenda</Text>
+          </TouchableOpacity>
+
+
+          {/*TODO: BORRAR PRENDA!!!!!!!*/}
+
+
           </Modal>
         </View>
         </View>

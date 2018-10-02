@@ -11,6 +11,9 @@ var SQLite = require('react-native-sqlite-storage')
 //SQLite.DEBUG(true);
 SQLite.enablePromise(true);
 //var ropa;
+
+
+
 class FavoritasScreen extends React.Component {
 
   constructor(props){
@@ -85,6 +88,9 @@ class FavoritasScreen extends React.Component {
 
   usarRopa = () => {
 
+    let arrayGuardarropas;
+    let arrayFavoritas;
+
     ropa.transaction(tx => {
       tx.executeSql(
           `UPDATE Ropa SET Uso = ? where Ropa_Id = ?;`,[this.state.prenda.Uso +1 , this.state.prenda.Ropa_Id]).then(([tx,results]) => {
@@ -137,36 +143,14 @@ class FavoritasScreen extends React.Component {
                       Alert.alert("Fallo la Busqueda en la Base de datos")
                       console.log(error);
                     });
-
-                    tx.executeSql(
-                      `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 1;`).then(([tx,results]) => {
-                      
-                        console.log("Query completed");
-            
-                        arrayPrecargadas=[]
-            
-                        var len = results.rows.length;
-                        
-                        for (let i = 0; i < len; i++) {
-                          let row = results.rows.item(i);
-                          //console.log(row)
-                          arrayPrecargadas.push(row)      // GUARDO SOLO NOMBRE
-                        }
-                     
-                        //this.setState({ropa:arrayGuardarropas,modalRopa:false})
-                      }).catch((error) => {
-                        this.setState({modalRopa:false})
-                        Alert.alert("Fallo la Busqueda en la Base de datos")
-                        console.log(error);
-                      });
          
             }).then( () => {   
               
-            //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
-            //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
+              //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+              //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
               
               const {dispatch} = this.props
-              dispatch( updateClothes(arrayFavoritas,arrayGuardarropas,arrayPrecargadas) );
+              dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
              
             });
 

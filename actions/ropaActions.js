@@ -6,9 +6,9 @@ SQLite.enablePromise(true);
 var ropa;
 
 
-export function updateClothes(arrayFavoritas,arrayGuardarropas,arrayPrecargadas){
+export function updateClothes(arrayFavoritas,arrayGuardarropas){
   console.log("UPDATE CLOTHES")
-  return {type : "UPDATE_CLOTHES", arrayFavoritas , arrayGuardarropas , arrayPrecargadas}
+  return {type : "UPDATE_CLOTHES", arrayFavoritas , arrayGuardarropas}
   
 }
 
