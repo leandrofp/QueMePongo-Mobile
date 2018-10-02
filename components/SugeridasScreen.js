@@ -1,4 +1,4 @@
-import { Button, Text, View } from 'react-native';
+import { Button, Text, View , Alert } from 'react-native';
 import React from 'react';
 
 console.ignoredYellowBox=true;
@@ -11,7 +11,6 @@ const apikey = '0efd092318208df58c1aa6a0a64c4ec6' ;
 export default class SugeridasScreen extends React.Component {
 
   
-	
 	state = {
 		loading: false,
 		error: false,
@@ -57,8 +56,7 @@ export default class SugeridasScreen extends React.Component {
 				}
 			}
 			else{
-				//TODO: ESTA CARGANDO 
-		
+				Alert.alert("La aplicacion esta cargando la informacion y no esta lista")
 			}
 	}
 
