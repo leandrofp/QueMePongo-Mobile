@@ -140,10 +140,7 @@ class PrecargadasScreen extends React.Component {
 
       
       console.log("APRETAME")
-      const {dispatch} = this.props
       
-
-      dispatch( updateClothes() );
       
 
       ropa.transaction(tx => {
@@ -178,6 +175,8 @@ class PrecargadasScreen extends React.Component {
       //data = this.state.data;
 
       const data = this.state.data
+
+     
 
      
 

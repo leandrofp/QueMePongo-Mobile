@@ -1,6 +1,8 @@
 import { Text, View ,  FlatList , Modal, TouchableOpacity, StyleSheet , Alert} from 'react-native';
 import { ListItem } from 'react-native-elements';
 import React from 'react';
+import { updateClothes } from '../actions/ropaActions'
+import { connect } from 'react-redux';
 
 console.ignoredYellowBox=true;
 
@@ -8,8 +10,14 @@ console.ignoredYellowBox=true;
 var SQLite = require('react-native-sqlite-storage')
 //SQLite.DEBUG(true);
 SQLite.enablePromise(true);
-//var ropa;
-export default class GuardarropasScreen extends React.Component {
+var ropa;
+
+let arrayPrecargadas=[];
+let arrayGuardarropas=[];
+let arrayFavoritas=[];
+
+
+class GuardarropasScreen extends React.Component {
 
   constructor(props){
     super(props)
@@ -22,8 +30,6 @@ export default class GuardarropasScreen extends React.Component {
 
   }
   componentWillMount(){  
-
-    
 
     SQLite.openDatabase("ropa.bd").then((DB) => {
       ropa = DB;                            // lo asigna a la global, supongo para poder usar esa despues
@@ -83,32 +89,86 @@ export default class GuardarropasScreen extends React.Component {
           
             console.log("Query completed");
 
-               // Tengo que volver a cargar la Ropa con los datos nuevos,  ver si puedo simplemente recargar el registro afectado y no todo
-            ropa.transaction(tx => {
+              // Tengo que volver a cargar la Ropa con los datos nuevos,  ver si puedo simplemente recargar el registro afectado y no todo
+            
+              ropa.transaction(tx => {
               tx.executeSql(
                   `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
                   
                     console.log("Query completed");
         
-                    let array=[]
+                    arrayGuardarropas=[]
         
                     var len = results.rows.length;
                     
                     for (let i = 0; i < len; i++) {
                       let row = results.rows.item(i);
                       //console.log(row)
-                      array.push(row)      // GUARDO SOLO NOMBRE
+                      arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
                     }
                  
-                    this.setState({ropa:array,modalRopa:false})
+                    this.setState({/*ropa:arrayGuardarropas,*/modalRopa:false})
                   }).catch((error) => {
                     this.setState({modalRopa:false})
                     Alert.alert("Fallo la Busqueda en la Base de datos")
                     console.log(error);
                   });
-        
+
+                  tx.executeSql(
+                    `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                    
+                      console.log("Query completed");
+          
+                      arrayFavoritas=[]
+          
+                      var len = results.rows.length;
+                      
+                      for (let i = 0; i < len; i++) {
+                        let row = results.rows.item(i);
+                        //console.log(row)
+                        arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+                      }
+                   
+                      //this.setState({ropa:arrayGuardarropas,modalRopa:false})
+                    }).catch((error) => {
+                      this.setState({modalRopa:false})
+                      Alert.alert("Fallo la Busqueda en la Base de datos")
+                      console.log(error);
+                    });
+
+                    tx.executeSql(
+                      `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 1;`).then(([tx,results]) => {
+                      
+                        console.log("Query completed");
+            
+                        arrayPrecargadas=[]
+            
+                        var len = results.rows.length;
+                        
+                        for (let i = 0; i < len; i++) {
+                          let row = results.rows.item(i);
+                          //console.log(row)
+                          arrayPrecargadas.push(row)      // GUARDO SOLO NOMBRE
+                        }
+                     
+                        //this.setState({ropa:arrayGuardarropas,modalRopa:false})
+                      }).catch((error) => {
+                        this.setState({modalRopa:false})
+                        Alert.alert("Fallo la Busqueda en la Base de datos")
+                        console.log(error);
+                      });
+         
+            }).then( () => {   
               
+              //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+              //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
+              
+              const {dispatch} = this.props
+              dispatch( updateClothes(arrayFavoritas,arrayGuardarropas,arrayPrecargadas) );
+             
             });
+
+
           }).catch((error) => {
             this.setState({modalRopa:false})
             Alert.alert("Fallo la actualizacion en la base de datos")
@@ -217,10 +277,19 @@ export default class GuardarropasScreen extends React.Component {
   
 
   render() {
+
+    let data;
+    console.log("PRUEBA ES AHORA " , this.props.ropa.prueba)
+    if(this.props.ropa.prendasGuardarropas.length)
+      data = this.props.ropa.prendasGuardarropas
+    else
+      data = this.state.ropa
+
+
       return (
         <View style={{ flex: 1 , backgroundColor:'orange'}}>
           
-          <FlatList keyExtractor={this.keyExtractor} data={this.state.ropa} renderItem={this.renderItem} />
+          <FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
         
         <View style={{backgroundColor:'orange', flex:1}}>
           <Modal visible={this.state.modalRopa} >
@@ -280,3 +349,12 @@ export default class GuardarropasScreen extends React.Component {
       padding : 8
     }
   });
+
+  const mapStateToProps = state => {
+    const { ropa } = state;
+        return {
+           ropa
+        };
+  };
+  
+  export default connect(mapStateToProps)(GuardarropasScreen);
