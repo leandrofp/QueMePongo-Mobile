@@ -388,7 +388,7 @@ class GuardarropasScreen extends React.Component {
   
     renderItem = ({ item, index }) => (
       <ListItem
-        title={item.Name}
+        title={item.Name+ ' color ' + item.Color}
         //leftAvatar={{ source: item.avatar_url, rounded: true }}
         onPress={() => {
           this.setState({ modalRopa: true , prenda : item });
@@ -414,10 +414,10 @@ class GuardarropasScreen extends React.Component {
           <FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
         
         <View style={{backgroundColor:'orange', flex:1}}>
-          <Modal visible={this.state.modalRopa} >
+          <Modal visible={this.state.modalRopa} style = {styles.modal} >
           
           <Text>
-            {"Nombre: " + this.state.prenda.Name }
+            {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
           </Text>
           <Text>
             {"Cantidad disponible: " + this.state.prenda.Cantidad}
@@ -480,7 +480,10 @@ class GuardarropasScreen extends React.Component {
       justifyContent: 'flex-end',
       //fontSize:20,
       padding : 8
-    }
+    },
+   modal: {
+      backgroundColor:'orange'
+   }
   });
 
   const mapStateToProps = state => {

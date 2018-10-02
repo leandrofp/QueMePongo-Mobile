@@ -4,6 +4,7 @@ import React from 'react';
 import { updateClothes } from '../actions/ropaActions'
 import { connect } from 'react-redux';
 
+
 console.ignoredYellowBox=true;
 
 
@@ -169,7 +170,7 @@ class FavoritasScreen extends React.Component {
   
     renderItem = ({ item, index }) => (
       <ListItem
-        title={item.Name}
+        title={item.Name + ' color ' + item.Color}
         //leftAvatar={{ source: item.avatar_url, rounded: true }}
         onPress={() => {
           this.setState({ modalRopa: true , prenda : item });
@@ -195,7 +196,7 @@ class FavoritasScreen extends React.Component {
           <Modal visible={this.state.modalRopa}>
           
           <Text>
-            {"Nombre: " + this.state.prenda.Name }
+            {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
           </Text>
           <Text>
             {"Cantidad disponible: " + this.state.prenda.Cantidad}
