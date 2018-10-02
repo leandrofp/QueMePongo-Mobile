@@ -413,57 +413,58 @@ class GuardarropasScreen extends React.Component {
           
           <FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
         
-        <View style={{backgroundColor:'orange', flex:1}}>
-          <Modal visible={this.state.modalRopa} style = {styles.modal} >
+        <Modal visible={this.state.modalRopa} style = {styles.modal} >
+          <View style={{backgroundColor:'grey', flex:1}}>
           
-          <Text style={styles.text}>
-            {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
-          </Text>
-          <Text style={styles.text}>
-            {"Cantidad disponible: " + this.state.prenda.Cantidad}
-          </Text>
-          <Text style={styles.text}>
-            {"Cantidad de veces que se uso: " + this.state.prenda.Uso}
-          </Text>
-          <TouchableOpacity
-            style = {styles.send}
-            onPress ={this.usarRopa}   
-          >
-            <Text style={styles.sendText}>Usar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style = {styles.send}
-            onPress ={ this.restarDisponibilidadRopa }    
-            disabled= {this.state.prenda.Cantidad == 0}
-          >
-            <Text style={styles.sendText}>Restar cantidad disponible</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style = {styles.send}
-            onPress ={ this.sumarDisponibilidadRopa}    
-            disabled= {this.state.prenda.Cantidad == 10}  
-          >
-            <Text style={styles.sendText}>Sumar cantidad disponible</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style = {styles.send}
-            onPress ={ this.eliminarPrenda}   
-          >
-            <Text style={styles.sendText}>Eliminar Prenda</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style = {styles.send}
-            onPress ={ () => {this.setState({modalRopa:false})}}
-          >
-            <Text style={styles.sendText}>Cancelar</Text>
-          </TouchableOpacity>
 
 
-          {/*TODO: BORRAR PRENDA!!!!!!!*/}
+          
+            <View style={{marginBottom:4}}>
+              <Text style={styles.text}>
+                {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
+              </Text>
+              <Text style={styles.text}>
+                {"Cantidad disponible: " + this.state.prenda.Cantidad}
+              </Text>
+              <Text style={styles.text}>
+                {"Cantidad de veces que se uso: " + this.state.prenda.Uso}
+              </Text>
+            </View>
+            <TouchableOpacity
+              style = {styles.send}
+              onPress ={this.usarRopa}   
+            >
+              <Text style={styles.sendText}>Usar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style = {styles.send}
+              onPress ={ this.restarDisponibilidadRopa }    
+              disabled= {this.state.prenda.Cantidad == 0}
+            >
+              <Text style={styles.sendText}>Restar cantidad disponible</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style = {styles.send}
+              onPress ={ this.sumarDisponibilidadRopa}    
+              disabled= {this.state.prenda.Cantidad == 10}  
+            >
+              <Text style={styles.sendText}>Sumar cantidad disponible</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style = {styles.send}
+              onPress ={ this.eliminarPrenda}   
+            >
+              <Text style={styles.sendText}>Eliminar Prenda</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style = {styles.send}
+              onPress ={ () => {this.setState({modalRopa:false})}}
+            >
+              <Text style={styles.sendText}>Cancelar</Text>
+            </TouchableOpacity>
 
-
-          </Modal>
-        </View>
+          </View>
+        </Modal>
         </View>
 
       );

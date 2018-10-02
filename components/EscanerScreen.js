@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: 'black'
+    backgroundColor: 'orange'
   },
   preview: {
     flex: 1,

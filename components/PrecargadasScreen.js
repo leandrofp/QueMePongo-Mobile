@@ -180,27 +180,28 @@ class PrecargadasScreen extends React.Component {
             
             <FlatList keyExtractor={this.keyExtractor} data={this.state.ropa} renderItem={this.renderItem} />
           
-          <View style={{backgroundColor:'orange', flex:1}}>
-            <Modal visible={this.state.modalRopa}>
+          <Modal visible={this.state.modalRopa}>
+            <View style={{backgroundColor:'grey', flex:1}}>
             
-            <Text style={styles.text}>
-              {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
-            </Text>
-            <TouchableOpacity
-              style = {styles.send}
-              onPress ={this.usarRopa}    // LLAMAR a una funcion que use una trasaccion para sumar 1 a USO
-            >
-              <Text style={styles.sendText}>Probar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style = {styles.send}
-              onPress ={ () => {this.setState({modalRopa:false})}}
-            >
-              <Text style={styles.sendText}>Cancelar</Text>
-            </TouchableOpacity>
             
-            </Modal>
-          </View>
+              <Text style={styles.text}>
+                {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
+              </Text>
+              <TouchableOpacity
+                style = {styles.send}
+                onPress ={this.usarRopa}    // LLAMAR a una funcion que use una trasaccion para sumar 1 a USO
+              >
+                <Text style={styles.sendText}>Probar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style = {styles.send}
+                onPress ={ () => {this.setState({modalRopa:false})}}
+              >
+                <Text style={styles.sendText}>Cancelar</Text>
+              </TouchableOpacity>
+            
+            </View>
+          </Modal>
           </View>
   
         );
