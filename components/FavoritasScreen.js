@@ -195,27 +195,28 @@ class FavoritasScreen extends React.Component {
         <View style={{backgroundColor:'orange', flex:1}}>
           <Modal visible={this.state.modalRopa}>
           
-          <Text>
+          <Text style={styles.text}>
             {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
           </Text>
-          <Text>
+          <Text style={styles.text}>
             {"Cantidad disponible: " + this.state.prenda.Cantidad}
           </Text>
-          <Text>
+          <Text style={styles.text}>
             {"Cantidad de veces que se uso: " + this.state.prenda.Uso}
           </Text>
           <TouchableOpacity
             style = {styles.send}
-            onPress ={ () => {this.setState({modalRopa:false})}}
+            onPress ={this.usarRopa}    // LLAMAR a una funcion que use una trasaccion para sumar 1 a USO
           >
-            <Text>Cancelar</Text>
+            <Text style={styles.sendText}>Usar</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style = {styles.send}
-            onPress ={this.usarRopa}    // LLAMAR a una funcion que use una trasaccion para sumar 1 a USO
+            onPress ={ () => {this.setState({modalRopa:false})}}
           >
-            <Text>Usar</Text>
+            <Text style={styles.sendText}>Cancelar</Text>
           </TouchableOpacity>
+          
           </Modal>
         </View>
         </View>
@@ -227,13 +228,22 @@ class FavoritasScreen extends React.Component {
   const styles = StyleSheet.create({
     send: {
       margin: 2 ,
-      backgroundColor: '#fff',
+      backgroundColor: 'orange',
       borderRadius: 5,
       paddingHorizontal: 22,
       alignSelf: 'center',
       justifyContent: 'flex-end',
       //fontSize:20,
       padding : 8
+    },
+    sendText: {
+      margin: 2 ,
+      color: '#ffffff'
+    },
+    text:{
+      fontSize: 20,
+      color: 'black',
+      alignSelf: 'center',
     }
   });
 

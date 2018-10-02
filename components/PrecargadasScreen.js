@@ -35,11 +35,6 @@ class PrecargadasScreen extends React.Component {
       //this.updateProgress("Error " + (err.message || err));
     }
     
-    /*componentWillUnmount(){
-      console.log("ABASDAF")
-      this.closeDatabase();
-    }*/
-
     componentWillMount(){  
 
       async function requestGPSPermission() {
@@ -188,22 +183,22 @@ class PrecargadasScreen extends React.Component {
           <View style={{backgroundColor:'orange', flex:1}}>
             <Modal visible={this.state.modalRopa}>
             
-            <Text>
+            <Text style={styles.text}>
               {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
             </Text>
-            
-            <TouchableOpacity
-              style = {styles.send}
-              onPress ={ () => {this.setState({modalRopa:false})}}
-            >
-              <Text>Cancelar</Text>
-            </TouchableOpacity>
             <TouchableOpacity
               style = {styles.send}
               onPress ={this.usarRopa}    // LLAMAR a una funcion que use una trasaccion para sumar 1 a USO
             >
-              <Text>Probar</Text>
+              <Text style={styles.sendText}>Probar</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              style = {styles.send}
+              onPress ={ () => {this.setState({modalRopa:false})}}
+            >
+              <Text style={styles.sendText}>Cancelar</Text>
+            </TouchableOpacity>
+            
             </Modal>
           </View>
           </View>
@@ -211,90 +206,27 @@ class PrecargadasScreen extends React.Component {
         );
     }
 
-    
-
-    
-
-    // apretame(){
-
-      
-    //   console.log("APRETAME")
-      
-      
-
-    //   ropa.transaction(tx => {
-    //     tx.executeSql(
-    //       `select * from Tipo_ropa;`).then(([tx,results]) => {
-          
-    //         console.log("Query completed");
-
-    //         let array=[]
-
-    //         var len = results.rows.length;
-            
-    //         for (let i = 0; i < len; i++) {
-    //           let row = results.rows.item(i);
-    //           //console.log(row.Name)
-    //           array.push(row.Name)
-    //         }
-    //         //console.log(array)
-    //         this.setState({data:array})
-           
-    //       }).catch((error) => {
-    //         console.log(error);
-    //       });
-
-        
-    //   });
-    // }
-
-    
-
-
-    // render() {
-
-    //   //data = this.state.data;
-
-    //   const data = this.state.data
-
-     
-
-     
-
-    //   return (
-    //     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' , backgroundColor:'orange' }}>
-    //       <Text>PRECARGADAS!</Text>
-         
-         
-    //       <TouchableOpacity
-    //       onPress = {this.apretame}
-    //       >
-    //       <Text style={{fontSize: 14}}> Apretame para ver datos </Text>
-    //       </TouchableOpacity>
-                    
-    //       {data.map((item,index) => <Text>{item}</Text> )}
-
-
-       
-          
-    //     </View>
-    //   );
-    // }
-
-
-
   }
 
   const styles = StyleSheet.create({
     send: {
       margin: 2 ,
-      backgroundColor: '#fff',
+      backgroundColor: 'orange',
       borderRadius: 5,
       paddingHorizontal: 22,
       alignSelf: 'center',
       justifyContent: 'flex-end',
       //fontSize:20,
       padding : 8
+    },
+    sendText: {
+      margin: 2 ,
+      color: '#ffffff'
+    },
+    text:{
+      fontSize: 20,
+      color: 'black',
+      alignSelf: 'center',
     }
   });
 

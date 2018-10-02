@@ -170,7 +170,7 @@ class GuardarropasScreen extends React.Component {
                // Tengo que volver a cargar la Ropa con los datos nuevos,  ver si puedo simplemente recargar el registro afectado y no todo
               ropa.transaction(tx => {
                 tx.executeSql(
-                    `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
+                    `SELECT * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
                     
                       console.log("Query completed");
           
@@ -192,7 +192,7 @@ class GuardarropasScreen extends React.Component {
                     });
   
                     tx.executeSql(
-                      `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                      `SELECT * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
                       
                         console.log("Query completed");
             
@@ -245,7 +245,7 @@ class GuardarropasScreen extends React.Component {
                // Tengo que volver a cargar la Ropa con los datos nuevos,  ver si puedo simplemente recargar el registro afectado y no todo
                ropa.transaction(tx => {
                 tx.executeSql(
-                    `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
+                    `SELECT * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
                     
                       console.log("Query completed");
           
@@ -267,7 +267,7 @@ class GuardarropasScreen extends React.Component {
                     });
   
                     tx.executeSql(
-                      `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                      `SELECT * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
                       
                         console.log("Query completed");
             
@@ -321,7 +321,7 @@ class GuardarropasScreen extends React.Component {
                // Tengo que volver a cargar la Ropa con los datos nuevos,  ver si puedo simplemente recargar el registro afectado y no todo
                ropa.transaction(tx => {
                 tx.executeSql(
-                    `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
+                    `SELECT * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
                     
                       console.log("Query completed");
           
@@ -343,7 +343,7 @@ class GuardarropasScreen extends React.Component {
                     });
   
                     tx.executeSql(
-                      `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                      `SELECT * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
                       
                         console.log("Query completed");
             
@@ -401,7 +401,7 @@ class GuardarropasScreen extends React.Component {
   render() {
 
     let data;
-    console.log("PRUEBA ES AHORA " , this.props.ropa.prueba)
+    //console.log("PRUEBA ES AHORA " , this.props.ropa.prueba)
     if(this.props.ropa.prendasGuardarropas.length)
       data = this.props.ropa.prendasGuardarropas
     else
@@ -416,46 +416,46 @@ class GuardarropasScreen extends React.Component {
         <View style={{backgroundColor:'orange', flex:1}}>
           <Modal visible={this.state.modalRopa} style = {styles.modal} >
           
-          <Text>
+          <Text style={styles.text}>
             {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
           </Text>
-          <Text>
+          <Text style={styles.text}>
             {"Cantidad disponible: " + this.state.prenda.Cantidad}
           </Text>
-          <Text>
+          <Text style={styles.text}>
             {"Cantidad de veces que se uso: " + this.state.prenda.Uso}
           </Text>
           <TouchableOpacity
             style = {styles.send}
-            onPress ={ () => {this.setState({modalRopa:false})}}
-          >
-            <Text>Cancelar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style = {styles.send}
             onPress ={this.usarRopa}   
           >
-            <Text>Usar</Text>
+            <Text style={styles.sendText}>Usar</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style = {styles.send}
             onPress ={ this.restarDisponibilidadRopa }    
             disabled= {this.state.prenda.Cantidad == 0}
           >
-            <Text>Restar cantidad disponible</Text>
+            <Text style={styles.sendText}>Restar cantidad disponible</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style = {styles.send}
             onPress ={ this.sumarDisponibilidadRopa}    
             disabled= {this.state.prenda.Cantidad == 10}  
           >
-            <Text>Sumar cantidad disponible</Text>
+            <Text style={styles.sendText}>Sumar cantidad disponible</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style = {styles.send}
             onPress ={ this.eliminarPrenda}   
           >
-            <Text>Eliminar Prenda</Text>
+            <Text style={styles.sendText}>Eliminar Prenda</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style = {styles.send}
+            onPress ={ () => {this.setState({modalRopa:false})}}
+          >
+            <Text style={styles.sendText}>Cancelar</Text>
           </TouchableOpacity>
 
 
@@ -473,7 +473,7 @@ class GuardarropasScreen extends React.Component {
   const styles = StyleSheet.create({
     send: {
       margin: 2 ,
-      backgroundColor: '#fff',
+      backgroundColor: 'orange',
       borderRadius: 5,
       paddingHorizontal: 22,
       alignSelf: 'center',
@@ -481,9 +481,17 @@ class GuardarropasScreen extends React.Component {
       //fontSize:20,
       padding : 8
     },
-   modal: {
+    sendText: {
+      margin: 2 ,
+      color: '#ffffff'
+    },
+    text:{
+      fontSize: 20,
+      color: 'black',
+      alignSelf: 'center',
+    },modal: {
       backgroundColor:'orange'
-   }
+    },
   });
 
   const mapStateToProps = state => {

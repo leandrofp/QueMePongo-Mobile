@@ -13,14 +13,18 @@ import {
 } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import Clarifai from 'clarifai'
+import { updateClothes } from '../actions/ropaActions'
+import { connect } from 'react-redux';
 
 
-const img1 = require('./RN1.jpg')
-const img2 = require('./PA1.jpg')
+var SQLite = require('react-native-sqlite-storage')
+//SQLite.DEBUG(true);
+SQLite.enablePromise(true);
+var ropa;
 
 console.disableYellowBox = true;
 
-export default class EscanerScreen extends Component {
+class EscanerScreen extends Component {
   
   constructor(props){
     super(props);
@@ -30,6 +34,85 @@ export default class EscanerScreen extends Component {
 
     //this.handleResponse = this.handleResponse.bind(this)
   }
+
+  componentWillMount(){
+
+    SQLite.openDatabase("ropa.bd").then((DB) => {
+      ropa = DB;                            // lo asigna a la global, supongo para poder usar esa despues
+      console.log("BD ABIERTA")               // hasta aca anda...
+    }).catch((error) => {
+      Alert.alert("Error abriendo la Base de datos. Deberá reiniciar la aplicación")
+      console.log(error);
+    });
+  }
+
+  agregarRopa = () =>{
+    ropa.transaction(tx => {
+
+      tx.executeSql(
+      `SELECT *  from Tipo_Ropa t where t.Name = ?;`,[this.state.prendaEscaneadaNombre]).then(([tx,results]) => {
+
+        let row;
+
+        var len = results.rows.length;        // en teoria no hace falta porque solo encontraria un tipo de prenda por nombre
+          for (let i = 0; i < len; i++) {
+            row = results.rows.item(i);
+            console.log(row.Name) 
+          }
+
+      //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Processing , Uso , Color) VALUES (1 ,2 , 1 , -1 , ? , 0, \'Blanco\' );', [5]);
+      ropa.transaction(tx => {
+
+          //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Processing , Uso , Color)
+
+          /*        */
+
+          tx.executeSql('INSERT INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Processing , Uso , Color) ' +  
+          'VALUES ( null , ? , 0 , 1 , ? , 0 , ? );', [ row.Tipo_Id , row.Tipo_Id  , this.state.colorPrendaEscaneadaNombre ]).then(([tx,results]) => {
+            this.setState({modal:false})
+           
+            console.log("INSERTE LA PRENDA")
+            var len = results.rows.length;        // en teoria no hace falta porque solo encontraria un tipo de prenda por nombre
+            for (let i = 0; i < len; i++) {
+              row = results.rows.item(i);
+              console.log(row) 
+            }
+  
+
+
+
+          }).catch((error) => {
+            this.setState({modal:false})
+            Alert.alert("Fallo la inserción en la Base de datos")
+            console.log(error);
+          })
+      }).then( () => {   
+              
+        //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+        //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
+        
+        const {dispatch} = this.props
+        dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+       
+      });
+
+
+      }).catch((error) => {
+        this.setState({modal:false})
+        Alert.alert("Fallo la inserción en la Base de datos")
+        console.log(error);
+      })
+    }).then(() =>{
+      this.setState({modal:false})
+      console,log("Transaccion Finalizada")
+        //this.closeDatabase()});
+    });   
+
+  
+    
+  }
+
+
 
   takePicture = async function() {
     if (this.camera) {
@@ -51,7 +134,7 @@ export default class EscanerScreen extends Component {
       
         process.nextTick = setImmediate // RN polyfill
     
-        console.log("PASE POR NEXTICK")
+        //console.log("PASE POR NEXTICK")
 
         //const { data } = data
         //const file = { base64: data }
@@ -65,7 +148,7 @@ export default class EscanerScreen extends Component {
             if (concepts && concepts.length > 0) {
             
               concepts[0].name = this.tipoPrenda(concepts[0].name)
-              concepts[1].name = this.tipoPrenda(concepts[1].name)
+              //concepts[1].name = this.tipoPrenda(concepts[1].name)
       
               if(concepts[0].name != '0'){
 
@@ -86,6 +169,9 @@ export default class EscanerScreen extends Component {
                 if(color1name != '0'){
                   this.setState({modal:true, prendaEscaneadaNombre:tipo1name,prendaEscaneadaAcierto:tipo1value,
                                   colorPrendaEscaneadaNombre:color1name,colorPrendaEscaneadaAcierto:color1value})
+
+
+
                   //Alert.alert("Usted Escaneo: " + tipo1name + ' ' + tipo1value + ' \r \r \r   ' + color1name + '  ' + color1value)
                 }
                 else
@@ -122,7 +208,7 @@ export default class EscanerScreen extends Component {
     }
 
   tipoPrenda = (prenda) => {
-      console.log("LLEGO PRENDA" , prenda)
+      //console.log("LLEGO PRENDA" , prenda)
       let tipoPrenda;
 
       if( prenda == "Shirt" || prenda == "T-Shirt" || prenda == "Tank Top" || prenda == "Activewear" || prenda == "T Shirt" || 
@@ -222,10 +308,10 @@ export default class EscanerScreen extends Component {
                 style={{width: 350, height: 350, transform: [{ rotate: '90deg'}], margin:2 , alignSelf:'center'}}
                 source={{uri: this.state.data}}
               />
-              <Text> Usted escaneo:  {this.state.prendaEscaneadaNombre + '  ' + this.state.colorPrendaEscaneadaNombre}</Text>
+              <Text> Usted escaneo:  {this.state.prendaEscaneadaNombre + ' color ' + this.state.colorPrendaEscaneadaNombre}</Text>
               <Text>Desea Agregarla al Guardarropas?</Text>
               <TouchableOpacity style = {styles.send}
-              //onPress = { () => {this.setState({modal:false})}}
+              onPress = {this.agregarRopa}
               >
               <Text style={{fontSize: 14}}> Agregar </Text>
               </TouchableOpacity>
@@ -275,4 +361,11 @@ const styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent('EscanerScreen', () => EscanerScreen);
+const mapStateToProps = state => {
+  const { ropa } = state;
+      return {
+         ropa
+      };
+};
+
+export default connect(mapStateToProps)(EscanerScreen);
