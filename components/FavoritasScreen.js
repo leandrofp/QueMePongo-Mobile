@@ -182,7 +182,7 @@ class FavoritasScreen extends React.Component {
 
   render() {
 
-    let ayuda ="En esta pantalla se encuentran todas \nlas prendas que fueron utilizadas\n que utilizaste al menos 5 veces!"
+    let ayuda ="En esta pantalla se encuentran todas \nlas prendas que utilizaste al menos 5 veces!"
 
     if(this.props.ropa.prendasFavoritas.length)
       data = this.props.ropa.prendasFavoritas
