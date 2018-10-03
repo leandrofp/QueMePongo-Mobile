@@ -1,6 +1,6 @@
 import {  Text, View , TouchableOpacity ,   PermissionsAndroid , Alert , FlatList , Modal , StyleSheet } from 'react-native';
 import React from 'react';
-import { ListItem } from 'react-native-elements';
+import { ListItem , Divider} from 'react-native-elements';
 //import { updateClothes } from '../actions/ropaActions'
 import { connect } from 'react-redux';
 
@@ -174,11 +174,17 @@ class PrecargadasScreen extends React.Component {
     }
 
     render() {
+
+    let ayuda ="En esta pantalla se encuentran aquellas\n prendas de muestra que trae la aplicación"
   
         return (
           <View style={{ flex: 1 , backgroundColor:'orange'}}>
             
             <FlatList keyExtractor={this.keyExtractor} data={this.state.ropa} renderItem={this.renderItem} />
+            <Divider style={{ backgroundColor: 'red' }} />
+            <View style={styles.ayudaContainer} >
+              <Text style={styles.ayuda}>{ayuda}</Text>
+            </View>
           
           <Modal visible={this.state.modalRopa}>
             <View style={{backgroundColor:'grey', flex:1}}>
@@ -214,20 +220,33 @@ class PrecargadasScreen extends React.Component {
       margin: 2 ,
       backgroundColor: 'orange',
       borderRadius: 5,
-      paddingHorizontal: 22,
+      width: 150 ,
       alignSelf: 'center',
-      justifyContent: 'flex-end',
+      justifyContent: 'center',
       //fontSize:20,
       padding : 8
     },
     sendText: {
       margin: 2 ,
-      color: '#ffffff'
+      color: '#ffffff',
+      textAlign:'center'
     },
     text:{
-      fontSize: 20,
+      fontSize: 22,
       color: 'black',
       alignSelf: 'center',
+    },modal: {
+      backgroundColor:'orange'
+    },
+    ayuda:{
+      fontWeight:'bold',
+      color:'red',
+      fontSize: 16,
+      textAlign:'center'
+    },
+    ayudaContainer:{
+      alignItems: 'center',
+      justifyContent:'center'
     }
   });
 

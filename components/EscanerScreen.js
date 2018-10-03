@@ -290,8 +290,8 @@ class EscanerScreen extends Component {
             style = {styles.preview}
             type={RNCamera.Constants.Type.back}
             flashMode={RNCamera.Constants.FlashMode.off}
-            permissionDialogTitle={'Permission to use camera'}
-            permissionDialogMessage={'We need your permission to use your camera phone'}
+            permissionDialogTitle={'Permisos de la cámara'}
+            permissionDialogMessage={'¿Deséa permitir a Que Me Pongo utilizar la cámara del dispositivo?'}
         />
         <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center',}}>
           <TouchableOpacity
@@ -299,7 +299,7 @@ class EscanerScreen extends Component {
               style = {styles.capture}
               disabled= {this.state.loading}
           >
-              <Text style={{fontSize: 14}}> Escanear prenda </Text>
+              <Text style={{fontSize: 16, color:'#fff'}}> Escanear prenda </Text>
           </TouchableOpacity>
         </View>
         <Modal visible={this.state.modal} >
@@ -309,7 +309,7 @@ class EscanerScreen extends Component {
                 source={{uri: this.state.data}}
               />
               <Text> Usted escaneo:  {this.state.prendaEscaneadaNombre + ' color ' + this.state.colorPrendaEscaneadaNombre}</Text>
-              <Text>Desea Agregarla al Guardarropas?</Text>
+              <Text>¿Desea Agregarla al Guardarropas?</Text>
               <TouchableOpacity style = {styles.send}
               onPress = {this.agregarRopa}
               >
@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
   },
   capture: {
     flex: 0,
-    backgroundColor: '#fff',
+    backgroundColor: 'grey',
     borderRadius: 5,
     padding: 15,
     paddingHorizontal: 20,

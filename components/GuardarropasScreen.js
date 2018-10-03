@@ -1,5 +1,5 @@
 import { Text, View ,  FlatList , Modal, TouchableOpacity, StyleSheet , Alert} from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem , Divider } from 'react-native-elements';
 import React from 'react';
 import { updateClothes } from '../actions/ropaActions'
 import { connect } from 'react-redux';
@@ -387,7 +387,7 @@ class GuardarropasScreen extends React.Component {
   keyExtractor = (item, index) => index;
   
     renderItem = ({ item, index }) => (
-      <ListItem
+      <ListItem style={styles.text}
         title={item.Name+ ' color ' + item.Color}
         //leftAvatar={{ source: item.avatar_url, rounded: true }}
         onPress={() => {
@@ -401,6 +401,9 @@ class GuardarropasScreen extends React.Component {
   render() {
 
     let data;
+
+    let ayuda ="En esta pantalla se encuentran\n todas tus prendas cargadas"
+ 
     //console.log("PRUEBA ES AHORA " , this.props.ropa.prueba)
     if(this.props.ropa.prendasGuardarropas.length)
       data = this.props.ropa.prendasGuardarropas
@@ -412,12 +415,13 @@ class GuardarropasScreen extends React.Component {
         <View style={{ flex: 1 , backgroundColor:'orange'}}>
           
           <FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
+          <Divider style={{ backgroundColor: 'red' }} />
+          <View style={styles.ayudaContainer} >
+            <Text style={styles.ayuda}>{ayuda}</Text>
+          </View>
         
         <Modal visible={this.state.modalRopa} style = {styles.modal} >
           <View style={{backgroundColor:'grey', flex:1}}>
-          
-
-
           
             <View style={{marginBottom:4}}>
               <Text style={styles.text}>
@@ -432,9 +436,10 @@ class GuardarropasScreen extends React.Component {
             </View>
             <TouchableOpacity
               style = {styles.send}
-              onPress ={this.usarRopa}   
+              //onPress ={this.usarRopa}  
+              disabled={this.state.prenda.Cantidad <= 0} 
             >
-              <Text style={styles.sendText}>Usar</Text>
+              <Text style={styles.sendText}>Probar</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style = {styles.send}
@@ -449,6 +454,13 @@ class GuardarropasScreen extends React.Component {
               disabled= {this.state.prenda.Cantidad == 10}  
             >
               <Text style={styles.sendText}>Sumar cantidad disponible</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style = {styles.send}
+              onPress ={this.usarRopa}  
+              disabled={this.state.prenda.Cantidad <= 0} 
+            >
+              <Text style={styles.sendText}>Usar</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style = {styles.send}
@@ -476,23 +488,34 @@ class GuardarropasScreen extends React.Component {
       margin: 2 ,
       backgroundColor: 'orange',
       borderRadius: 5,
-      paddingHorizontal: 22,
+      width: 150 ,
       alignSelf: 'center',
-      justifyContent: 'flex-end',
+      justifyContent: 'center',
       //fontSize:20,
       padding : 8
     },
     sendText: {
       margin: 2 ,
-      color: '#ffffff'
+      color: '#ffffff',
+      textAlign:'center'
     },
     text:{
-      fontSize: 20,
+      fontSize: 22,
       color: 'black',
       alignSelf: 'center',
     },modal: {
       backgroundColor:'orange'
     },
+    ayuda:{
+      fontWeight:'bold',
+      color:'red',
+      fontSize: 16,
+      textAlign:'center'
+    },
+    ayudaContainer:{
+      alignItems: 'center',
+      justifyContent:'center'
+    }
   });
 
   const mapStateToProps = state => {
