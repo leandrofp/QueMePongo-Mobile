@@ -413,6 +413,15 @@ class GuardarropasScreen extends React.Component {
 
       return (
         <View style={{ flex: 1 , backgroundColor:'orange'}}>
+
+          
+          {/* {this.props.ropa.prendasFavoritas.length == 0 &&
+          <View>
+              <Text style={styles.vacio}>No hay prendas en el guardarropas</Text>
+              <Text style={styles.vacio}>Cargue algunas prendas usando el escaner</Text>
+          </View>
+          } */}
+          
           
           <FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
           <Divider style={{ backgroundColor: 'red' }} />
@@ -515,6 +524,13 @@ class GuardarropasScreen extends React.Component {
     ayudaContainer:{
       alignItems: 'center',
       justifyContent:'center'
+    },
+    vacio:{
+      fontSize:22 , 
+      fontWeight:'bold', 
+      alignSelf:'center', 
+      color:'red',
+      textAlign:'center'
     }
   });
 

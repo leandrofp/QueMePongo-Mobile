@@ -60,15 +60,15 @@ class EscanerScreen extends Component {
             console.log(row.Name) 
           }
 
-      //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Processing , Uso , Color) VALUES (1 ,2 , 1 , -1 , ? , 0, \'Blanco\' );', [5]);
+      //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) VALUES (1 ,2 , 1 , -1 , ? , 0, \'Blanco\' );', [5]);
       ropa.transaction(tx => {
 
-          //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Processing , Uso , Color)
+          
 
-          /*        */
+        
 
-          tx.executeSql('INSERT INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Processing , Uso , Color) ' +  
-          'VALUES ( null , ? , 0 , 1 , ? , 0 , ? );', [ row.Tipo_Id , row.Tipo_Id  , this.state.colorPrendaEscaneadaNombre ]).then(([tx,results]) => {
+          tx.executeSql('INSERT INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) ' +  
+          'VALUES ( null , ? , 0 , 1 , ? , 0 , ? );', [ row.Tipo_Id , /*COD COLOR, CALCULAR*/  , this.state.colorPrendaEscaneadaNombre ]).then(([tx,results]) => {
             this.setState({modal:false})
            
             console.log("INSERTE LA PRENDA")
@@ -244,11 +244,11 @@ class EscanerScreen extends Component {
 
   colorPrenda = (colorname) => {
 
-    if(colorname.includes("Gray"))
+    if(colorname.includes("Gray"))               
       colorname = "Gris"
-    else if(colorname.includes("Brown"))
+    else if(colorname.includes("Brown"))       
       colorname = "Marron"
-    else if(colorname.includes("Red"))
+    else if(colorname.includes("Red"))         
       colorname = "Rojo"
     else if(colorname.includes("Green"))
       colorname = "Verde"

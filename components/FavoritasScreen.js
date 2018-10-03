@@ -191,6 +191,16 @@ class FavoritasScreen extends React.Component {
 
       return (
         <View style={{ flex: 1 , backgroundColor:'orange'}}>
+
+          
+          {console.log( this.props.ropa.prendasFavoritas.length  )}
+          {/* {this.props.ropa.prendasFavoritas.length == 0 &&
+          <View>
+              <Text style={styles.vacio}>No hay prendas favoritas.Utilice más</Text>
+              <Text style={styles.vacio}>prendas para que aparezcan en esta seccion</Text>
+          </View> */}
+          }
+         
           
           <FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
           <Divider style={{ backgroundColor: 'red' }} />
@@ -273,6 +283,13 @@ class FavoritasScreen extends React.Component {
     ayudaContainer:{
       alignItems: 'center',
       justifyContent:'center'
+    },
+    vacio:{
+      fontSize:22 , 
+      fontWeight:'bold', 
+      alignSelf:'center', 
+      color:'red',
+      textAlign:'center'
     }
   });
 

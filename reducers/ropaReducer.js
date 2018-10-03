@@ -28,7 +28,7 @@ export function ropa(state = initialState, action) {
           ...state,
           prendasFavoritas : action.arrayFavoritas,
           prendasGuardarropas : action.arrayGuardarropas,
-          //prendasPrecargadas : action.arrayPrecargadas,
+          //prendasSugeridas : action.arraySugeridas,
           prueba: 123
       };  
         

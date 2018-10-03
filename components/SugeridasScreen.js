@@ -1,38 +1,47 @@
-import { Button, Text, View , Alert } from 'react-native';
+import { Text, View ,  FlatList , Modal, TouchableOpacity, StyleSheet , Alert} from 'react-native';
+import { ListItem , Divider } from 'react-native-elements';
 import React from 'react';
+//import { updateClothes } from '../actions/ropaActions'
+import { connect } from 'react-redux';
 
 console.ignoredYellowBox=true;
 
 const apikey = '0efd092318208df58c1aa6a0a64c4ec6' ;
 
+var SQLite = require('react-native-sqlite-storage')
+//SQLite.DEBUG(true);
+SQLite.enablePromise(true);
+//var ropa;
+
 
 // TODO , CUANDO "ERROR" ESTA EN TRUE DEBE TIRAR ALGUN MODAL, AL CERRARLO CAMBIAR A FALSO
 
-export default class SugeridasScreen extends React.Component {
-
-  
-	state = {
-		loading: false,
-		error: false,
-		location: '',
-		temperature: 999,
-		weather: '',
-		message : '', 
-		latitude: '' ,
-		longitude: '',
-	};
+class SugeridasScreen extends React.Component {
 
 	constructor(props){
 		super(props)
 		this.handleLocation = this.handleLocation.bind(this)
+		this.state = {
+			loading: false,
+			error: false,
+			location: '',
+			temperature: 999,
+			weather: '',
+			message : '', 
+			latitude: '' ,
+			longitude: '',
+			modalRopa: false, 
+			ropa: [], 
+			prenda: {}
+		};
 	}
 	
-  componentDidMount(){
+  //componentDidMount(){
 		
 			//if(this.state.temperature==999)		// para que no la vuelva a llamar si cambio de tab, me ahorraria bloqueos (testear si hace falta)
-					this.handleLocation()
+			//this.handleLocation()
 
-  }
+  //}
 
   handleLocation = async () => {
 	
@@ -83,7 +92,7 @@ export default class SugeridasScreen extends React.Component {
 
 				if(weather == 'Rainy')
 					weather = 'Lluvia'
-				else if(weather == 'Cloudy')
+				else if(weather == 'Cloudy' || weather == 'Clouds')
 					weather = 'Nublado'
 				else if(weather == 'Clear' || weather == 'Sunny')
 					weather = 'Despejado'
@@ -118,9 +127,29 @@ export default class SugeridasScreen extends React.Component {
 		return a;
 
 	}
+
+	keyExtractor = (item, index) => index;
+  
+    renderItem = ({ item, index }) => (
+      <ListItem
+        title={item.Name + ' color ' + item.Color}
+        //leftAvatar={{ source: item.avatar_url, rounded: true }}
+        onPress={() => {
+          this.setState({ modalRopa: true , prenda : item });
+        }}
+      />
+  );
 	
 
   render() {
+
+	let ayuda ="Pantalla donde se pueden solicitar\n las sugerencias de ropa de Que Me Pongo"
+
+	if(this.props.ropa.prendasSugeridas.length)		
+      	data = this.props.ropa.prendasFavoritas
+    else{
+		data = []	// no hay ropa
+	}
 
 		//console.log(this.state.temperature , this.state.weather)
 		const temperature = this.state.temperature
@@ -128,19 +157,137 @@ export default class SugeridasScreen extends React.Component {
 		
 
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>SUGERIDAS!</Text>
-         <View>   
-				  <Text>Latitude: {this.state.latitude}</Text>
-          <Text>Longitude: {this.state.longitude}</Text>
-					{temperature != 999 &&
-						<Text style={{fontSize:22}}>TEMPERATURA: {temperature+'º    '} { weather}  </Text>
-					}
-					<Text> {this.state.message}</Text>
+
+      <View style={{ flex: 1 , backgroundColor:'orange' }}>
+
+		{/* <View>
+		{this.props.ropa.prendasSugeridas.length == 0 &&
+				<Text style={styles.vacio}>No hay Prendas Sugeridas</Text>
+		}
+		</View> */}
+		
+	  	<FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
+	  	<Divider style={{ backgroundColor: 'red' }} />
+	  	<TouchableOpacity
+			style = {styles.sugerencias}
+			onPress ={this.handleLocation}
+		>
+			<Text style={styles.sendText}>Pedir sugerencias</Text>
+		</TouchableOpacity>
+        <Divider style={{ backgroundColor: 'red' }} />
+		{/* TODO: CAMBIAR A FLEX 0 LUEGO PORQUE NO VA MAS ESTA BAZOFIA Y QUE EL BOTON QUEDE ABAJO DE TODO*/}
+        <View style={{ flex: 1}}>   	
+			<Text>Latitude: {this.state.latitude}</Text>
+          	<Text>Longitude: {this.state.longitude}</Text>
+			{temperature != 999 &&
+				<Text style={{fontSize:22}}>TEMPERATURA: {temperature+'º    '} { weather}  </Text>
+			}
+			<Text> {this.state.message}</Text>
 				
         </View>
+		<View style={styles.ayudaContainer} >
+        	<Text style={styles.ayuda}>{ayuda}</Text>
+        </View>
+
+		<Modal visible={this.state.modalRopa}>
+            <View style={{backgroundColor:'grey', flex:1}}>
+            
+            
+              <Text style={styles.text}>
+                {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
+              </Text>
+              <Text style={styles.text}>
+                {"Cantidad disponible: " + this.state.prenda.Cantidad}
+              </Text>
+              <Text style={styles.text}>
+                {"Cantidad de veces que se uso: " + this.state.prenda.Uso}
+              </Text>
+              <TouchableOpacity
+                style = {styles.send}
+                //onPress ={this.usarRopa}   
+                disabled={this.state.prenda.Cantidad <= 0} 
+              >
+                <Text style={styles.sendText}>Probar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style = {styles.send}
+                onPress ={this.usarRopa}   
+                disabled={this.state.prenda.Cantidad <= 0} 
+              >
+                <Text style={styles.sendText}>Usar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style = {styles.send}
+                onPress ={ () => {this.setState({modalRopa:false})}}
+              >
+                <Text style={styles.sendText}>Cancelar</Text>
+              </TouchableOpacity>
+              
+            </View>
+        </Modal>
      
       </View>
-    );
+	);
   }
 }
+
+const styles = StyleSheet.create({
+    send: {
+      margin: 2 ,
+      backgroundColor: 'orange',
+      borderRadius: 5,
+      width: 150 ,
+      alignSelf: 'center',
+      justifyContent: 'center',
+      //fontSize:20,
+      padding : 8
+    },
+    sendText: {
+      margin: 2 ,
+      color: '#ffffff',
+      textAlign:'center'
+    },
+    text:{
+      fontSize: 22,
+      color: 'black',
+      alignSelf: 'center',
+    },modal: {
+      backgroundColor:'orange'
+    },
+    ayuda:{
+      fontWeight:'bold',
+      color:'red',
+      fontSize: 16,
+      textAlign:'center'
+    },
+    ayudaContainer:{
+      alignItems: 'center',
+      justifyContent:'center'
+	},
+	sugerencias: {
+		margin: 2 ,
+		backgroundColor: 'grey',
+		borderRadius: 5,
+		width: 150 ,
+		alignSelf: 'center',
+		justifyContent: 'center',
+		//fontSize:20,
+		padding : 8
+	},
+	vacio:{
+		fontSize:22 , 
+		fontWeight:'bold', 
+		alignSelf:'center', 
+		color:'red',
+		textAlign:'center'
+	}
+  });
+
+const mapStateToProps = state => {
+    const { ropa } = state;
+        return {
+           ropa
+        };
+  };
+  
+export default connect(mapStateToProps)(SugeridasScreen);
