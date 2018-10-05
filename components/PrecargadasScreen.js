@@ -77,11 +77,16 @@ class PrecargadasScreen extends React.Component {
     }
 
     createTables = (tx) => {
+
+
+      //Para eliminar las tablas (tipo un truncate que no se si existe)
+      // tx.executeSql('DROP TABLE IF EXISTS Ropa;');
+      // tx.executeSql('DROP TABLE IF EXISTS Tipo_ropa;');
      
       
       tx.executeSql('CREATE TABLE IF NOT EXISTS Ropa( '
-      + 'Ropa_Id INTEGER  NOT NULL PRIMARY KEY,'
-      + 'Tipo_Id INTEGER  NOT NULL , Precargada INTEGER NOT NULL , '  
+      + 'Ropa_Id INTEGER NOT NULL PRIMARY KEY,'
+      + 'Tipo_Id INTEGER NOT NULL , Precargada INTEGER NOT NULL , '  
       +	'Cantidad INTEGER , Cod_Color INTEGER NOT NULL , '
       +	'Uso INTEGER NOT NULL , Color VARCHAR(20) NOT NULL);' ).catch((error) => {
         this.errorCB(error)
@@ -92,14 +97,7 @@ class PrecargadasScreen extends React.Component {
       + 'Name VARCHAR(50) NOT NULL  ); ').catch((error) => {
       this.errorCB(error)
       });
-      
-  
-      //Para eliminar las tablas (tipo un truncate que no se si existe)
-      // tx.executeSql('DROP TABLE IF EXISTS Ropa;');
-      // tx.executeSql('DROP TABLE IF EXISTS Tipo_ropa;');
 
-      
-    
       // INSERCION DE TIPOS DE ROPA ACA ------------------------
       tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (1,"Pantalon");');
       tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (2,"Remera");');
@@ -130,16 +128,23 @@ class PrecargadasScreen extends React.Component {
       //   12=PURPURA
       
 
-     
-       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) VALUES (1 ,2 , 1 , -1 , ? , 0, \'Blanco\' );', [8]);
-       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) VALUES (2 ,1 , 1 , -1 , ? , 0, \'Blanco\' );', [8]);
-       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) VALUES (3 ,2 , 0 , 0 , ? , 0, \'Verde\' );', [4]);
-       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) VALUES (4 ,1 , 0 , 0 , ? , 0, \'Amarillo\' );', [5]);
-       tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) VALUES (5 ,1 , 0 , 0 , ? , 5, \'Rojo\' );', [3]);
+      // Precargadas
+
+      //(Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color)
+      
+
+      tx.executeSql('INSERT OR IGNORE INTO Ropa  VALUES (1 ,2 , 1 , -1 , ? , 0, \'Blanco\' );', [8]);
+      tx.executeSql('INSERT OR IGNORE INTO Ropa  VALUES (2 ,1 , 1 , -1 , ? , 0, \'Blanco\' );', [8]);
+      
+      
+      // Normales para Testing
+      tx.executeSql('INSERT OR IGNORE INTO Ropa  VALUES (3 ,2 , 0 , 0 , ? , 0, \'Verde\' );', [4]);
+      tx.executeSql('INSERT OR IGNORE INTO Ropa  VALUES (4 ,1 , 0 , 0 , ? , 0, \'Amarillo\' );', [5]);
+      tx.executeSql('INSERT OR IGNORE INTO Ropa  VALUES (5 ,1 , 0 , 0 , ? , 5, \'Rojo\' );', [3]);
       
        // el 5 seria remera, el 6 pantalon por ahora en processing por suponer algo
 
-       tx.executeSql(
+      tx.executeSql(
         `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 1;`).then(([tx,results]) => {
         
           console.log("Query completed Precargadas");
@@ -190,7 +195,7 @@ class PrecargadasScreen extends React.Component {
     render() {
 
     let ayuda ="En esta pantalla se encuentran aquellas\n prendas de muestra que trae la aplicación"
-  
+
         return (
           <View style={{ flex: 1 , backgroundColor:'orange'}}>
             

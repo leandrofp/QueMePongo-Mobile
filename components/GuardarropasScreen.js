@@ -311,6 +311,7 @@ class GuardarropasScreen extends React.Component {
     
     let arrayGuardarropas;
     let arrayFavoritas;
+    let arraySugeridas;
 
     ropa.transaction(tx => {
       tx.executeSql(
@@ -352,6 +353,7 @@ class GuardarropasScreen extends React.Component {
                         var len = results.rows.length;
                         
                         for (let i = 0; i < len; i++) {
+
                           let row = results.rows.item(i);
                           //console.log(row)
                           arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
@@ -367,7 +369,7 @@ class GuardarropasScreen extends React.Component {
                   
               }).then( () => {   
                 
-                //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+                //console.log("ARRAY FAVORITAS POST ELIMINAR:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
                 //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
                 
                 const {dispatch} = this.props
@@ -400,27 +402,35 @@ class GuardarropasScreen extends React.Component {
 
   render() {
 
-    let data;
+    console.log( "ARRAY FAVORITAS:  " + this.props.ropa.prendasGuardarropas)
+    console.log( "LENGHT:  " + this.props.ropa.prendasGuardarropas.length)
 
+   
     let ayuda ="En esta pantalla se encuentran\n todas tus prendas cargadas"
+    let vacio = false
+    let data;
  
     //console.log("PRUEBA ES AHORA " , this.props.ropa.prueba)
-    if(this.props.ropa.prendasGuardarropas.length)
+    if(this.props.ropa.prendasGuardarropas.length){
       data = this.props.ropa.prendasGuardarropas
-    else
+      vacio = false
+    }
+    else if(this.state.ropa.length)
       data = this.state.ropa
+    else
+      vacio=true
 
 
       return (
         <View style={{ flex: 1 , backgroundColor:'orange'}}>
 
           
-          {/* {this.props.ropa.prendasFavoritas.length == 0 &&
+          { vacio &&
           <View>
               <Text style={styles.vacio}>No hay prendas en el guardarropas</Text>
               <Text style={styles.vacio}>Cargue algunas prendas usando el escaner</Text>
           </View>
-          } */}
+          } 
           
           
           <FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />

@@ -24,6 +24,11 @@ export function ropa(state = initialState, action) {
       }
       case 'UPDATE_CLOTHES':{
         console.log("AL CASE LLEGUE")
+
+        console.log("LONG DE FAVORITAS:  " ,  action.arrayFavoritas.length)
+
+
+
         return {
           ...state,
           prendasFavoritas : action.arrayFavoritas,

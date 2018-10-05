@@ -75,7 +75,7 @@ class FavoritasScreen extends React.Component {
               let row = results.rows.item(i);
               //console.log(row)
               array.push(row)      // GUARDO SOLO NOMBRE
-            }
+            }   
             //console.log(array , "AAA")
             this.setState({ropa:array})
           }).catch((error) => {
@@ -91,6 +91,7 @@ class FavoritasScreen extends React.Component {
 
     let arrayGuardarropas;
     let arrayFavoritas;
+    let arraySugeridas;
 
     ropa.transaction(tx => {
       tx.executeSql(
@@ -115,6 +116,8 @@ class FavoritasScreen extends React.Component {
                       //console.log(row)
                       arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
                     }
+
+                   
                  
                     this.setState({/*ropa:arrayGuardarropas,*/modalRopa:false})
                   }).catch((error) => {
@@ -123,6 +126,86 @@ class FavoritasScreen extends React.Component {
                     console.log(error);
                   });
 
+                  tx.executeSql(
+                    `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                    
+                      console.log("Query completed");
+          
+                      arrayFavoritas=[]
+          
+                      var len = results.rows.length;
+                      
+                      for (let i = 0; i < len; i++) {
+                        let row = results.rows.item(i);
+                        //console.log(row)
+                        arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+                      }
+                   
+                      //this.setState({ropa:arrayGuardarropas,modalRopa:false})
+                    }).catch((error) => {
+                      this.setState({modalRopa:false})
+                      Alert.alert("Fallo la Busqueda en la Base de datos")
+                      console.log(error);
+                    });
+         
+            }).then( () => {   
+              
+              //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+              //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
+              
+              const {dispatch} = this.props
+              dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+             
+            });
+
+
+          }).catch((error) => {
+            this.setState({modalRopa:false})
+            Alert.alert("Fallo la actualizacion en la base de datos")
+            console.log(error);
+          });      
+    });
+
+  }
+
+  reset = () => {
+
+    let arrayGuardarropas;
+    let arrayFavoritas;
+    let arraySugeridas;
+
+    ropa.transaction(tx => {
+      tx.executeSql(
+          `UPDATE Ropa SET Uso = 0 where Uso > 4;`).then(([tx,results]) => {
+          
+            console.log("Query completed");
+
+              // Tengo que volver a cargar la Ropa con los datos nuevos,  ver si puedo simplemente recargar el registro afectado y no todo
+            
+              ropa.transaction(tx => {
+              tx.executeSql(
+                  `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
+                  
+                    console.log("Query completed");
+        
+                    arrayGuardarropas=[]
+        
+                    var len = results.rows.length;
+                    
+                    for (let i = 0; i < len; i++) {
+                      let row = results.rows.item(i);
+                      //console.log(row)
+                      arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
+                    }
+
+                   
+                 
+                    this.setState({/*ropa:arrayGuardarropas,*/modalRopa:false})
+                  }).catch((error) => {
+                    this.setState({modalRopa:false})
+                    Alert.alert("Fallo la Busqueda en la Base de datos")
+                    console.log(error);
+                  });
                   tx.executeSql(
                     `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
                     
@@ -183,30 +266,52 @@ class FavoritasScreen extends React.Component {
   render() {
 
     let ayuda ="En esta pantalla se encuentran todas \nlas prendas que utilizaste al menos 5 veces!"
+    let vacio = false
+    let data;
 
-    if(this.props.ropa.prendasFavoritas.length)
+
+    console.log( "ARRAY FAVORITAS:  " + this.props.ropa.prendasFavoritas)   // muestra un object object aunque este vacio y x eso rompe el hdp
+    //console.log( "LENGHT:  " + this.props.ropa.prendasFavoritas.length)
+
+    if(this.props.ropa.prendasFavoritas.length){
       data = this.props.ropa.prendasFavoritas
-    else
+      vacio = false
+    }
+    else if(this.state.ropa.length)
       data = this.state.ropa
+    else{
+      vacio=true
+    }
 
+      
       return (
         <View style={{ flex: 1 , backgroundColor:'orange'}}>
 
           
-          {console.log( this.props.ropa.prendasFavoritas.length  )}
-          {/* {this.props.ropa.prendasFavoritas.length == 0 &&
+         
+          { vacio &&
           <View>
               <Text style={styles.vacio}>No hay prendas favoritas.Utilice más</Text>
               <Text style={styles.vacio}>prendas para que aparezcan en esta seccion</Text>
-          </View> */}
-          }
+          </View> }
+          
          
           
           <FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
           <Divider style={{ backgroundColor: 'red' }} />
+          <TouchableOpacity
+                style = {styles.reset}
+                onPress ={this.reset}   
+                //disabled={this.state.prenda.Cantidad <= 0} 
+              >
+                <Text style={styles.sendText}>Resetear favoritos</Text>
+          </TouchableOpacity>
+          <Divider style={{ backgroundColor: 'red' }} />
           <View style={styles.ayudaContainer} >
             <Text style={styles.ayuda}>{ayuda}</Text>
           </View>
+          
+          
         
 
           <Modal visible={this.state.modalRopa}>
@@ -290,6 +395,16 @@ class FavoritasScreen extends React.Component {
       alignSelf:'center', 
       color:'red',
       textAlign:'center'
+    },
+    reset: {
+      margin: 2 ,
+      backgroundColor: 'grey',
+      borderRadius: 5,
+      width: 150 ,
+      alignSelf: 'center',
+      justifyContent: 'center',
+      //fontSize:20,
+      padding : 8
     }
   });
 
