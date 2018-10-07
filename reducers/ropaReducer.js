@@ -33,11 +33,16 @@ export function ropa(state = initialState, action) {
           ...state,
           prendasFavoritas : action.arrayFavoritas,
           prendasGuardarropas : action.arrayGuardarropas,
-          prendasSugeridas : action.arraySugeridas,
           prueba: 123
-      };  
-        
+        };     
       }
+      case 'UPDATE_SUGERIDAS':{
+        console.log("AL CASE LLEGUE")
+        return {
+          ...state,
+          prendasSugeridas : action.arraySugeridas,
+        }; 
+      } 
       default:
         return state;
     }

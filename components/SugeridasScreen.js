@@ -3,6 +3,7 @@ import { ListItem , Divider } from 'react-native-elements';
 import React from 'react';
 //import { updateClothes } from '../actions/ropaActions'
 import { connect } from 'react-redux';
+import { updateClothes , updateSugeridas } from '../actions/ropaActions'
 
 console.ignoredYellowBox=true;
 
@@ -11,7 +12,7 @@ const apikey = '0efd092318208df58c1aa6a0a64c4ec6' ;
 var SQLite = require('react-native-sqlite-storage')
 //SQLite.DEBUG(true);
 SQLite.enablePromise(true);
-//var ropa;
+var ropa;
 
 
 // TODO , CUANDO "ERROR" ESTA EN TRUE DEBE TIRAR ALGUN MODAL, AL CERRARLO CAMBIAR A FALSO
@@ -36,12 +37,19 @@ class SugeridasScreen extends React.Component {
 		};
 	}
 	
-  //componentDidMount(){
-		
-			//if(this.state.temperature==999)		// para que no la vuelva a llamar si cambio de tab, me ahorraria bloqueos (testear si hace falta)
-			//this.handleLocation()
 
-  //}
+	componentWillMount(){  
+
+    SQLite.openDatabase("ropa.bd").then((DB) => {
+      ropa = DB;                            // lo asigna a la global, supongo para poder usar esa despues
+      console.log("BD ABIERTA")    
+      //console.log(ropa)       
+      //this.postOpenDatabase(ropa);
+    }).catch((error) => {
+      console.log(error);
+    
+    });
+  }
 
   handleLocation = async () => {
 	
@@ -73,7 +81,7 @@ class SugeridasScreen extends React.Component {
 
 		navigator.geolocation.getCurrentPosition(
 			async (position) => {	
-				console.log("FUNCIONE")	
+				//console.log("FUNCIONE")	
 				this.setState({
 					latitude: position.coords.latitude,
 					longitude: position.coords.longitude,
@@ -109,6 +117,8 @@ class SugeridasScreen extends React.Component {
 					weather: weather
 				});
 
+				this.BuscarSugeridas(temp);
+
 			},
 			(error) => { console.log("ERROR") , this.setState({ message : error.message , error : true })} , 
 			{ enableHighAccuracy: false, timeout: 10000, maximumAge: 1000 },
@@ -140,6 +150,115 @@ class SugeridasScreen extends React.Component {
       />
   );
 	
+
+	BuscarSugeridas = (temp) => {
+
+			// POSTERIORMENTE SE HARA CON UN BOTON
+			let animo='feliz'
+			
+			let tiempo;
+			let arrayTipo;
+			let colores;
+
+			let queryTipo='';
+			let queryColor='';
+			
+			// DETERMINO TIEMPO
+			if(temp > 20)
+				tiempo = 'calor'
+			else if(temp >= 10 && temp <= 20)
+				tiempo = 'fresco'
+			else if(temp < 10)
+				tiempo = 'frio'
+
+			switch (tiempo){
+				case 'calor':{
+						arrayTipo=["Short","Remera","Pollera","Camisa"]
+						break;
+				}
+				case 'fresco':{
+					  arrayTipo=["Pantalon","Buzo",""]
+						break;
+				}
+				case 'frio':{
+					  arrayTipo=["Campera","Pulover","Pantalon","Buzo"]
+						break;
+				}
+			}		
+
+				// hasta aca pareciera funcionar
+			
+			switch (animo){
+				case 'feliz':{
+						colores=["Rojo","Azul","Verde","Amarillo"]
+						break;
+				}
+				case 'triste':{
+					  colores=["Negro","Gris"]
+						break;
+				}
+				
+			}		
+		
+			// TODO : IF PREGUNTANDO SI AMBOS VECTORES TIENEN ALGO, SINO SALIR DIRECTAMENTE
+
+
+			arrayTipo.map((tipo) => {
+		
+				queryTipo += '"' + tipo + '",'
+			})
+			queryTipo += '"SOBRA"'
+			colores.map((tipo) => {
+	
+				queryColor += '"' + tipo + '",'
+			})
+			queryColor += '"SOBRA"'
+
+
+			//console.log("queryTipo: " + queryTipo)
+			//console.log("queryColor: " + queryColor)
+			
+      ropa.transaction(tx => {
+        tx.executeSql(
+						'select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where t.name IN (' + queryTipo +  ') and r.Color IN (' +
+						 queryColor + ') ;').then(([tx,results]) => {
+            
+              console.log("Query completed");
+        
+              arraySugeridas=[]
+        
+							var len = results.rows.length;
+							
+							// TODO: IF ES 0 ALERT Q NO HAY Y SALIR
+                    
+              for (let i = 0; i < len; i++) {
+                let row = results.rows.item(i);
+                console.log(row)
+                arraySugeridas.push(row)      
+              }
+              // TODO: BORRE ALGO ACA
+              //this.setState({modalRopa:false})
+            }).catch((error) => {
+              //this.setState({modalRopa:false})
+              Alert.alert("Fallo la busqueda de sugeridas en la base de datos")
+              console.log(error);
+            });
+          
+      }).then( () => {   
+              
+        //const {dispatch} = this.props
+        //dispatch( updateSugeridas()  );
+             
+      }).catch((error) => {
+      //this.setState({modalRopa:false})
+      Alert.alert("Fallo la busqueda de sugeridas en la base de datos")
+      console.log(error);
+    });      
+
+		
+
+	}
+
 
   render() {
 

@@ -146,7 +146,7 @@ class PrecargadasScreen extends React.Component {
       //  el 5 seria remera, el 6 pantalon por ahora en processing por suponer algo
 
       tx.executeSql(
-        `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 1;`).then(([tx,results]) => {
+        `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada = 1;`).then(([tx,results]) => {
         
           console.log("Query completed Precargadas");
 
