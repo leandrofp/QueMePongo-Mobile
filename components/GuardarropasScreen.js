@@ -82,7 +82,7 @@ class GuardarropasScreen extends React.Component {
 
     let arrayGuardarropas;
     let arrayFavoritas;
-
+   
     ropa.transaction(tx => {
       tx.executeSql(
           `UPDATE Ropa SET Uso = ? where Ropa_Id = ?;`,[this.state.prenda.Uso +1 , this.state.prenda.Ropa_Id]).then(([tx,results]) => {
@@ -346,7 +346,7 @@ class GuardarropasScreen extends React.Component {
                     tx.executeSql(
                       `SELECT * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
                       
-                        console.log("Query completed");
+                        console.log("Query completed seleccion favoritas");
             
                         arrayFavoritas=[]
             
@@ -402,8 +402,8 @@ class GuardarropasScreen extends React.Component {
 
   render() {
 
-    console.log( "ARRAY FAVORITAS:  " + this.props.ropa.prendasGuardarropas)
-    console.log( "LENGHT:  " + this.props.ropa.prendasGuardarropas.length)
+    // console.log( "ARRAY FAVORITAS:  " + this.props.ropa.prendasGuardarropas)
+    // console.log( "LENGHT:  " + this.props.ropa.prendasGuardarropas.length)
 
    
     let ayuda ="En esta pantalla se encuentran\n todas tus prendas cargadas"

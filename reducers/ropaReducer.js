@@ -11,7 +11,7 @@ const initialState = {
 
 
 export function ropa(state = initialState, action) {
-    console.log("ROPA REDUCER", action)
+    console.log("ROPA REDUCER", action.type)
     
     switch (action.type) {
       case 'OPEN_MODAL':{
@@ -33,7 +33,7 @@ export function ropa(state = initialState, action) {
           ...state,
           prendasFavoritas : action.arrayFavoritas,
           prendasGuardarropas : action.arrayGuardarropas,
-          //prendasSugeridas : action.arraySugeridas,
+          prendasSugeridas : action.arraySugeridas,
           prueba: 123
       };  
         
