@@ -55,6 +55,7 @@
 		3E695A353E9D4ED4934977AE /* libRNCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B265E1A4B6894F8A8EF45CF9 /* libRNCamera.a */; };
 		64B2C867BD764D51A4AECB29 /* libSQLite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CCB53863B8440CB823A5E45 /* libSQLite.a */; };
 		86283789060344CDA0D3622F /* libRNImageRotate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61E0499C7EC0482AA8C39569 /* libRNImageRotate.a */; };
+		53D67664239B4E4CB5F761C8 /* libRNImgToBase64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D7F96AEB3F6046FFA03A9008 /* libRNImgToBase64.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -382,6 +383,8 @@
 		7CCB53863B8440CB823A5E45 /* libSQLite.a */ = {isa = PBXFileReference; name = "libSQLite.a"; path = "libSQLite.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		9AC7E63073AD4D718A4ED0BC /* RNImageRotate.xcodeproj */ = {isa = PBXFileReference; name = "RNImageRotate.xcodeproj"; path = "../node_modules/react-native-image-rotate/RNImageRotate.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		61E0499C7EC0482AA8C39569 /* libRNImageRotate.a */ = {isa = PBXFileReference; name = "libRNImageRotate.a"; path = "libRNImageRotate.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		537034103871442595D4E2B4 /* RNImgToBase64.xcodeproj */ = {isa = PBXFileReference; name = "RNImgToBase64.xcodeproj"; path = "../node_modules/react-native-image-base64/ios/RNImgToBase64.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		D7F96AEB3F6046FFA03A9008 /* libRNImgToBase64.a */ = {isa = PBXFileReference; name = "libRNImgToBase64.a"; path = "libRNImgToBase64.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -414,6 +417,7 @@
 				3E695A353E9D4ED4934977AE /* libRNCamera.a in Frameworks */,
 				64B2C867BD764D51A4AECB29 /* libSQLite.a in Frameworks */,
 				86283789060344CDA0D3622F /* libRNImageRotate.a in Frameworks */,
+				53D67664239B4E4CB5F761C8 /* libRNImgToBase64.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -604,6 +608,7 @@
 				073A4BEBE6CE41C4A80AE890 /* RNCamera.xcodeproj */,
 				1E94E488651846A6906C78E2 /* SQLite.xcodeproj */,
 				9AC7E63073AD4D718A4ED0BC /* RNImageRotate.xcodeproj */,
+				537034103871442595D4E2B4 /* RNImgToBase64.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1271,6 +1276,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1278,6 +1284,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-rotate\RNImageRotate/**",
+					"$(SRCROOT)\..\node_modules\react-native-image-base64\ios",
 				);
 			};
 			name = Debug;
@@ -1302,6 +1309,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1309,6 +1317,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-rotate\RNImageRotate/**",
+					"$(SRCROOT)\..\node_modules\react-native-image-base64\ios",
 				);
 			};
 			name = Release;
@@ -1334,6 +1343,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-rotate\RNImageRotate/**",
+					"$(SRCROOT)\..\node_modules\react-native-image-base64\ios",
 				);
 			};
 			name = Debug;
@@ -1358,6 +1368,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-rotate\RNImageRotate/**",
+					"$(SRCROOT)\..\node_modules\react-native-image-base64\ios",
 				);
 			};
 			name = Release;
@@ -1391,6 +1402,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1398,6 +1410,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-rotate\RNImageRotate/**",
+					"$(SRCROOT)\..\node_modules\react-native-image-base64\ios",
 				);
 			};
 			name = Debug;
@@ -1431,6 +1444,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1438,6 +1452,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-rotate\RNImageRotate/**",
+					"$(SRCROOT)\..\node_modules\react-native-image-base64\ios",
 				);
 			};
 			name = Release;
@@ -1470,6 +1485,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1477,6 +1493,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-rotate\RNImageRotate/**",
+					"$(SRCROOT)\..\node_modules\react-native-image-base64\ios",
 				);
 			};
 			name = Debug;
@@ -1509,6 +1526,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1516,6 +1534,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-rotate\RNImageRotate/**",
+					"$(SRCROOT)\..\node_modules\react-native-image-base64\ios",
 				);
 			};
 			name = Release;

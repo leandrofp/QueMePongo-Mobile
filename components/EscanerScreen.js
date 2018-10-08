@@ -16,6 +16,7 @@ import Clarifai from 'clarifai'
 import { updateClothes } from '../actions/ropaActions'
 import { connect } from 'react-redux';
 import ImageRotate from 'react-native-image-rotate';
+import ImgToBase64 from 'react-native-image-base64';
 
 
 var SQLite = require('react-native-sqlite-storage')
@@ -191,22 +192,33 @@ class EscanerScreen extends Component {
 
       //console.log("MI FOTO ES :" + data.uri)
 
-      ImageRotate.rotateImage(
-      data.uri,
-      90,
-      (uri) => {
+      ImageRotate.rotateImage( data.uri, 90, (uri) => {
+
+        console.log("uri: " , uri)
+
+        let data = uri
         this.setState({
-        data: data.uri,
+        data: uri,
         });
+
+      ImgToBase64.getBase64String( 
+          data).then( (cadena) => {
+         
+            const a =(this.escaneo(cadena))
+            //dispatch( sendPhoto( cadena, token , this.state.text ))
+      });
+
       },
       (error) => {
         console.error(error);
       });
+
+      
       
 
       // VER SI CONVIERTO A BASE 64 EL URI ROTADO 
 
-      const a =(this.escaneo(data.base64))
+      
     }
   }
 
@@ -395,7 +407,7 @@ class EscanerScreen extends Component {
         <Modal visible={this.state.modal} >
             <View style={{backgroundColor:'orange', flex:1}}>
               <Image
-                style={{flex:1  , alignItems:'center' , margin:5 ,  /*transform: [{ rotate: '90deg'}]*/}}
+                style={{flex:1  , alignItems:'center' , margin:5 }}
                 source={{uri: this.state.data}}
               />
               <Text style={styles.text}> Usted escaneo:  {this.state.prendaEscaneadaNombre + ' color ' + this.state.colorPrendaEscaneadaNombre}</Text>
