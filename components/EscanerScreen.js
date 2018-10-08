@@ -47,6 +47,15 @@ class EscanerScreen extends Component {
     });
   }
 
+  componentDidMount() {
+    const { navigation } = this.props;
+    navigation.addListener('willFocus', () =>
+      this.setState({ focusedScreen: true })
+    );
+    navigation.addListener('willBlur', () =>
+      this.setState({ focusedScreen: false })
+    );
+  }
 
   codColorPrenda = (colorName) =>{
     let codColor=0
@@ -356,8 +365,13 @@ class EscanerScreen extends Component {
 
   render() {
 
+    const { hasCameraPermission, focusedScreen } = this.state;
+
     return (
+
+      
       <View style={styles.container}>
+        { focusedScreen &&
         <RNCamera
             ref={ref => {
               this.camera = ref;
@@ -368,6 +382,7 @@ class EscanerScreen extends Component {
             permissionDialogTitle={'Permisos de la cámara'}
             permissionDialogMessage={'¿Deséa permitir a Que Me Pongo utilizar la cámara del dispositivo?'}
         />
+        }
         <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center',}}>
           <TouchableOpacity
               onPress={this.takePicture.bind(this)}
