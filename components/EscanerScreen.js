@@ -15,6 +15,7 @@ import { RNCamera } from 'react-native-camera';
 import Clarifai from 'clarifai'
 import { updateClothes } from '../actions/ropaActions'
 import { connect } from 'react-redux';
+import ImageRotate from 'react-native-image-rotate';
 
 
 var SQLite = require('react-native-sqlite-storage')
@@ -170,8 +171,6 @@ class EscanerScreen extends Component {
     
   }
 
-
-
   takePicture = async function() {
     if (this.camera) {
       const options = { quality: 0.5, base64: true };
@@ -179,9 +178,26 @@ class EscanerScreen extends Component {
       //console.log(data)                 // DATA ES LA FOTO TOMADA, URI ES LA UBICACION EN CACHE DONDE LA GUARDA
       this.setState({data:data.uri, modal:false , loading:true , 
                      prendaEscaneadaNombre:'', prendaEscaneadaAcierto:'', colorPrendaEscaneadaNombre:'',colorPrendaEscaneadaAcierto:''})
+
+
+      //console.log("MI FOTO ES :" + data.uri)
+
+      ImageRotate.rotateImage(
+      data.uri,
+      90,
+      (uri) => {
+        this.setState({
+        data: data.uri,
+        });
+      },
+      (error) => {
+        console.error(error);
+      });
       
+
+      // VER SI CONVIERTO A BASE 64 EL URI ROTADO 
+
       const a =(this.escaneo(data.base64))
-      
     }
   }
 
@@ -364,11 +380,11 @@ class EscanerScreen extends Component {
         <Modal visible={this.state.modal} >
             <View style={{backgroundColor:'orange', flex:1}}>
               <Image
-                style={{width: 350, height: 350, transform: [{ rotate: '90deg'}], margin:2 , alignSelf:'center'}}
+                style={{flex:1  , alignItems:'center' , margin:5 ,  /*transform: [{ rotate: '90deg'}]*/}}
                 source={{uri: this.state.data}}
               />
-              <Text> Usted escaneo:  {this.state.prendaEscaneadaNombre + ' color ' + this.state.colorPrendaEscaneadaNombre}</Text>
-              <Text>¿Desea Agregarla al Guardarropas?</Text>
+              <Text style={styles.text}> Usted escaneo:  {this.state.prendaEscaneadaNombre + ' color ' + this.state.colorPrendaEscaneadaNombre}</Text>
+              <Text style={styles.text}>¿Desea Agregarla al Guardarropas?</Text>
               <TouchableOpacity style = {styles.send}
               onPress = {this.agregarRopa}
               >
@@ -417,6 +433,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     //fontSize:20,
     padding : 8
+  },
+  text:{
+    fontSize: 22,
+    color: 'black',
+    alignSelf: 'center',
   }
 });
 
