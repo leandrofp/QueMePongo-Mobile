@@ -46,6 +46,60 @@ class EscanerScreen extends Component {
     });
   }
 
+
+  codColorPrenda = (colorName) =>{
+    let codColor=0
+    switch(colorName){
+      case ('Gris') : {
+        codColor=1 
+      }
+      case ('Marron') : {
+        codColor=2
+        
+      }
+      case ('Rojo') : {
+        codColor=3
+        
+      }
+      case ('Verde') : {
+        codColor=4
+        
+      }
+      case ('Amarillo') : {
+        codColor=5
+        
+      }
+      case ('Azul') : {
+        codColor=6
+        
+      }
+      case ('Negro') : {
+        codColor=7
+        
+      }
+      case ('Blanco') : {
+        codColor=8
+        
+      }
+      case ('Violeta') : {
+        codColor=9
+      }
+      case ('Ocre') : {
+        codColor=10
+        
+      }
+      case ('Rosa') : {
+        codColor=11
+        
+      }
+      case ('Purpura') : {
+        codColor=12
+      }
+
+    }
+    return codColor
+  }
+
   agregarRopa = () =>{
     ropa.transaction(tx => {
 
@@ -60,42 +114,46 @@ class EscanerScreen extends Component {
             console.log(row.Name) 
           }
 
-      //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) VALUES (1 ,2 , 1 , -1 , ? , 0, \'Blanco\' );', [5]);
-      ropa.transaction(tx => {
-
-          
-
+        // Determinar Codigo de Prenda
+        let codColor = this.codColorPrenda(this.state.colorPrendaEscaneadaNombre)
         
+        console.log("COD COLOR ES: " + codColor)
 
-          tx.executeSql('INSERT INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) ' +  
-          'VALUES ( null , ? , 0 , 1 , ? , 0 , ? );', [ row.Tipo_Id , /*COD COLOR, CALCULAR*/  , this.state.colorPrendaEscaneadaNombre ]).then(([tx,results]) => {
-            this.setState({modal:false})
-           
-            console.log("INSERTE LA PRENDA")
-            var len = results.rows.length;        // en teoria no hace falta porque solo encontraria un tipo de prenda por nombre
-            for (let i = 0; i < len; i++) {
-              row = results.rows.item(i);
-              console.log(row) 
-            }
-  
+        if(codColor != 0){
+          //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) VALUES (1 ,2 , 1 , -1 , ? , 0, \'Blanco\' );', [5]);
+          ropa.transaction(tx => {
 
-
-
-          }).catch((error) => {
-            this.setState({modal:false})
-            Alert.alert("Fallo la inserción en la Base de datos")
-            console.log(error);
-          })
-      }).then( () => {   
+              tx.executeSql('INSERT INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color) ' +  
+              'VALUES ( null , ? , 0 , 1 , ? , 0 , ? );', [ row.Tipo_Id , codColor  , this.state.colorPrendaEscaneadaNombre ]).then(([tx,results]) => {
+                this.setState({modal:false})
               
-        //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
-        //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
-        
-        const {dispatch} = this.props
-        dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
-       
-      });
+                console.log("INSERTE LA PRENDA")
+                var len = results.rows.length;        // en teoria no hace falta porque solo encontraria un tipo de prenda por nombre
+                for (let i = 0; i < len; i++) {
+                  row = results.rows.item(i);
+                  console.log(row) 
+                }
+      
 
+
+
+              }).catch((error) => {
+                this.setState({modal:false})
+                Alert.alert("Fallo la inserción en la Base de datos")
+                console.log(error);
+              })
+          }).then( () => {   
+                  
+            //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+            //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
+            
+            const {dispatch} = this.props
+            dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+          
+          });
+        }
+        else
+          Alert.alert("Error determinando codigo de color de Prenda")
 
       }).catch((error) => {
         this.setState({modal:false})
@@ -270,6 +328,7 @@ class EscanerScreen extends Component {
       colorname = "Purpura"
     else
       colorname = "0"
+    
     return colorname
   }
 
