@@ -333,8 +333,12 @@ class SugeridasScreen extends React.Component {
 	keyExtractor = (item, index) => index;
   
     renderItem = ({ item, index }) => (
-      <ListItem
-        title={item.Name + ' color ' + item.Color}
+      <ListItem 
+        containerStyle={{ borderStyle:'solid', backgroundColor:'green', margin:3 , 
+                          borderWidth: 2 , borderBottomWidth: 2 , borderBottomColor : 'blue' ,borderColor: 'blue' }}
+				title={
+					<Text style={styles.lista}> {item.Name} color {item.Color} </Text>
+				}
         //leftAvatar={{ source: item.avatar_url, rounded: true }}
         onPress={() => {
           this.setState({ modalRopa: true , prenda : item });
@@ -445,13 +449,15 @@ const styles = StyleSheet.create({
       padding : 8
     },
     sendText: {
+			fontSize:18,
+      fontWeight:'bold',
       margin: 2 ,
       color: '#ffffff',
       textAlign:'center'
     },
     text:{
-      fontSize: 22,
-      color: 'black',
+			fontSize: 22,
+      color: 'blue',
       alignSelf: 'center',
     },modal: {
       backgroundColor:'orange'
@@ -468,9 +474,9 @@ const styles = StyleSheet.create({
 	},
 	sugerencias: {
 		margin: 2 ,
-		backgroundColor: 'grey',
+		backgroundColor: 'blue',
 		borderRadius: 5,
-		width: 150 ,
+		width: 200 ,
 		alignSelf: 'center',
 		justifyContent: 'center',
 		//fontSize:20,
@@ -482,6 +488,9 @@ const styles = StyleSheet.create({
 		alignSelf:'center', 
 		color:'red',
 		textAlign:'center'
+	},lista:{
+		color:'#F3EBEB',
+		fontSize:18,
 	}
   });
 

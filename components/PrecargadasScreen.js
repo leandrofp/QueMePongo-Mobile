@@ -220,9 +220,12 @@ class PrecargadasScreen extends React.Component {
     keyExtractor = (item, index) => index;
   
     renderItem = ({ item, index }) => (
-      <ListItem
-        title={item.Name + ' color ' + item.Color}
-        //leftAvatar={{ source: item.avatar_url, rounded: true }}
+      <ListItem 
+        containerStyle={{ borderStyle:'solid', backgroundColor:'green', margin:3 , 
+                          borderWidth: 2 , borderBottomWidth: 2 , borderBottomColor : 'blue' ,borderColor: 'blue' }}
+        title={ 
+        <Text style={styles.lista}> {item.Name} color {item.Color} </Text> 
+        }
         onPress={() => {
           this.setState({ modalRopa: true , prenda : item });
         }}
@@ -289,13 +292,16 @@ class PrecargadasScreen extends React.Component {
       padding : 8
     },
     sendText: {
+      fontSize:16,
+      fontWeight:'bold',
       margin: 2 ,
       color: '#ffffff',
       textAlign:'center'
     },
     text:{
+      color: 'blue',
       fontSize: 22,
-      color: 'black',
+   
       alignSelf: 'center',
     },modal: {
       backgroundColor:'orange'
@@ -309,6 +315,10 @@ class PrecargadasScreen extends React.Component {
     ayudaContainer:{
       alignItems: 'center',
       justifyContent:'center'
+    },
+    lista:{
+      color:'#F3EBEB',
+      fontSize:18,
     }
   });
 

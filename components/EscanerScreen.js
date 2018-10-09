@@ -436,22 +436,26 @@ class EscanerScreen extends Component {
           </TouchableOpacity>
         </View>
         <Modal visible={this.state.modal} >
-            <View style={{backgroundColor:'orange', flex:1}}>
+            <View style={{backgroundColor:'grey', flex:1}}>
               <Image
                 style={{flex:1  , alignItems:'center' , margin:5 }}
                 source={{uri: this.state.data}}
               />
-              <Text style={styles.text}> Usted escaneo:  {this.state.prendaEscaneadaNombre + ' color ' + this.state.colorPrendaEscaneadaNombre}</Text>
-              <Text style={styles.text}>¿Desea Agregarla al Guardarropas?</Text>
+
+              <View style={{borderStyle:'solid', borderWidth: 2 , borderColor: 'red' , margin:3 }} >
+                <Text style={styles.text}> Usted escaneo:  {this.state.prendaEscaneadaNombre + ' color ' + this.state.colorPrendaEscaneadaNombre}</Text>
+                <Text style={styles.text}>¿Deséa Agregarla al Guardarropas?</Text>
+              </View>
+              
               <TouchableOpacity style = {styles.send}
               onPress = {this.agregarRopa}
               >
-              <Text style={{fontSize: 14}}> Agregar </Text>
+              <Text style={styles.sendText}> Agregar </Text>
               </TouchableOpacity>
               <TouchableOpacity style = {styles.send}
               onPress = { () => {this.setState({modal:false})}}
               >
-              <Text style={{fontSize: 14}}> Cancelar </Text>
+              <Text style={styles.sendText}> Cancelar </Text>
               </TouchableOpacity>
             </View>
         </Modal>
@@ -474,8 +478,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   capture: {
+    fontSize:20,
+    fontWeight:'bold',
     flex: 0,
-    backgroundColor: 'grey',
+    backgroundColor: 'blue',
     borderRadius: 5,
     padding: 15,
     paddingHorizontal: 20,
@@ -484,7 +490,7 @@ const styles = StyleSheet.create({
   },
   send: {
     margin: 2 ,
-    backgroundColor: '#fff',
+    backgroundColor: 'orange',
     borderRadius: 5,
     paddingHorizontal: 22,
     alignSelf: 'center',
@@ -494,9 +500,16 @@ const styles = StyleSheet.create({
   },
   text:{
     fontSize: 22,
-    color: 'black',
+    color: 'blue',
     alignSelf: 'center',
-  }
+  },
+  sendText: {
+    fontSize:18,
+    fontWeight:'bold',
+    margin: 2 ,
+    color: '#ffffff',
+    textAlign:'center'
+  },
 });
 
 const mapStateToProps = state => {

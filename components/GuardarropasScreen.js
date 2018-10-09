@@ -432,8 +432,12 @@ class GuardarropasScreen extends React.Component {
   keyExtractor = (item, index) => index;
   
     renderItem = ({ item, index }) => (
-      <ListItem style={styles.text}
-        title={item.Name+ ' color ' + item.Color}
+      <ListItem 
+        containerStyle={{ borderStyle:'solid', backgroundColor:'green', margin:3 , 
+                          borderWidth: 2 , borderBottomWidth: 2 , borderBottomColor : 'blue' ,borderColor: 'blue' }}
+        title={
+          <Text style={styles.lista}> {item.Name} color {item.Color} </Text>
+          }
         //leftAvatar={{ source: item.avatar_url, rounded: true }}
         onPress={() => {
           this.setState({ modalRopa: true , prenda : item });
@@ -559,13 +563,16 @@ class GuardarropasScreen extends React.Component {
       padding : 8
     },
     sendText: {
+      fontSize:16,
+      fontWeight:'bold',
       margin: 2 ,
       color: '#ffffff',
       textAlign:'center'
     },
     text:{
+      color: 'blue',
       fontSize: 22,
-      color: 'black',
+   
       alignSelf: 'center',
     },modal: {
       backgroundColor:'orange'
@@ -586,6 +593,10 @@ class GuardarropasScreen extends React.Component {
       alignSelf:'center', 
       color:'red',
       textAlign:'center'
+    },
+    lista:{
+      color:'#F3EBEB',
+      fontSize:18,
     }
   });
 

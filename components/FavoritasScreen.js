@@ -287,8 +287,12 @@ class FavoritasScreen extends React.Component {
   keyExtractor = (item, index) => index;
   
     renderItem = ({ item, index }) => (
-      <ListItem
-        title={item.Name + ' color ' + item.Color}
+      <ListItem 
+        containerStyle={{ borderStyle:'solid', backgroundColor:'green', margin:3 , 
+                          borderWidth: 2 , borderBottomWidth: 2 , borderBottomColor : 'blue' ,borderColor: 'blue' }}
+        title={
+          <Text style={styles.lista}> {item.Name} color {item.Color} </Text>
+          }
         //leftAvatar={{ source: item.avatar_url, rounded: true }}
         onPress={() => {
           this.setState({ modalRopa: true , prenda : item });
@@ -406,13 +410,15 @@ class FavoritasScreen extends React.Component {
       padding : 8
     },
     sendText: {
+      fontSize:18,
+      fontWeight:'bold',
       margin: 2 ,
       color: '#ffffff',
       textAlign:'center'
     },
     text:{
       fontSize: 22,
-      color: 'black',
+      color: 'blue',
       alignSelf: 'center',
     },modal: {
       backgroundColor:'orange'
@@ -436,13 +442,17 @@ class FavoritasScreen extends React.Component {
     },
     reset: {
       margin: 2 ,
-      backgroundColor: 'grey',
+      backgroundColor: 'blue',
       borderRadius: 5,
-      width: 150 ,
+      width: 180 ,
       alignSelf: 'center',
       justifyContent: 'center',
       //fontSize:20,
       padding : 8
+    },
+    lista:{
+      color:'#F3EBEB',
+      fontSize:18,
     }
   });
 
