@@ -33,8 +33,7 @@ class FavoritasScreen extends React.Component {
 
   componentWillMount(){  
 
-    
-
+  
     SQLite.openDatabase("ropa.bd").then((DB) => {
       ropa = DB;                            // lo asigna a la global, supongo para poder usar esa despues
       console.log("BD ABIERTA")    
@@ -88,6 +87,8 @@ class FavoritasScreen extends React.Component {
   }
 
   usarRopa = () => {
+
+    this.setState({ropa:[]})
 
     let arrayGuardarropas;
     let arrayFavoritas;
@@ -169,6 +170,8 @@ class FavoritasScreen extends React.Component {
   }
 
   reset = () => {
+
+    this.setState({ropa:[]})
 
     let arrayGuardarropas;
     let arrayFavoritas;

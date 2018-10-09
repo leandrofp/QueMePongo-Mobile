@@ -79,6 +79,7 @@ class GuardarropasScreen extends React.Component {
 
   usarRopa = () => {
 
+    this.setState({ropa:[]})
 
     let arrayGuardarropas;
     let arrayFavoritas;
@@ -158,6 +159,8 @@ class GuardarropasScreen extends React.Component {
 
   restarDisponibilidadRopa = () => {
 
+    this.setState({ropa:[]})
+
     let arrayGuardarropas;
     let arrayFavoritas;
 
@@ -232,6 +235,8 @@ class GuardarropasScreen extends React.Component {
   }
 
   sumarDisponibilidadRopa = () => {
+
+    this.setState({ropa:[]})
 
     let arrayGuardarropas;
     let arrayFavoritas;
@@ -308,6 +313,8 @@ class GuardarropasScreen extends React.Component {
   }
 
   eliminarPrenda = () =>{
+
+    this.setState({ropa:[]})
     
     let arrayGuardarropas;
     let arrayFavoritas;
