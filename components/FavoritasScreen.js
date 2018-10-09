@@ -273,7 +273,7 @@ class FavoritasScreen extends React.Component {
     let data;
 
 
-    console.log( "ARRAY FAVORITAS:  " + this.props.ropa.prendasFavoritas)   // muestra un object object aunque este vacio y x eso rompe el hdp
+    //console.log( "ARRAY FAVORITAS:  " + this.props.ropa.prendasFavoritas)   // muestra un object object aunque este vacio y x eso rompe el hdp
     //console.log( "LENGHT:  " + this.props.ropa.prendasFavoritas.length)
 
     if(this.props.ropa.prendasFavoritas.length){
