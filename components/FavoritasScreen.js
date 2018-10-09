@@ -59,41 +59,73 @@ class FavoritasScreen extends React.Component {
   }
 
   readTables = (tx) => {
+
+      let arrayGuardarropas;
+      let arrayFavoritas;
    
       ropa.transaction(tx => {
-      tx.executeSql(
-          `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+
+        tx.executeSql(
+          `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
           
             console.log("Query completed");
 
-            let array=[]
+            arrayGuardarropas=[]
 
             var len = results.rows.length;
             
             for (let i = 0; i < len; i++) {
               let row = results.rows.item(i);
               //console.log(row)
-              array.push(row)      // GUARDO SOLO NOMBRE
-            }   
-            //console.log(array , "AAA")
-            this.setState({ropa:array})
+              arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
+            }
+
           }).catch((error) => {
+            Alert.alert("Fallo la carga de Prendas con la Base de datos")
+            console.log(error);
+          });
+        tx.executeSql(
+          `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+          
+            console.log("Query completed");
+
+            arrayFavoritas=[]
+
+            var len = results.rows.length;
+            
+            for (let i = 0; i < len; i++) {
+              let row = results.rows.item(i);
+              //console.log(row)
+              arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+            }   
+
+          }).catch((error) => {
+            Alert.alert("Fallo la carga de Prendas con la Base de datos")
             console.log(error);
           });
 
       
+    }).then( () => {
+             
+        // console.log("PRECARGA")
+        // console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+        // console.log("ARRAY GUARDARROPAS:   "  , arrayGuardarropas) 
+        
+        const {dispatch} = this.props
+        dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+      
     });
-  console.log("all config SQL done");
+
+
   }
 
   usarRopa = () => {
 
-    this.setState({ropa:[]})
+
 
     let arrayGuardarropas;
     let arrayFavoritas;
-    let arraySugeridas;
-
+ 
     ropa.transaction(tx => {
       tx.executeSql(
           `UPDATE Ropa SET Uso = ? where Ropa_Id = ?;`,[this.state.prenda.Uso +1 , this.state.prenda.Ropa_Id]).then(([tx,results]) => {
@@ -151,8 +183,9 @@ class FavoritasScreen extends React.Component {
          
             }).then( () => {   
               
-              //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
-              //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
+           
+              // console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+              // console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
               
               const {dispatch} = this.props
               dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
@@ -171,7 +204,7 @@ class FavoritasScreen extends React.Component {
 
   reset = () => {
 
-    this.setState({ropa:[]})
+
 
     let arrayGuardarropas;
     let arrayFavoritas;
@@ -201,9 +234,7 @@ class FavoritasScreen extends React.Component {
                       arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
                     }
 
-                   
-                 
-                    this.setState({/*ropa:arrayGuardarropas,*/modalRopa:false})
+       
                   }).catch((error) => {
                     this.setState({modalRopa:false})
                     Alert.alert("Fallo la Busqueda en la Base de datos")
@@ -217,6 +248,7 @@ class FavoritasScreen extends React.Component {
                       arrayFavoritas=[]
           
                       var len = results.rows.length;
+                      
                       
                       for (let i = 0; i < len; i++) {
                         let row = results.rows.item(i);
@@ -273,15 +305,18 @@ class FavoritasScreen extends React.Component {
     let data;
 
 
-    //console.log( "ARRAY FAVORITAS:  " + this.props.ropa.prendasFavoritas)   // muestra un object object aunque este vacio y x eso rompe el hdp
+    console.log( "ARRAY FAVORITAS:  " + this.props.ropa.prendasFavoritas)   // muestra un object object aunque este vacio y x eso rompe el hdp
     //console.log( "LENGHT:  " + this.props.ropa.prendasFavoritas.length)
-
-    if(this.props.ropa.prendasFavoritas.length){
-      data = this.props.ropa.prendasFavoritas
-      vacio = false
+    if(this.props.ropa.prendasFavoritas){
+     
+      if(this.props.ropa.prendasFavoritas.length){
+        console.log("IF 2")
+        data = this.props.ropa.prendasFavoritas
+        vacio = false
+      }
+      else
+        vacio=true
     }
-    else if(this.state.ropa.length)
-      data = this.state.ropa
     else{
       vacio=true
     }

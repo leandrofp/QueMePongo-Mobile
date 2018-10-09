@@ -51,35 +51,71 @@ class GuardarropasScreen extends React.Component {
 
   readTables = (tx) => {
    
-      ropa.transaction(tx => {
-      tx.executeSql(
-          `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
-          
-            console.log("Query completed");
-
-            let array=[]
-
-            var len = results.rows.length;
-            
-            for (let i = 0; i < len; i++) {
-              let row = results.rows.item(i);
-              //console.log(row)
-              array.push(row)      // GUARDO SOLO NOMBRE
-            }
-            //console.log(array , "AAA")
-            this.setState({ropa:array})
-          }).catch((error) => {
-            console.log(error);
-          });
-
+    let arrayGuardarropas;
+    let arrayFavoritas;
+   
+    ropa.transaction(tx => {
       
-    });
-  console.log("all config SQL done");
+              tx.executeSql(
+                  `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
+                  
+                    console.log("Query completed");
+        
+                    arrayGuardarropas=[]
+        
+                    var len = results.rows.length;
+                    
+                    for (let i = 0; i < len; i++) {
+                      let row = results.rows.item(i);
+                      //console.log(row)
+                      arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
+                    }
+                 
+                    this.setState({/*ropa:arrayGuardarropas,*/modalRopa:false})
+                  }).catch((error) => {
+                    this.setState({modalRopa:false})
+                    Alert.alert("Fallo la carga de Prendas con la Base de datos")
+                    console.log(error);
+                  });
+
+                  tx.executeSql(
+                    `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                    
+                      console.log("Query completed");
+          
+                      arrayFavoritas=[]
+          
+                      var len = results.rows.length;
+                      
+                      for (let i = 0; i < len; i++) {
+                        let row = results.rows.item(i);
+                        //console.log(row)
+                        arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+                      }
+                   
+                      //this.setState({ropa:arrayGuardarropas,modalRopa:false})
+                    }).catch((error) => {
+                      this.setState({modalRopa:false})
+                      Alert.alert("Fallo la carga de Prendas con la Base de datos")
+                      console.log(error);
+                    });
+
+                
+            }).then( () => {   
+              
+              console.log("PRECARGA")
+              console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+              console.log("ARRAY GUARDARROPAS:   "  , arrayGuardarropas) 
+              
+              const {dispatch} = this.props
+              dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+             
+            });
+    
+    console.log("all config SQL done");
   }
 
   usarRopa = () => {
-
-    this.setState({ropa:[]})
 
     let arrayGuardarropas;
     let arrayFavoritas;
@@ -159,7 +195,7 @@ class GuardarropasScreen extends React.Component {
 
   restarDisponibilidadRopa = () => {
 
-    this.setState({ropa:[]})
+    
 
     let arrayGuardarropas;
     let arrayFavoritas;
@@ -236,7 +272,7 @@ class GuardarropasScreen extends React.Component {
 
   sumarDisponibilidadRopa = () => {
 
-    this.setState({ropa:[]})
+   
 
     let arrayGuardarropas;
     let arrayFavoritas;
@@ -314,7 +350,7 @@ class GuardarropasScreen extends React.Component {
 
   eliminarPrenda = () =>{
 
-    this.setState({ropa:[]})
+   
     
     let arrayGuardarropas;
     let arrayFavoritas;
@@ -418,12 +454,14 @@ class GuardarropasScreen extends React.Component {
     let data;
  
     //console.log("PRUEBA ES AHORA " , this.props.ropa.prueba)
-    if(this.props.ropa.prendasGuardarropas.length){
-      data = this.props.ropa.prendasGuardarropas
-      vacio = false
+    if(this.props.ropa.prendasGuardarropas){
+      if(this.props.ropa.prendasGuardarropas.length){
+        data = this.props.ropa.prendasGuardarropas
+        vacio = false
+      }
+      else
+        vacio=true
     }
-    else if(this.state.ropa.length)
-      data = this.state.ropa
     else
       vacio=true
 

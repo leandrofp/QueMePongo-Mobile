@@ -66,42 +66,33 @@ class EscanerScreen extends Component {
       }
       case ('Marron') : {
         codColor=2
-        
       }
       case ('Rojo') : {
         codColor=3
-        
       }
       case ('Verde') : {
         codColor=4
-        
       }
       case ('Amarillo') : {
         codColor=5
-        
       }
       case ('Azul') : {
         codColor=6
-        
       }
       case ('Negro') : {
         codColor=7
-        
       }
       case ('Blanco') : {
-        codColor=8
-        
+        codColor=8  
       }
       case ('Violeta') : {
         codColor=9
       }
       case ('Ocre') : {
         codColor=10
-        
       }
       case ('Rosa') : {
         codColor=11
-        
       }
       case ('Purpura') : {
         codColor=12
@@ -112,6 +103,10 @@ class EscanerScreen extends Component {
   }
 
   agregarRopa = () =>{
+
+    let arrayGuardarropas;
+    let arrayFavoritas;
+
     ropa.transaction(tx => {
 
       tx.executeSql(
@@ -134,20 +129,60 @@ class EscanerScreen extends Component {
           //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) VALUES (1 ,2 , 1 , -1 , ? , 0, \'Blanco\' );', [5]);
           ropa.transaction(tx => {
 
+              // null es para indicar que se use le autoinrcemento de la primary key
               tx.executeSql('INSERT INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color) ' +  
               'VALUES ( null , ? , 0 , 1 , ? , 0 , ? );', [ row.Tipo_Id , codColor  , this.state.colorPrendaEscaneadaNombre ]).then(([tx,results]) => {
                 this.setState({modal:false})
               
+
                 console.log("INSERTE LA PRENDA")
-                var len = results.rows.length;        // en teoria no hace falta porque solo encontraria un tipo de prenda por nombre
-                for (let i = 0; i < len; i++) {
-                  row = results.rows.item(i);
-                  console.log(row) 
-                }
-      
+               
+                ropa.transaction(tx => {
+                  tx.executeSql(
+                      `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
+                      
+                        console.log("Query completed");
+            
+                        arrayGuardarropas=[]
+            
+                        var len = results.rows.length;
+                        
+                        for (let i = 0; i < len; i++) {
+                          let row = results.rows.item(i);
+                          //console.log(row)
+                          arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
+                        }
+                     
+                      }).catch((error) => {
+                        this.setState({modal:false})
+                        Alert.alert("Fallo la Busqueda en la Base de datos")
+                        console.log(error);
+                      });
+    
+                      tx.executeSql(
+                        `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                        
+                          console.log("Query completed");
+              
+                          arrayFavoritas=[]
+              
+                          var len = results.rows.length;
+                          
+                          for (let i = 0; i < len; i++) {
+                            let row = results.rows.item(i);
+                            //console.log(row)
+                            arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+                          }
+         
+                        }).catch((error) => {
+                          this.setState({modal:false})
+                          Alert.alert("Fallo la Busqueda en la Base de datos")
+                          console.log(error);
+                        });   
+                })
 
 
-
+              // ACA TERMINA THEN DE INSERT
               }).catch((error) => {
                 this.setState({modal:false})
                 Alert.alert("Fallo la inserción en la Base de datos")
@@ -155,30 +190,32 @@ class EscanerScreen extends Component {
               })
           }).then( () => {   
                   
-            //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
-            //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
+            // console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+            // console.log("ARRAY PRECARGADAS:   "  , arrayGuardarropas) 
             
             const {dispatch} = this.props
             dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
           
           });
         }
-        else
+        else{
+          this.setState({modal:false})
           Alert.alert("Error determinando codigo de color de Prenda")
-
+        }
+          
+      //FIN DEL SELECT PARA SABER TIPO DE PRENDA
       }).catch((error) => {
         this.setState({modal:false})
         Alert.alert("Fallo la inserción en la Base de datos")
         console.log(error);
       })
+    // FIN TRANSAC BASE
+
     }).then(() =>{
       this.setState({modal:false})
       console,log("Transaccion Finalizada")
-        //this.closeDatabase()});
-    });   
+    })
 
-  
-    
   }
 
   takePicture = async function() {
@@ -188,7 +225,6 @@ class EscanerScreen extends Component {
       //console.log(data)                 // DATA ES LA FOTO TOMADA, URI ES LA UBICACION EN CACHE DONDE LA GUARDA
       this.setState({data:data.uri, modal:false , loading:true , 
                      prendaEscaneadaNombre:'', prendaEscaneadaAcierto:'', colorPrendaEscaneadaNombre:'',colorPrendaEscaneadaAcierto:''})
-
 
       //console.log("MI FOTO ES :" + data.uri)
 
@@ -205,18 +241,13 @@ class EscanerScreen extends Component {
           data).then( (cadena) => {
          
             const a =(this.escaneo(cadena))
-            //dispatch( sendPhoto( cadena, token , this.state.text ))
+          
       });
 
       },
       (error) => {
         console.error(error);
       });
-
-      
-      
-
-      // VER SI CONVIERTO A BASE 64 EL URI ROTADO 
 
       
     }
