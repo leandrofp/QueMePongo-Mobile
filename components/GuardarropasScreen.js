@@ -1,7 +1,7 @@
 import { Text, View ,  FlatList , Modal, TouchableOpacity, StyleSheet , Alert} from 'react-native';
 import { ListItem , Divider } from 'react-native-elements';
 import React from 'react';
-import { updateClothes } from '../actions/ropaActions'
+import { updateClothes , updateSugeridas } from '../actions/ropaActions'
 import { connect } from 'react-redux';
 
 console.ignoredYellowBox=true;
@@ -117,6 +117,7 @@ class GuardarropasScreen extends React.Component {
 
   usarRopa = () => {
 
+    let arraySugeridas=[]
     let arrayGuardarropas;
     let arrayFavoritas;
    
@@ -180,6 +181,7 @@ class GuardarropasScreen extends React.Component {
               //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
               
               const {dispatch} = this.props
+              dispatch( updateSugeridas(arraySugeridas))
               dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
              
             });
@@ -196,7 +198,7 @@ class GuardarropasScreen extends React.Component {
   restarDisponibilidadRopa = () => {
 
     
-
+    let arraySugeridas=[]
     let arrayGuardarropas;
     let arrayFavoritas;
 
@@ -259,6 +261,7 @@ class GuardarropasScreen extends React.Component {
                 //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
                 
                 const {dispatch} = this.props
+                dispatch( updateSugeridas(arraySugeridas))
                 dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
                
               });
@@ -273,7 +276,7 @@ class GuardarropasScreen extends React.Component {
   sumarDisponibilidadRopa = () => {
 
    
-
+    let arraySugeridas=[];
     let arrayGuardarropas;
     let arrayFavoritas;
 
@@ -337,6 +340,7 @@ class GuardarropasScreen extends React.Component {
                 
                 const {dispatch} = this.props
                 dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+                dispatch( updateSugeridas(arraySugeridas))
                
               });
 
@@ -354,7 +358,7 @@ class GuardarropasScreen extends React.Component {
     
     let arrayGuardarropas;
     let arrayFavoritas;
-    let arraySugeridas;
+    let arraySugeridas=[];
 
     ropa.transaction(tx => {
       tx.executeSql(
@@ -417,6 +421,7 @@ class GuardarropasScreen extends React.Component {
                 
                 const {dispatch} = this.props
                 dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+                dispatch( updateSugeridas(arraySugeridas))
                
               });
 

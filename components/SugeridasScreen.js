@@ -65,6 +65,7 @@ class SugeridasScreen extends React.Component {
 					
 				
 				}catch (e) {
+					Alert.alert("Error al obtener clima actual")
 					this.setState({
 						loading: false,
 						error: true,
@@ -120,8 +121,9 @@ class SugeridasScreen extends React.Component {
 				this.BuscarSugeridas(temp);
 
 			},
-			(error) => { console.log("ERROR") , this.setState({ message : error.message , error : true , loading:false })} , 
-			{ enableHighAccuracy: false, timeout: 10000, maximumAge: 1000 },
+			(error) => { console.log("ERROR") , this.setState({ message : error.message , error : true , loading:false }),
+									 Alert.alert("Error al obtener ubicacion actual")} , 
+			{ enableHighAccuracy: false, timeout: 10000, maximumAge: 1000 },		// parametros 
 		);
 		
 	}
@@ -141,7 +143,7 @@ class SugeridasScreen extends React.Component {
 	BuscarSugeridas = (temp) => {
 
 			// POSTERIORMENTE SE HARA CON UN BOTON
-			let animo='feliz'
+			let animo='triste'
 			
 			let tiempo;
 			let arrayTipo;
@@ -177,11 +179,11 @@ class SugeridasScreen extends React.Component {
 			
 			switch (animo){
 				case 'feliz':{
-						colores=["Rojo","Azul","Verde","Amarillo"]
+						colores=["Rojo","Azul","Verde","Amarillo","Rosa"]
 						break;
 				}
 				case 'triste':{
-					  colores=["Negro","Gris"]
+					  colores=["Negro","Gris","Blanco","Ocre"]
 						break;
 				}
 				
@@ -207,7 +209,7 @@ class SugeridasScreen extends React.Component {
 			
       ropa.transaction(tx => {
         tx.executeSql(
-						'select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where t.name IN (' + queryTipo +  ') and r.Color IN (' +
+						'select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0 and t.name IN (' + queryTipo +  ') and r.Color IN (' +
 						 queryColor + ') ;').then(([tx,results]) => {
             
               console.log("Query completed");
@@ -224,7 +226,8 @@ class SugeridasScreen extends React.Component {
 								}
 							}
 							else
-								Alert.alert("No hay prendas sugeridas en el guardarropas para clima actual y estado de animo")	
+								Alert.alert("No hay prendas en el guardarropas para clima actual y estado de animo" )
+													
               // TODO: BORRE ALGO ACA
               //this.setState({modalRopa:false})
             }).catch((error) => {
@@ -317,8 +320,10 @@ class SugeridasScreen extends React.Component {
               console.log("ARRAY GUARDARROPAS:   "  , arrayGuardarropas) 
               
               const {dispatch} = this.props
-              dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
-             
+              dispatch( updateClothes(arrayFavoritas,arrayGuardarropas))
+							this.BuscarSugeridas(this.state.temperature)
+							
+
             });
 
 
