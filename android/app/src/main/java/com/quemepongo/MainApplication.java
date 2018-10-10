@@ -4,6 +4,8 @@ import android.app.Application;
 
 import org.pgsqlite.SQLitePluginPackage;
 import com.facebook.react.ReactApplication;
+import fr.snapp.imagebase64.RNImgToBase64Package;
+import io.codebakery.imagerotate.ImageRotatePackage;
 import org.reactnative.camera.RNCameraPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
@@ -26,6 +28,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNImgToBase64Package(),
+            new ImageRotatePackage(),
             new RNCameraPackage(),
             new VectorIconsPackage(),
             new SQLitePluginPackage()   // register SQLite Plugin here    

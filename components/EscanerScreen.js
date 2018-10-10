@@ -15,6 +15,8 @@ import { RNCamera } from 'react-native-camera';
 import Clarifai from 'clarifai'
 import { updateClothes } from '../actions/ropaActions'
 import { connect } from 'react-redux';
+import ImageRotate from 'react-native-image-rotate';
+import ImgToBase64 from 'react-native-image-base64';
 
 
 var SQLite = require('react-native-sqlite-storage')
@@ -46,73 +48,283 @@ class EscanerScreen extends Component {
     });
   }
 
+  componentDidMount() {
+    const { navigation } = this.props;
+    navigation.addListener('willFocus', () =>
+      this.setState({ focusedScreen: true })
+    );
+    navigation.addListener('willBlur', () =>
+      this.setState({ focusedScreen: false })
+    );
+  }
+
+  codColorPrenda = (colorName) =>{
+    let codColor=0
+    switch(colorName){
+      case ('Gris') : {
+        codColor=1 
+      }
+      case ('Marron') : {
+        codColor=2
+      }
+      case ('Rojo') : {
+        codColor=3
+      }
+      case ('Verde') : {
+        codColor=4
+      }
+      case ('Amarillo') : {
+        codColor=5
+      }
+      case ('Azul') : {
+        codColor=6
+      }
+      case ('Negro') : {
+        codColor=7
+      }
+      case ('Blanco') : {
+        codColor=8  
+      }
+      case ('Violeta') : {
+        codColor=9
+      }
+      case ('Ocre') : {
+        codColor=10
+      }
+      case ('Rosa') : {
+        codColor=11
+      }
+      case ('Purpura') : {
+        codColor=12
+      }
+
+    }
+    return codColor
+  }
+
   agregarRopa = () =>{
+
+    let arrayGuardarropas;
+    let arrayFavoritas;
+
     ropa.transaction(tx => {
 
       tx.executeSql(
-      `SELECT *  from Tipo_Ropa t where t.Name = ?;`,[this.state.prendaEscaneadaNombre]).then(([tx,results]) => {
-
-        let row;
-
-        var len = results.rows.length;        // en teoria no hace falta porque solo encontraria un tipo de prenda por nombre
-          for (let i = 0; i < len; i++) {
-            row = results.rows.item(i);
-            console.log(row.Name) 
-          }
-
-      //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) VALUES (1 ,2 , 1 , -1 , ? , 0, \'Blanco\' );', [5]);
-      ropa.transaction(tx => {
-
-          
+        `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where t.Name = ? and r.Color like ? and r.Precargada == 0;`,
+        [this.state.prendaEscaneadaNombre, '%'+this.state.colorPrendaEscaneadaNombre+'%']).then(([tx,results]) => {
 
         
+        let row;
+        var len = results.rows.length;   
+        console.log("ENCONTRE: " , len)
+        for (let i = 0; i < len; i++) {
+          row = results.rows.item(i);
+          console.log(row) 
+        }
 
-          tx.executeSql('INSERT INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) ' +  
-          'VALUES ( null , ? , 0 , 1 , ? , 0 , ? );', [ row.Tipo_Id , /*COD COLOR, CALCULAR*/  , this.state.colorPrendaEscaneadaNombre ]).then(([tx,results]) => {
-            this.setState({modal:false})
-           
-            console.log("INSERTE LA PRENDA")
+        if(len == 0){   // NO existe una prenda con ese nombre y color
+          
+          ropa.transaction(tx => {
+          tx.executeSql(
+          `SELECT * from Tipo_Ropa t where t.Name = ?;`,[this.state.prendaEscaneadaNombre]).then(([tx,results]) => {
+
+            let row;
             var len = results.rows.length;        // en teoria no hace falta porque solo encontraria un tipo de prenda por nombre
-            for (let i = 0; i < len; i++) {
-              row = results.rows.item(i);
-              console.log(row) 
+              for (let i = 0; i < len; i++) {
+                row = results.rows.item(i);
+                console.log(row.Name) 
+              }
+
+            // Determinar Codigo de Prenda
+            let codColor = this.codColorPrenda(this.state.colorPrendaEscaneadaNombre)
+            console.log("COD COLOR ES: " + codColor)
+            if(codColor != 0){
+              //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) VALUES (1 ,2 , 1 , -1 , ? , 0, \'Blanco\' );', [5]);
+            
+              ropa.transaction(tx => {
+
+                  // null es para indicar que se use le autoinrcemento de la primary key
+                  tx.executeSql('INSERT INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color, Cant_Max) ' +  
+                  'VALUES ( null , ? , 0 , 1 , ? , 0 , ? , 1 );', [ row.Tipo_Id , codColor  , this.state.colorPrendaEscaneadaNombre ]).then(([tx,results]) => {
+                    this.setState({modal:false})
+                  
+
+                    console.log("INSERTE LA PRENDA")
+                  
+                    ropa.transaction(tx => {
+                      tx.executeSql(
+                          `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
+                          
+                            console.log("Query completed");
+                
+                            arrayGuardarropas=[]
+                
+                            var len = results.rows.length;
+                            
+                            for (let i = 0; i < len; i++) {
+                              let row = results.rows.item(i);
+                              //console.log(row)
+                              arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
+                            }
+                        
+                          }).catch((error) => {
+                            this.setState({modal:false})
+                            Alert.alert("Fallo la Busqueda en la Base de datos")
+                            console.log(error);
+                          });
+        
+                          tx.executeSql(
+                            `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                            
+                              console.log("Query completed");
+                  
+                              arrayFavoritas=[]
+                  
+                              var len = results.rows.length;
+                              
+                              for (let i = 0; i < len; i++) {
+                                let row = results.rows.item(i);
+                                //console.log(row)
+                                arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+                              }
+            
+                            }).catch((error) => {
+                              this.setState({modal:false})
+                              Alert.alert("Fallo la Busqueda en la Base de datos")
+                              console.log(error);
+                            });   
+                    })
+
+
+                  // ACA TERMINA THEN DE INSERT
+                  }).catch((error) => {
+                    this.setState({modal:false})
+                    Alert.alert("Fallo la inserción en la Base de datos")
+                    console.log(error);
+                  })
+              }).then( () => {   
+                      
+                // console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+                // console.log("ARRAY PRECARGADAS:   "  , arrayGuardarropas) 
+                
+                const {dispatch} = this.props
+                dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+              
+              });
+
             }
-  
-
-
-
+            else{
+              this.setState({modal:false})
+              Alert.alert("Error determinando codigo de color de Prenda")
+            }
+              
+          //FIN DEL SELECT PARA SABER TIPO DE PRENDA
           }).catch((error) => {
             this.setState({modal:false})
             Alert.alert("Fallo la inserción en la Base de datos")
             console.log(error);
           })
-      }).then( () => {   
-              
-        //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
-        //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
-        
-        const {dispatch} = this.props
-        dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+
+          // catch de la transac de insert
+          }).catch((error) => {
+            this.setState({modal:false})
+            Alert.alert("Fallo la inserción en la Base de datos")
+            console.log(error);
+          })
        
+
+        }
+        else{
+
+          //console.log("CAMBIANDO DISPONIBILIDAD")
+
+
+          row = results.rows.item(0)  // PORQUE ES UN SOLO ITEM O NINGUNO, NO PUEDE HABER DUPLICADOS EN COLOR Y NOMBRE
+          let id = row.Ropa_Id
+          
+          ropa.transaction(tx => {
+          tx.executeSql(
+            `UPDATE Ropa SET Cant_MAX = ? , Cantidad = ? where Ropa_Id= ? ;`,[row.Cant_Max+1, row.Cantidad+1 , id]).then(([tx,results]) => { 
+
+
+              //console.log("CAMBIE DISPONIBILIDAD PRENDA, AHORA ACTUALIZO LAS LISTAS")
+              ropa.transaction(tx => {
+                tx.executeSql(
+                    `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
+                    
+                      console.log("Query completed");
+          
+                      arrayGuardarropas=[]
+          
+                      var len = results.rows.length;
+                      
+                      for (let i = 0; i < len; i++) {
+                        let row = results.rows.item(i);
+                        //console.log(row)
+                        arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
+                      }
+                  
+                    }).catch((error) => {
+                      this.setState({modal:false})
+                      Alert.alert("Fallo la Busqueda en la Base de datos")
+                      console.log(error);
+                    });
+  
+                    tx.executeSql(
+                      `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                      
+                        console.log("Query completed");
+            
+                        arrayFavoritas=[]
+            
+                        var len = results.rows.length;
+                        
+                        for (let i = 0; i < len; i++) {
+                          let row = results.rows.item(i);
+                          //console.log(row)
+                          arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+                        }
+      
+                      }).catch((error) => {
+                        this.setState({modal:false})
+                        Alert.alert("Fallo la Busqueda en la Base de datos")
+                        console.log(error);
+                      });   
+              }).then( () => {   
+                      
+                // console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+                // console.log("ARRAY PRECARGADAS:   "  , arrayGuardarropas) 
+                
+                const {dispatch} = this.props
+                dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+              
+              });
+
+              
+            //CATCH DEL UPDATE
+            }).catch((error) => {
+              this.setState({modal:false})
+              Alert.alert("Fallo Modificando disponibilidad maxima")
+              console.log(error);
+            })
+          //CATCH DEL TRANSAC DENTRO DEL ELSE
+          }).catch((error) => {
+            this.setState({modal:false})
+            Alert.alert("Fallo Modificando disponibilidad maxima")
+            console.log(error);
+          })
+
+
+        } // FIN ELSE
+
       });
-
-
-      }).catch((error) => {
-        this.setState({modal:false})
-        Alert.alert("Fallo la inserción en la Base de datos")
-        console.log(error);
-      })
+    // FIN TRANSAC BASE
     }).then(() =>{
       this.setState({modal:false})
       console,log("Transaccion Finalizada")
-        //this.closeDatabase()});
-    });   
+    })
 
-  
-    
   }
-
-
 
   takePicture = async function() {
     if (this.camera) {
@@ -121,8 +333,30 @@ class EscanerScreen extends Component {
       //console.log(data)                 // DATA ES LA FOTO TOMADA, URI ES LA UBICACION EN CACHE DONDE LA GUARDA
       this.setState({data:data.uri, modal:false , loading:true , 
                      prendaEscaneadaNombre:'', prendaEscaneadaAcierto:'', colorPrendaEscaneadaNombre:'',colorPrendaEscaneadaAcierto:''})
-      
-      const a =(this.escaneo(data.base64))
+
+      //console.log("MI FOTO ES :" + data.uri)
+
+      ImageRotate.rotateImage( data.uri, 90, (uri) => {
+
+        console.log("uri: " , uri)
+
+        let data = uri
+        this.setState({
+        data: uri,
+        });
+
+      ImgToBase64.getBase64String( 
+          data).then( (cadena) => {
+         
+            const a =(this.escaneo(cadena))
+          
+      });
+
+      },
+      (error) => {
+        console.error(error);
+      });
+
       
     }
   }
@@ -270,6 +504,7 @@ class EscanerScreen extends Component {
       colorname = "Purpura"
     else
       colorname = "0"
+    
     return colorname
   }
 
@@ -281,8 +516,13 @@ class EscanerScreen extends Component {
 
   render() {
 
+    const { hasCameraPermission, focusedScreen } = this.state;
+
     return (
+
+      
       <View style={styles.container}>
+        { focusedScreen &&
         <RNCamera
             ref={ref => {
               this.camera = ref;
@@ -293,32 +533,37 @@ class EscanerScreen extends Component {
             permissionDialogTitle={'Permisos de la cámara'}
             permissionDialogMessage={'¿Deséa permitir a Que Me Pongo utilizar la cámara del dispositivo?'}
         />
+        }
         <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center',}}>
           <TouchableOpacity
               onPress={this.takePicture.bind(this)}
               style = {styles.capture}
               disabled= {this.state.loading}
           >
-              <Text style={{fontSize: 16, color:'#fff'}}> Escanear prenda </Text>
+              <Text style={{fontSize: 16, color:'#fff', fontWeight:'bold'}}> Escanear prenda </Text>
           </TouchableOpacity>
         </View>
         <Modal visible={this.state.modal} >
-            <View style={{backgroundColor:'orange', flex:1}}>
+            <View style={{backgroundColor:'grey', flex:1}}>
               <Image
-                style={{width: 350, height: 350, transform: [{ rotate: '90deg'}], margin:2 , alignSelf:'center'}}
+                style={{flex:1  , alignItems:'center' , margin:5 }}
                 source={{uri: this.state.data}}
               />
-              <Text> Usted escaneo:  {this.state.prendaEscaneadaNombre + ' color ' + this.state.colorPrendaEscaneadaNombre}</Text>
-              <Text>¿Desea Agregarla al Guardarropas?</Text>
+
+              <View style={{borderStyle:'solid', borderWidth: 2 , borderColor: 'red' , margin:3 }} >
+                <Text style={styles.text}> Usted escaneo:  {this.state.prendaEscaneadaNombre + ' color ' + this.state.colorPrendaEscaneadaNombre}</Text>
+                <Text style={styles.text}>¿Deséa Agregarla al Guardarropas?</Text>
+              </View>
+              
               <TouchableOpacity style = {styles.send}
               onPress = {this.agregarRopa}
               >
-              <Text style={{fontSize: 14}}> Agregar </Text>
+              <Text style={styles.sendText}> Agregar </Text>
               </TouchableOpacity>
               <TouchableOpacity style = {styles.send}
               onPress = { () => {this.setState({modal:false})}}
               >
-              <Text style={{fontSize: 14}}> Cancelar </Text>
+              <Text style={styles.sendText}> Cancelar </Text>
               </TouchableOpacity>
             </View>
         </Modal>
@@ -341,8 +586,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   capture: {
+    //fontSize:20,
+    //fontWeight:'bold',
     flex: 0,
-    backgroundColor: 'grey',
+    backgroundColor: 'blue',
     borderRadius: 5,
     padding: 15,
     paddingHorizontal: 20,
@@ -351,14 +598,26 @@ const styles = StyleSheet.create({
   },
   send: {
     margin: 2 ,
-    backgroundColor: '#fff',
+    backgroundColor: 'orange',
     borderRadius: 5,
     paddingHorizontal: 22,
     alignSelf: 'center',
     justifyContent: 'flex-end',
     //fontSize:20,
     padding : 8
-  }
+  },
+  text:{
+    fontSize: 22,
+    color: 'blue',
+    alignSelf: 'center',
+  },
+  sendText: {
+    fontSize:18,
+    fontWeight:'bold',
+    margin: 2 ,
+    color: '#ffffff',
+    textAlign:'center'
+  },
 });
 
 const mapStateToProps = state => {

@@ -1,7 +1,7 @@
 import { Text, View ,  FlatList , Modal, TouchableOpacity, StyleSheet , Alert} from 'react-native';
 import { ListItem , Divider } from 'react-native-elements';
 import React from 'react';
-import { updateClothes } from '../actions/ropaActions'
+import { updateClothes , updateSugeridas } from '../actions/ropaActions'
 import { connect } from 'react-redux';
 
 console.ignoredYellowBox=true;
@@ -51,38 +51,76 @@ class GuardarropasScreen extends React.Component {
 
   readTables = (tx) => {
    
-      ropa.transaction(tx => {
-      tx.executeSql(
-          `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
-          
-            console.log("Query completed");
-
-            let array=[]
-
-            var len = results.rows.length;
-            
-            for (let i = 0; i < len; i++) {
-              let row = results.rows.item(i);
-              //console.log(row)
-              array.push(row)      // GUARDO SOLO NOMBRE
-            }
-            //console.log(array , "AAA")
-            this.setState({ropa:array})
-          }).catch((error) => {
-            console.log(error);
-          });
-
+    let arrayGuardarropas;
+    let arrayFavoritas;
+   
+    ropa.transaction(tx => {
       
-    });
-  console.log("all config SQL done");
+              tx.executeSql(
+                  `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
+                  
+                    console.log("Query completed");
+        
+                    arrayGuardarropas=[]
+        
+                    var len = results.rows.length;
+                    
+                    for (let i = 0; i < len; i++) {
+                      let row = results.rows.item(i);
+                      //console.log(row)
+                      arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
+                    }
+                 
+                    this.setState({/*ropa:arrayGuardarropas,*/modalRopa:false})
+                  }).catch((error) => {
+                    this.setState({modalRopa:false})
+                    Alert.alert("Fallo la carga de Prendas con la Base de datos")
+                    console.log(error);
+                  });
+
+                  tx.executeSql(
+                    `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                    
+                      console.log("Query completed");
+          
+                      arrayFavoritas=[]
+          
+                      var len = results.rows.length;
+                      
+                      for (let i = 0; i < len; i++) {
+                        let row = results.rows.item(i);
+                        //console.log(row)
+                        arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+                      }
+                   
+                      //this.setState({ropa:arrayGuardarropas,modalRopa:false})
+                    }).catch((error) => {
+                      this.setState({modalRopa:false})
+                      Alert.alert("Fallo la carga de Prendas con la Base de datos")
+                      console.log(error);
+                    });
+
+                
+            }).then( () => {   
+              
+              console.log("PRECARGA")
+              console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+              console.log("ARRAY GUARDARROPAS:   "  , arrayGuardarropas) 
+              
+              const {dispatch} = this.props
+              dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+             
+            });
+    
+    console.log("all config SQL done");
   }
 
   usarRopa = () => {
 
-
+    let arraySugeridas=[]
     let arrayGuardarropas;
     let arrayFavoritas;
-
+   
     ropa.transaction(tx => {
       tx.executeSql(
           `UPDATE Ropa SET Uso = ? where Ropa_Id = ?;`,[this.state.prenda.Uso +1 , this.state.prenda.Ropa_Id]).then(([tx,results]) => {
@@ -143,6 +181,7 @@ class GuardarropasScreen extends React.Component {
               //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
               
               const {dispatch} = this.props
+              dispatch( updateSugeridas(arraySugeridas))
               dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
              
             });
@@ -158,6 +197,8 @@ class GuardarropasScreen extends React.Component {
 
   restarDisponibilidadRopa = () => {
 
+    
+    let arraySugeridas=[]
     let arrayGuardarropas;
     let arrayFavoritas;
 
@@ -220,6 +261,7 @@ class GuardarropasScreen extends React.Component {
                 //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
                 
                 const {dispatch} = this.props
+                dispatch( updateSugeridas(arraySugeridas))
                 dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
                
               });
@@ -233,6 +275,8 @@ class GuardarropasScreen extends React.Component {
 
   sumarDisponibilidadRopa = () => {
 
+   
+    let arraySugeridas=[];
     let arrayGuardarropas;
     let arrayFavoritas;
 
@@ -296,6 +340,7 @@ class GuardarropasScreen extends React.Component {
                 
                 const {dispatch} = this.props
                 dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+                dispatch( updateSugeridas(arraySugeridas))
                
               });
 
@@ -308,9 +353,12 @@ class GuardarropasScreen extends React.Component {
   }
 
   eliminarPrenda = () =>{
+
+   
     
     let arrayGuardarropas;
     let arrayFavoritas;
+    let arraySugeridas=[];
 
     ropa.transaction(tx => {
       tx.executeSql(
@@ -345,13 +393,14 @@ class GuardarropasScreen extends React.Component {
                     tx.executeSql(
                       `SELECT * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
                       
-                        console.log("Query completed");
+                        console.log("Query completed seleccion favoritas");
             
                         arrayFavoritas=[]
             
                         var len = results.rows.length;
                         
                         for (let i = 0; i < len; i++) {
+
                           let row = results.rows.item(i);
                           //console.log(row)
                           arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
@@ -367,11 +416,12 @@ class GuardarropasScreen extends React.Component {
                   
               }).then( () => {   
                 
-                //console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+                //console.log("ARRAY FAVORITAS POST ELIMINAR:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
                 //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
                 
                 const {dispatch} = this.props
                 dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+                dispatch( updateSugeridas(arraySugeridas))
                
               });
 
@@ -387,8 +437,12 @@ class GuardarropasScreen extends React.Component {
   keyExtractor = (item, index) => index;
   
     renderItem = ({ item, index }) => (
-      <ListItem style={styles.text}
-        title={item.Name+ ' color ' + item.Color}
+      <ListItem 
+        containerStyle={{ borderStyle:'solid', backgroundColor:'green', margin:3 , 
+                          borderWidth: 2 , borderBottomWidth: 2 , borderBottomColor : 'blue' ,borderColor: 'blue' }}
+        title={
+          <Text style={styles.lista}> {item.Name} color {item.Color} </Text>
+          }
         //leftAvatar={{ source: item.avatar_url, rounded: true }}
         onPress={() => {
           this.setState({ modalRopa: true , prenda : item });
@@ -400,27 +454,37 @@ class GuardarropasScreen extends React.Component {
 
   render() {
 
-    let data;
+    // console.log( "ARRAY FAVORITAS:  " + this.props.ropa.prendasGuardarropas)
+    // console.log( "LENGHT:  " + this.props.ropa.prendasGuardarropas.length)
 
+   
     let ayuda ="En esta pantalla se encuentran\n todas tus prendas cargadas"
+    let vacio = false
+    let data;
  
     //console.log("PRUEBA ES AHORA " , this.props.ropa.prueba)
-    if(this.props.ropa.prendasGuardarropas.length)
-      data = this.props.ropa.prendasGuardarropas
+    if(this.props.ropa.prendasGuardarropas){
+      if(this.props.ropa.prendasGuardarropas.length){
+        data = this.props.ropa.prendasGuardarropas
+        vacio = false
+      }
+      else
+        vacio=true
+    }
     else
-      data = this.state.ropa
+      vacio=true
 
 
       return (
         <View style={{ flex: 1 , backgroundColor:'orange'}}>
 
           
-          {/* {this.props.ropa.prendasFavoritas.length == 0 &&
+          { vacio &&
           <View>
               <Text style={styles.vacio}>No hay prendas en el guardarropas</Text>
               <Text style={styles.vacio}>Cargue algunas prendas usando el escaner</Text>
           </View>
-          } */}
+          } 
           
           
           <FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
@@ -437,7 +501,7 @@ class GuardarropasScreen extends React.Component {
                 {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
               </Text>
               <Text style={styles.text}>
-                {"Cantidad disponible: " + this.state.prenda.Cantidad}
+                {"Cantidad disponible: " + this.state.prenda.Cantidad + "/" + this.state.prenda.Cant_Max}
               </Text>
               <Text style={styles.text}>
                 {"Cantidad de veces que se uso: " + this.state.prenda.Uso}
@@ -460,7 +524,7 @@ class GuardarropasScreen extends React.Component {
             <TouchableOpacity
               style = {styles.send}
               onPress ={ this.sumarDisponibilidadRopa}    
-              disabled= {this.state.prenda.Cantidad == 10}  
+              disabled= {this.state.prenda.Cantidad >= this.state.prenda.Cant_Max }  
             >
               <Text style={styles.sendText}>Sumar cantidad disponible</Text>
             </TouchableOpacity>
@@ -504,13 +568,16 @@ class GuardarropasScreen extends React.Component {
       padding : 8
     },
     sendText: {
+      fontSize:16,
+      fontWeight:'bold',
       margin: 2 ,
       color: '#ffffff',
       textAlign:'center'
     },
     text:{
+      color: 'blue',
       fontSize: 22,
-      color: 'black',
+   
       alignSelf: 'center',
     },modal: {
       backgroundColor:'orange'
@@ -531,6 +598,10 @@ class GuardarropasScreen extends React.Component {
       alignSelf:'center', 
       color:'red',
       textAlign:'center'
+    },
+    lista:{
+      color:'#F3EBEB',
+      fontSize:18,
     }
   });
 
