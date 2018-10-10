@@ -501,7 +501,7 @@ class GuardarropasScreen extends React.Component {
                 {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
               </Text>
               <Text style={styles.text}>
-                {"Cantidad disponible: " + this.state.prenda.Cantidad}
+                {"Cantidad disponible: " + this.state.prenda.Cantidad + "/" + this.state.prenda.Cant_Max}
               </Text>
               <Text style={styles.text}>
                 {"Cantidad de veces que se uso: " + this.state.prenda.Uso}
@@ -524,7 +524,7 @@ class GuardarropasScreen extends React.Component {
             <TouchableOpacity
               style = {styles.send}
               onPress ={ this.sumarDisponibilidadRopa}    
-              disabled= {this.state.prenda.Cantidad == 10}  
+              disabled= {this.state.prenda.Cantidad >= this.state.prenda.Cant_Max }  
             >
               <Text style={styles.sendText}>Sumar cantidad disponible</Text>
             </TouchableOpacity>

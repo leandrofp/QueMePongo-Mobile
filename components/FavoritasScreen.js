@@ -309,12 +309,12 @@ class FavoritasScreen extends React.Component {
     let data;
 
 
-    console.log( "ARRAY FAVORITAS:  " + this.props.ropa.prendasFavoritas)   // muestra un object object aunque este vacio y x eso rompe el hdp
+    //console.log( "ARRAY FAVORITAS:  " + this.props.ropa.prendasFavoritas)   // muestra un object object aunque este vacio y x eso rompe el hdp
     //console.log( "LENGHT:  " + this.props.ropa.prendasFavoritas.length)
     if(this.props.ropa.prendasFavoritas){
      
       if(this.props.ropa.prendasFavoritas.length){
-        console.log("IF 2")
+        //console.log("IF 2")
         data = this.props.ropa.prendasFavoritas
         vacio = false
       }
@@ -364,7 +364,7 @@ class FavoritasScreen extends React.Component {
                 {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
               </Text>
               <Text style={styles.text}>
-                {"Cantidad disponible: " + this.state.prenda.Cantidad}
+                {"Cantidad disponible: " + this.state.prenda.Cantidad + "/" + this.state.prenda.Cant_Max}
               </Text>
               <Text style={styles.text}>
                 {"Cantidad de veces que se uso: " + this.state.prenda.Uso}

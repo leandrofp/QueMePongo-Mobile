@@ -87,7 +87,7 @@ class PrecargadasScreen extends React.Component {
       tx.executeSql('CREATE TABLE IF NOT EXISTS Ropa( '
             + 'Ropa_Id INTEGER NOT NULL PRIMARY KEY,'
             + 'Tipo_Id INTEGER NOT NULL , Precargada INTEGER NOT NULL , '  
-            +	'Cantidad INTEGER , CodColor INTEGER NOT NULL , Uso INTEGER NOT NULL , Color TEXT NOT NULL);' ).catch((error) => {
+            +	'Cantidad INTEGER , CodColor INTEGER NOT NULL , Uso INTEGER NOT NULL , Color TEXT NOT NULL , Cant_Max INTEGER NOT NULL);' ).catch((error) => {
             this.errorCB(error)
       });
           
@@ -144,15 +144,15 @@ class PrecargadasScreen extends React.Component {
               
               /* TODO:  REVISAR LA INSERCION DE LOS VARCHAR, CREO QUE ROMPE AHI */
 
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color)  VALUES (1 ,2 , 1 , -1 , 8 , 0, "Blanco" );');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color)  VALUES (2 ,1 , 1 , -1 , 8 , 0, "Blanco" );');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (1, 2 , 1 , -1 , 8 , 0, "Blanco", 0);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (2, 1 , 1 , -1 , 8 , 0, "Blanco", 0);');
               
               
               // Normales para Testing
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color)  VALUES (3 ,2 , 0 , 0 , 4 , 0, "Verde" );');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color) VALUES (4 ,1 , 0 , 0 , 5 , 0, "Amarillo" );');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color)  VALUES (5 ,1 , 0 , 0 , 3 , 5, "Rojo" );');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color)  VALUES (6 ,3 , 0 , 1 , 7 , 2, "Gris" );');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (3, 2 , 0 , 0 , 4 , 0, "Verde", 3);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (4, 1 , 0 , 0 , 5 , 0, "Amarillo", 3);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (5, 1 , 0 , 0 , 3 , 5, "Rojo", 3);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (6, 3 , 0 , 1 , 7 , 2, "Gris", 3);');
               
 
               //el 5 seria remera, el 6 pantalon por ahora en processing por suponer algo
