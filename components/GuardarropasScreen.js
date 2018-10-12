@@ -507,47 +507,62 @@ class GuardarropasScreen extends React.Component {
                 {"Cantidad de veces que se uso: " + this.state.prenda.Uso}
               </Text>
             </View>
-            <TouchableOpacity
-              style = {styles.send}
-              //onPress ={this.usarRopa}  
-              disabled={this.state.prenda.Cantidad <= 0} 
-            >
-              <Text style={styles.sendText}>Probar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style = {styles.send}
-              onPress ={ this.restarDisponibilidadRopa }    
-              disabled= {this.state.prenda.Cantidad == 0}
-            >
-              <Text style={styles.sendText}>Restar cantidad disponible</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style = {styles.send}
-              onPress ={ this.sumarDisponibilidadRopa}    
-              disabled= {this.state.prenda.Cantidad >= this.state.prenda.Cant_Max }  
-            >
-              <Text style={styles.sendText}>Sumar cantidad disponible</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style = {styles.send}
-              onPress ={this.usarRopa}  
-              disabled={this.state.prenda.Cantidad <= 0} 
-            >
-              <Text style={styles.sendText}>Usar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style = {styles.send}
-              onPress ={ this.eliminarPrenda}   
-            >
-              <Text style={styles.sendText}>Eliminar Prenda</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style = {styles.send}
-              onPress ={ () => {this.setState({modalRopa:false})}}
-            >
-              <Text style={styles.sendText}>Cancelar</Text>
-            </TouchableOpacity>
-
+            <View style={{flexDirection:'row' , alignSelf:'center' }}>
+              <TouchableOpacity
+                style = {styles.send}
+                //onPress ={this.usarRopa}  
+                disabled={this.state.prenda.Cantidad <= 0} 
+              >
+                <Text style={styles.sendText}>Probar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style = {styles.send}
+                onPress ={this.usarRopa}  
+                disabled={this.state.prenda.Cantidad <= 0} 
+              >
+                <Text style={styles.sendText}>Usar</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{flexDirection:'row', alignSelf:'center'}}>
+              <TouchableOpacity
+                style = {styles.send}
+                onPress ={ this.restarDisponibilidadRopa }    
+                disabled= {this.state.prenda.Cantidad == 0}
+              >
+                <Text style={styles.sendText}>Restar cantidad disponible</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style = {styles.send}
+                onPress ={ this.sumarDisponibilidadRopa}    
+                disabled= {this.state.prenda.Cantidad >= this.state.prenda.Cant_Max }  
+              >
+                <Text style={styles.sendText}>Sumar cantidad disponible</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{flexDirection:'row', alignSelf:'center'}}>  
+              <TouchableOpacity
+                style = {styles.send}
+                onPress ={ this.eliminarPrenda}   
+              >
+                <Text style={styles.sendText}>Eliminar Prenda</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style = {styles.send}
+                //onPress ={this.resetearPrenda}  // SIN IMPLEMENTAR AUN  
+                //disabled={this.state.prenda.Cantidad <= 0} 
+              >
+                <Text style={styles.sendText}>Resetear Prenda</Text>
+              </TouchableOpacity>
+              
+            </View>
+            <View style={{flexDirection:'row', alignSelf:'center'}}>  
+              <TouchableOpacity
+                style = {styles.send}
+                onPress ={ () => {this.setState({modalRopa:false})}}
+              >
+                <Text style={styles.sendText}>Cancelar</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </Modal>
         </View>

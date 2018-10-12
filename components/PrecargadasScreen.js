@@ -1,9 +1,13 @@
-import {  Text, View , TouchableOpacity ,   PermissionsAndroid , Alert , FlatList , Modal , StyleSheet } from 'react-native';
+import {  Text, View , TouchableOpacity ,   PermissionsAndroid , Alert , FlatList , Modal , StyleSheet , Image } from 'react-native';
 import React from 'react';
 import { ListItem , Divider} from 'react-native-elements';
 //import { updateClothes } from '../actions/ropaActions'
 import { connect } from 'react-redux';
 
+// PATH DE PRENDAS
+
+var RemeraBlancoPre = require('../assets/RemeraBlancaPre.jpg');
+var PantalonBlancoPre = require('../assets/PantalonBlancoPre.png');
 
 
 
@@ -21,7 +25,8 @@ class PrecargadasScreen extends React.Component {
     this.state = {
       modalRopa: false , 
       ropa: [], 
-      prenda: {}
+      prenda: {},
+      image:''
     
     }
 
@@ -227,18 +232,29 @@ class PrecargadasScreen extends React.Component {
         <Text style={styles.lista}> {item.Name} color {item.Color} </Text> 
         }
         onPress={() => {
-          this.setState({ modalRopa: true , prenda : item });
+          //this.setState({ modalRopa: true , prenda : item });
+          this.determinarImagenPrenda(item);
         }}
       />
     );
 
-    usarRopa = () => {
+    
 
-      this.setState({modalRopa:false})
-  
+    determinarImagenPrenda = (item) =>{
+
+      console.log(item)
+
+      if(item.Name == 'Pantalon' && item.Color=='Blanco' )
+        this.setState({image: PantalonBlancoPre  , modalRopa:true , prenda: item })
+      else if(item.Name ==  'Remera' && item.Color=='Blanco' )
+        this.setState({image: RemeraBlancoPre , modalRopa:true , prenda: item })
+
     }
 
     render() {
+
+    image = this.state.image
+    console.log(image)
 
     let ayuda ="En esta pantalla se encuentran aquellas\n prendas de muestra que trae la aplicación"
 
@@ -258,19 +274,28 @@ class PrecargadasScreen extends React.Component {
               <Text style={styles.text}>
                 {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
               </Text>
-              <TouchableOpacity
-                style = {styles.send}
-                onPress ={this.usarRopa}    // LLAMAR a una funcion que use una trasaccion para sumar 1 a USO
-              >
-                <Text style={styles.sendText}>Probar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style = {styles.send}
-                onPress ={ () => {this.setState({modalRopa:false})}}
-              >
-                <Text style={styles.sendText}>Cancelar</Text>
-              </TouchableOpacity>
-            
+
+              <View style={{flex:1 , alignSelf:'center'}}>
+              <Image
+                source={ image }
+                resizeMode='cover'    // cover o center seria la posta, uno renderiza para arriba y el otro achica 
+              
+              />
+              </View>
+              <View style={{flexDirection:'row' , alignSelf:'center' }}>
+                <TouchableOpacity
+                  style = {styles.send}
+                  //onPress ={this.usarRopa}    
+                >
+                  <Text style={styles.sendText}>Probar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style = {styles.send}
+                  onPress ={ () => {this.setState({modalRopa:false})}}
+                >
+                  <Text style={styles.sendText}>Cancelar</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </Modal>
           </View>

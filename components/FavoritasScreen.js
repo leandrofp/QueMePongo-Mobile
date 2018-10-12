@@ -369,27 +369,31 @@ class FavoritasScreen extends React.Component {
               <Text style={styles.text}>
                 {"Cantidad de veces que se uso: " + this.state.prenda.Uso}
               </Text>
-              <TouchableOpacity
-                style = {styles.send}
-                //onPress ={this.usarRopa}   
-                disabled={this.state.prenda.Cantidad <= 0} 
-              >
-                <Text style={styles.sendText}>Probar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style = {styles.send}
-                onPress ={this.usarRopa}   
-                disabled={this.state.prenda.Cantidad <= 0} 
-              >
-                <Text style={styles.sendText}>Usar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style = {styles.send}
-                onPress ={ () => {this.setState({modalRopa:false})}}
-              >
-                <Text style={styles.sendText}>Cancelar</Text>
-              </TouchableOpacity>
-              
+              <View style={{flexDirection:'row' , alignSelf:'center' }}>
+                <TouchableOpacity
+                  style = {styles.send}
+                  //onPress ={this.usarRopa}   
+                  disabled={this.state.prenda.Cantidad <= 0} 
+                >
+                  <Text style={styles.sendText}>Probar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style = {styles.send}
+                  onPress ={this.usarRopa}   
+                  disabled={this.state.prenda.Cantidad <= 0} 
+                >
+                  <Text style={styles.sendText}>Usar</Text>
+                
+                </TouchableOpacity>
+              </View>
+              <View style={{flexDirection:'row' , alignSelf:'center' }}>
+                <TouchableOpacity
+                  style = {styles.send}
+                  onPress ={ () => {this.setState({modalRopa:false})}}
+                >
+                  <Text style={styles.sendText}>Cancelar</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </Modal>
         </View>

@@ -30,7 +30,7 @@ class EscanerScreen extends Component {
   
   constructor(props){
     super(props);
-    this.state = {data:'', modal:false, loading:false}
+    this.state = {data:'', modal:false, loading:false, flash:true}
     this.escaneo = this.escaneo.bind(this)
 
 
@@ -58,48 +58,52 @@ class EscanerScreen extends Component {
     );
   }
 
-  codColorPrenda = (colorName) =>{
-    let codColor=0
-    switch(colorName){
-      case ('Gris') : {
-        codColor=1 
-      }
-      case ('Marron') : {
-        codColor=2
-      }
-      case ('Rojo') : {
-        codColor=3
-      }
-      case ('Verde') : {
-        codColor=4
-      }
-      case ('Amarillo') : {
-        codColor=5
-      }
-      case ('Azul') : {
-        codColor=6
-      }
-      case ('Negro') : {
-        codColor=7
-      }
-      case ('Blanco') : {
-        codColor=8  
-      }
-      case ('Violeta') : {
-        codColor=9
-      }
-      case ('Ocre') : {
-        codColor=10
-      }
-      case ('Rosa') : {
-        codColor=11
-      }
-      case ('Purpura') : {
-        codColor=12
-      }
+  changeFlash = () => {
+    this.setState({flash: !(this.state.flash)})
+  }
 
+  codColorPrenda = (colorName) =>{
+    
+    console.log("ENTRE A CODCOLORPRENDA CON: " , colorName)
+    switch(colorName){
+      case "Gris" : {
+        return 1 
+      }
+      case "Marron" : {
+        return 2
+      }
+      case "Rojo" : {
+        return 3
+      }
+      case "Verde" : {
+        return 4
+      }
+      case "Amarillo" : {
+        return 5
+      }
+      case "Azul" : {
+        return 6
+      }
+      case "Negro" : {
+        return 7
+      }
+      case "Blanco" : {
+        return 8  
+      }
+      case "Violeta" : {
+        return 9
+      }
+      case "Ocre" : {
+        return 10
+      }
+      case "Rosa" : {
+        return 11
+      }
+      case "Purpura" : {
+        return 12
+      }
     }
-    return codColor
+    return 0
   }
 
   agregarRopa = () =>{
@@ -138,92 +142,96 @@ class EscanerScreen extends Component {
             // Determinar Codigo de Prenda
             let codColor = this.codColorPrenda(this.state.colorPrendaEscaneadaNombre)
             console.log("COD COLOR ES: " + codColor)
-            if(codColor != 0){
-              //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) VALUES (1 ,2 , 1 , -1 , ? , 0, \'Blanco\' );', [5]);
-            
-              ropa.transaction(tx => {
+              if(codColor != 0){
+                //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , Cod_Color , Uso , Color) VALUES (1 ,2 , 1 , -1 , ? , 0, \'Blanco\' );', [5]);
+              
+                ropa.transaction(tx => {
 
-                  // null es para indicar que se use le autoinrcemento de la primary key
-                  tx.executeSql('INSERT INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color, Cant_Max) ' +  
-                  'VALUES ( null , ? , 0 , 1 , ? , 0 , ? , 1 );', [ row.Tipo_Id , codColor  , this.state.colorPrendaEscaneadaNombre ]).then(([tx,results]) => {
-                    this.setState({modal:false})
-                  
+                    // null es para indicar que se use le autoinrcemento de la primary key
+                    tx.executeSql('INSERT INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color, Cant_Max) ' +  
+                    'VALUES ( null , ? , 0 , 1 , ? , 0 , ? , 1 );', [ row.Tipo_Id , codColor  , this.state.colorPrendaEscaneadaNombre ]).then(([tx,results]) => {
+                      this.setState({modal:false})
+                    
 
-                    console.log("INSERTE LA PRENDA")
-                  
-                    ropa.transaction(tx => {
-                      tx.executeSql(
-                          `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
-                          
-                            console.log("Query completed");
-                
-                            arrayGuardarropas=[]
-                
-                            var len = results.rows.length;
+                      console.log("INSERTE LA PRENDA")
+                    
+                      ropa.transaction(tx => {
+                        tx.executeSql(
+                            `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
                             
-                            for (let i = 0; i < len; i++) {
-                              let row = results.rows.item(i);
-                              //console.log(row)
-                              arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
-                            }
-                        
-                          }).catch((error) => {
-                            this.setState({modal:false})
-                            Alert.alert("Fallo la Busqueda en la Base de datos")
-                            console.log(error);
-                          });
-        
-                          tx.executeSql(
-                            `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
-                            
-                              console.log("Query completed");
+                              console.log("Query completed update Guardarropas");
                   
-                              arrayFavoritas=[]
+                              arrayGuardarropas=[]
                   
                               var len = results.rows.length;
                               
                               for (let i = 0; i < len; i++) {
                                 let row = results.rows.item(i);
                                 //console.log(row)
-                                arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+                                arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
                               }
-            
+                          
                             }).catch((error) => {
                               this.setState({modal:false})
                               Alert.alert("Fallo la Busqueda en la Base de datos")
                               console.log(error);
-                            });   
-                    })
-
-
-                  // ACA TERMINA THEN DE INSERT
-                  }).catch((error) => {
-                    this.setState({modal:false})
-                    Alert.alert("Fallo la inserción en la Base de datos")
-                    console.log(error);
-                  })
-              }).then( () => {   
+                            });
+          
+                            tx.executeSql(
+                              `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                              
+                                console.log("Query completed update Favoritas");
+                    
+                                arrayFavoritas=[]
+                    
+                                var len = results.rows.length;
+                                
+                                for (let i = 0; i < len; i++) {
+                                  let row = results.rows.item(i);
+                                  //console.log(row)
+                                  arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+                                }
+              
+                              }).catch((error) => {
+                                this.setState({modal:false})
+                                Alert.alert("Fallo la Busqueda en la Base de datos")
+                                console.log(error);
+                              });   
+                      }).then( () => {   
+                        
+                        // console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+                        // console.log("ARRAY PRECARGADAS:   "  , arrayGuardarropas) 
+                        
+                        const {dispatch} = this.props
+                        dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
                       
-                // console.log("ARRAY FAVORITAS:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
-                // console.log("ARRAY PRECARGADAS:   "  , arrayGuardarropas) 
-                
-                const {dispatch} = this.props
-                dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
-              
-              });
+                      });
 
-            }
-            else{
-              this.setState({modal:false})
-              Alert.alert("Error determinando codigo de color de Prenda")
-            }
+
+                    // ACA TERMINA THEN DE INSERT
+                    }).catch((error) => {
+                      this.setState({modal:false})
+                      Alert.alert("Fallo la inserción en la Base de datos")
+                      console.log(error);
+                    })
+                }).catch((error) => {
+                  this.setState({modal:false})
+                  Alert.alert("Fallo la inserción en la Base de datos")
+                  console.log(error);
+                })
+
+              }
+              else{
+                this.setState({modal:false})
+                Alert.alert("Error determinando codigo de color de Prenda")
+              }
               
-          //FIN DEL SELECT PARA SABER TIPO DE PRENDA
-          }).catch((error) => {
-            this.setState({modal:false})
-            Alert.alert("Fallo la inserción en la Base de datos")
-            console.log(error);
-          })
+            //FIN DEL SELECT PARA SABER TIPO DE PRENDA
+            }).catch((error) => {
+              this.setState({modal:false})
+              Alert.alert("Fallo la inserción en la Base de datos")
+              console.log(error);
+            })
 
           // catch de la transac de insert
           }).catch((error) => {
@@ -252,7 +260,7 @@ class EscanerScreen extends Component {
                 tx.executeSql(
                     `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
                     
-                      console.log("Query completed");
+                      console.log("Query completed Guardarropas cambiar Disponibilidad");
           
                       arrayGuardarropas=[]
           
@@ -273,7 +281,7 @@ class EscanerScreen extends Component {
                     tx.executeSql(
                       `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
                       
-                        console.log("Query completed");
+                        console.log("Query completed  Favoritas cambiar Disponibilidad");
             
                         arrayFavoritas=[]
             
@@ -321,9 +329,8 @@ class EscanerScreen extends Component {
     // FIN TRANSAC BASE
     }).then(() =>{
       this.setState({modal:false})
-      console,log("Transaccion Finalizada")
+      console.log("Transaccion Finalizada")
     })
-
   }
 
   takePicture = async function() {
@@ -482,6 +489,8 @@ class EscanerScreen extends Component {
       colorname = "Gris"
     else if(colorname.includes("Brown"))       
       colorname = "Marron"
+    else if(colorname.includes("Silver"))   // no agregue plateado      
+      colorname = "Gris"
     else if(colorname.includes("Red"))         
       colorname = "Rojo"
     else if(colorname.includes("Green"))
@@ -529,7 +538,9 @@ class EscanerScreen extends Component {
             }}
             style = {styles.preview}
             type={RNCamera.Constants.Type.back}
-            flashMode={RNCamera.Constants.FlashMode.off}
+   
+            flashMode={ this.state.flash ? RNCamera.Constants.FlashMode.on : RNCamera.Constants.FlashMode.off }
+  
             permissionDialogTitle={'Permisos de la cámara'}
             permissionDialogMessage={'¿Deséa permitir a Que Me Pongo utilizar la cámara del dispositivo?'}
         />
@@ -541,6 +552,13 @@ class EscanerScreen extends Component {
               disabled= {this.state.loading}
           >
               <Text style={{fontSize: 16, color:'#fff', fontWeight:'bold'}}> Escanear prenda </Text>
+          </TouchableOpacity>
+     
+          <TouchableOpacity
+              onPress={ this.changeFlash }
+              style = {styles.capture}    
+          >
+              <Text style={{fontSize: 16, color:'#fff', fontWeight:'bold'}}> {this.state.flash? "Desactivar Flash" : "Activar Flash"} </Text>
           </TouchableOpacity>
         </View>
         <Modal visible={this.state.modal} >
@@ -555,16 +573,18 @@ class EscanerScreen extends Component {
                 <Text style={styles.text}>¿Deséa Agregarla al Guardarropas?</Text>
               </View>
               
-              <TouchableOpacity style = {styles.send}
-              onPress = {this.agregarRopa}
-              >
-              <Text style={styles.sendText}> Agregar </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style = {styles.send}
-              onPress = { () => {this.setState({modal:false})}}
-              >
-              <Text style={styles.sendText}> Cancelar </Text>
-              </TouchableOpacity>
+              <View style={{flexDirection:'row' , alignSelf:'center' }}>
+                <TouchableOpacity style = {styles.send}
+                onPress = {this.agregarRopa}
+                >
+                <Text style={styles.sendText}> Agregar </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style = {styles.send}
+                onPress = { () => {this.setState({modal:false})}}
+                >
+                <Text style={styles.sendText}> Cancelar </Text>
+                </TouchableOpacity>
+              </View>
             </View>
         </Modal>
             
