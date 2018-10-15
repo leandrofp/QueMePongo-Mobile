@@ -98,6 +98,7 @@ android {
     buildToolsVersion "27.0.3"
 
     defaultConfig {
+        multiDexEnabled true  // needed for firestore:
         applicationId "com.quemepongo"
         minSdkVersion 16
         targetSdkVersion 22
@@ -152,6 +153,8 @@ dependencies {
     implementation project(':react-native-firebase')
     //implementation "com.google.android.gms:play-services-base:15.0.1"
     implementation "com.google.firebase:firebase-core:16.0.1"
+    implementation "com.google.firebase:firebase-database:16.0.1"
+    implementation "com.google.firebase:firebase-firestore:17.0.2"
  
     implementation project(':react-native-camera')
     implementation project(':react-native-image-base64')

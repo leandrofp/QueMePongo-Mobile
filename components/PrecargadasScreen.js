@@ -6,13 +6,11 @@ import { connect } from 'react-redux';
 
 // PATH DE PRENDAS
 
-
-
 var RemeraBlancoPre = require('../assets/RemeraBlancaPre.jpg');
 var PantalonBlancoPre = require('../assets/PantalonBlancoPre.png');
 
 
-
+import firebase from 'react-native-firebase';
 
 
 
@@ -27,6 +25,9 @@ class PrecargadasScreen extends React.Component {
 
     constructor(props){
     super(props)
+
+    this.ref = firebase.firestore().collection('prendas');
+
     this.state = {
       modalRopa: false , 
       ropa: [], 
@@ -46,6 +47,19 @@ class PrecargadasScreen extends React.Component {
     }
     
     componentWillMount(){  
+
+
+      
+      this.ref.add({
+          prueba: "PROBANDO DESDE REACT NATIVE",
+      }).then( () => {
+        console.log("INSERTE EN FIREBASE")
+      }).catch( (error) =>{
+        console.log("NO INSERTE UN CARAJO " + error)
+      });
+      
+
+ 
 
       async function requestGPSPermission() {
         try {

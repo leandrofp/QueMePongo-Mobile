@@ -5,6 +5,8 @@ import android.app.Application;
 import org.pgsqlite.SQLitePluginPackage;
 import com.facebook.react.ReactApplication;
 import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.database.RNFirebaseDatabasePackage;
+import io.invertase.firebase.firestore.RNFirebaseFirestorePackage; 
 import fr.snapp.imagebase64.RNImgToBase64Package;
 import io.codebakery.imagerotate.ImageRotatePackage;
 import org.reactnative.camera.RNCameraPackage;
@@ -30,6 +32,8 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new RNFirebasePackage(),
+            new RNFirebaseDatabasePackage(),
+            new RNFirebaseFirestorePackage(),
             new RNImgToBase64Package(),
             new ImageRotatePackage(),
             new RNCameraPackage(),
