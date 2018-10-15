@@ -6,8 +6,13 @@ import { connect } from 'react-redux';
 
 // PATH DE PRENDAS
 
+
+
 var RemeraBlancoPre = require('../assets/RemeraBlancaPre.jpg');
 var PantalonBlancoPre = require('../assets/PantalonBlancoPre.png');
+
+
+
 
 
 
