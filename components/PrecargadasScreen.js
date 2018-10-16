@@ -3,6 +3,7 @@ import React from 'react';
 import { ListItem , Divider} from 'react-native-elements';
 //import { updateClothes } from '../actions/ropaActions'
 import { connect } from 'react-redux';
+import firebase from 'react-native-firebase';
 
 // PATH DE PRENDAS
 
@@ -10,7 +11,7 @@ var RemeraBlancoPre = require('../assets/RemeraBlancaPre.jpg');
 var PantalonBlancoPre = require('../assets/PantalonBlancoPre.png');
 
 
-import firebase from 'react-native-firebase';
+
 
 
 
@@ -289,6 +290,7 @@ class PrecargadasScreen extends React.Component {
       })
       .catch(error => {
         console.log('Transaction failed: ', error);
+        Alert.alert("Falla en la comunicacion con la aplicacion de escritorio")
         this.setState({modalRopa:false});
       });
 
