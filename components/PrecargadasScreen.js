@@ -9,6 +9,7 @@ import firebase from 'react-native-firebase';
 
 var RemeraBlancoPre = require('../assets/RemeraBlancaPre.jpg');
 var PantalonBlancoPre = require('../assets/PantalonBlancoPre.png');
+var VestidoBlancoPre = require('../assets/VestidoBlancoPre.png');
 
 
 const window = Dimensions.get('window');
@@ -161,14 +162,15 @@ class PrecargadasScreen extends React.Component {
 
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (1, 2 , 1 , -1 , 8 , 0, "Blanco", 0);');
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (2, 1 , 1 , -1 , 8 , 0, "Blanco", 0);');
-              
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (3, 4 , 1 , -1 , 8 , 0, "Blanco", 0);');
               
               // Normales para Testing
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (3, 2 , 0 , 0 , 4 , 0, "Verde", 3);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (4, 1 , 0 , 0 , 5 , 0, "Amarillo", 3);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (5, 1 , 0 , 0 , 3 , 5, "Rojo", 3);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (6, 3 , 0 , 1 , 7 , 2, "Gris", 3);');
-              
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (3, 2 , 0 , 1 , 4 , 0, "Verde", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (4, 1 , 0 , 1 , 5 , 0, "Amarillo", 2);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (5, 1 , 0 , 1 , 3 , 5, "Rojo", 4);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (6, 3 , 0 , 1 , 7 , 2, "Gris", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (7, 2 , 0 , 1 , 6 , 5, "Azul", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (8, 2 , 0 , 1 , 1 , 2, "Gris", 1);');
 
               //el 5 seria remera, el 6 pantalon por ahora en processing por suponer algo
 
@@ -259,6 +261,10 @@ class PrecargadasScreen extends React.Component {
         this.setState({image: PantalonBlancoPre  , modalRopa:true , prenda: item })
       else if(item.Name ==  'Remera' && item.Color=='Blanco' )
         this.setState({image: RemeraBlancoPre , modalRopa:true , prenda: item })
+      else if(item.Name ==  'Vestido' && item.Color=='Blanco' )
+        this.setState({image: VestidoBlancoPre , modalRopa:true , prenda: item })
+      else
+        this.setState({image: '', modalRopa:true , prenda: item })
       
 
     }
