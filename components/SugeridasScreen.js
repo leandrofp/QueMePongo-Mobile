@@ -35,7 +35,8 @@ class SugeridasScreen extends React.Component {
 			longitude: '',
 			modalRopa: false, 
 			ropa: [], 
-			prenda: {}
+			prenda: {},
+			animo:'feliz'
 		};
 	}
 	
@@ -145,7 +146,7 @@ class SugeridasScreen extends React.Component {
 	BuscarSugeridas = (temp) => {
 
 			// POSTERIORMENTE SE HARA CON UN BOTON
-			let animo='triste'
+			let animo= this.state.animo
 			
 			let tiempo;
 			let arrayTipo;
@@ -374,6 +375,15 @@ class SugeridasScreen extends React.Component {
 
 	}
 
+	cambiarAnimo = () => {
+		if(this.state.animo == 'feliz')
+			this.setState({ animo : 'triste' })
+		else if(this.setState.animo == 'triste')
+			this.setState({ animo : 'feliz' })
+		else
+			Alert.alert("Falló cambio de ánimo")
+	}
+
 	keyExtractor = (item, index) => index;
   
     renderItem = ({ item, index }) => (
@@ -418,21 +428,29 @@ class SugeridasScreen extends React.Component {
 		
 	  	<FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
 	  	
-	  	<View style={{flex:0  }}>
+	  	<View style={{flex: 0 }}>
 			<Divider style={{ backgroundColor: 'red' }} />
-				<TouchableOpacity
-					style = {styles.sugerencias}
-					onPress ={this.handleLocation}
-				>
-					<Text style={styles.sendText}>Pedir sugerencias</Text>
-				</TouchableOpacity>
+				<View style={{flexDirection:'row',alignSelf:'center'}}>
+					<TouchableOpacity
+						style = {styles.sugerencias}
+						onPress ={this.handleLocation}
+					>
+						<Text style={styles.sendText}>Pedir sugerencias</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						style = {styles.sugerencias}
+						onPress ={this.cambiarAnimo}
+					>
+						<Text style={styles.sendText}> {this.state.animo=='feliz' ? "Cambiar a triste" : "Cambiar a felíz"}</Text>
+					</TouchableOpacity>
+				</View>
 				{/* <Text>Latitude: {this.state.latitude}</Text>
 				<Text>Longitude: {this.state.longitude}</Text> */}
-				
+				<View>
 				{temperature != 999 &&
 					<Text style={{fontSize:22, textAlign:'center',fontWeight:'bold' , color:'green'}}>TEMPERATURA: {temperature+'º    '} { weather}  </Text>}
 					<Text> {this.state.message}</Text>
-				
+				</View>
 			</View>
       <Divider style={{ backgroundColor: 'red' }} />
 	
@@ -520,10 +538,11 @@ const styles = StyleSheet.create({
       justifyContent:'center'
 	},
 	sugerencias: {
+		flex: 0,
 		margin: 2 ,
 		backgroundColor: 'blue',
 		borderRadius: 5,
-		width: 200 ,
+		//width: 150 ,
 		alignSelf: 'center',
 		justifyContent: 'center',
 		//fontSize:20,

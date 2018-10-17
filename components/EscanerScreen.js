@@ -611,10 +611,10 @@ const styles = StyleSheet.create({
     flex: 0,
     backgroundColor: 'blue',
     borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
+    padding: 10,
+    paddingHorizontal: 10,
     alignSelf: 'center',
-    margin: 20
+    margin: 10
   },
   send: {
     margin: 2 ,
