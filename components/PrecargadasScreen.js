@@ -1,4 +1,4 @@
-import {  Text, View , TouchableOpacity ,   PermissionsAndroid , Alert , FlatList , Modal , StyleSheet , Image } from 'react-native';
+import {  Text, View , TouchableOpacity ,   PermissionsAndroid , Alert , FlatList , Modal , StyleSheet , Image , Dimensions } from 'react-native';
 import React from 'react';
 import { ListItem , Divider} from 'react-native-elements';
 //import { updateClothes } from '../actions/ropaActions'
@@ -11,6 +11,7 @@ var RemeraBlancoPre = require('../assets/RemeraBlancaPre.jpg');
 var PantalonBlancoPre = require('../assets/PantalonBlancoPre.png');
 
 
+const window = Dimensions.get('window');
 
 
 
@@ -253,10 +254,12 @@ class PrecargadasScreen extends React.Component {
 
       console.log(item)
 
+      
       if(item.Name == 'Pantalon' && item.Color=='Blanco' )
         this.setState({image: PantalonBlancoPre  , modalRopa:true , prenda: item })
       else if(item.Name ==  'Remera' && item.Color=='Blanco' )
         this.setState({image: RemeraBlancoPre , modalRopa:true , prenda: item })
+      
 
     }
 
@@ -322,13 +325,19 @@ class PrecargadasScreen extends React.Component {
                 {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
               </Text>
 
-              <View style={{flex:1 , alignSelf:'center'}}>
+              <View style={{flex:1}}>
               <Image
                 source={ image }
-                resizeMode='cover'    // cover o center seria la posta, uno renderiza para arriba y el otro achica 
-              
+                resizeMode='contain'  
+                resizeMethod='resize'
+                style={{width: '100%' ,
+                  height: '100%' ,
+                  //position:'absolute',
+                  alignSelf:'center'}}
+               
               />
               </View>
+
               <View style={{flexDirection:'row' , alignSelf:'center' }}>
                 <TouchableOpacity
                   style = {styles.send}

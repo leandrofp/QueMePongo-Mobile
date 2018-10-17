@@ -1,4 +1,4 @@
-import { Text, View ,  FlatList , Modal, TouchableOpacity, StyleSheet , Alert} from 'react-native';
+import { Text, View ,  FlatList , Modal, TouchableOpacity, StyleSheet , Alert , Image , Dimensions} from 'react-native';
 import { ListItem , Divider } from 'react-native-elements';
 import React from 'react';
 import { updateClothes , updateSugeridas } from '../actions/ropaActions'
@@ -7,6 +7,11 @@ import firebase from 'react-native-firebase';
 
 console.ignoredYellowBox=true;
 
+const window = Dimensions.get('window');
+
+//var PantalonBlancoPre = require('../assets/PantalonBlancoPre.png');
+var PantalonRojoM = require('../assets/PantalonRojoM.jpg');
+var RemeraVerdeM = require('../assets/RemeraVerdeM.jpg');
 
 var SQLite = require('react-native-sqlite-storage')
 //SQLite.DEBUG(true);
@@ -472,6 +477,37 @@ class GuardarropasScreen extends React.Component {
 
   }
 
+  determinarImagenPrenda = (item) =>{
+
+    console.log(item)
+
+    // PRECARGADAS
+    // if(item.Name == 'Pantalon' && item.Color=='Blanco' )
+    //   this.setState({image: PantalonBlancoPre  , modalRopa:true , prenda: item })
+    // else if(item.Name ==  'Remera' && item.Color=='Blanco' )
+    //   this.setState({image: RemeraBlancoPre , modalRopa:true , prenda: item })
+    // NO PRECARGADAS
+    //else 
+    if(item.Name == 'Pantalon' && item.Color=='Rojo' )
+        this.setState({image: PantalonRojoM , modalRopa:true , prenda: item })
+    else if (item.Name == 'Remera' && item.Color=='Verde' )
+        this.setState({image: RemeraVerdeM , modalRopa:true , prenda: item })
+    /*else if (item.Name == 'Pantalon' && item.Color=='Rojo' )
+        this.setState({image: PantalonRojoM , modalRopa:true , prenda: item })
+    else if (item.Name == 'Pantalon' && item.Color=='Rojo' )
+        this.setState({image: PantalonRojoM , modalRopa:true , prenda: item })
+    else if (item.Name == 'Pantalon' && item.Color=='Rojo' )
+        this.setState({image: PantalonRojoM , modalRopa:true , prenda: item })
+    else if (item.Name == 'Pantalon' && item.Color=='Rojo' )
+        this.setState({image: PantalonRojoM , modalRopa:true , prenda: item })
+    else if (item.Name == 'Pantalon' && item.Color=='Rojo' )
+        this.setState({image: PantalonRojoM , modalRopa:true , prenda: item })
+    else if (item.Name == 'Pantalon' && item.Color=='Rojo' )
+        this.setState({image: PantalonRojoM , modalRopa:true , prenda: item })*/
+
+
+  }
+
 
   keyExtractor = (item, index) => index;
   
@@ -484,7 +520,8 @@ class GuardarropasScreen extends React.Component {
           }
         //leftAvatar={{ source: item.avatar_url, rounded: true }}
         onPress={() => {
-          this.setState({ modalRopa: true , prenda : item });
+          //this.setState({ modalRopa: true , prenda : item });
+          this.determinarImagenPrenda(item);
         }}
       />
   );
@@ -495,7 +532,7 @@ class GuardarropasScreen extends React.Component {
 
     // console.log( "ARRAY FAVORITAS:  " + this.props.ropa.prendasGuardarropas)
     // console.log( "LENGHT:  " + this.props.ropa.prendasGuardarropas.length)
-
+    image = this.state.image
    
     let ayuda ="En esta pantalla se encuentran\n todas tus prendas cargadas"
     let vacio = false
@@ -535,71 +572,91 @@ class GuardarropasScreen extends React.Component {
         <Modal visible={this.state.modalRopa} style = {styles.modal} >
           <View style={{backgroundColor:'grey', flex:1}}>
           
-            <View style={{marginBottom:4}}>
-              <Text style={styles.text}>
-                {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
-              </Text>
-              <Text style={styles.text}>
-                {"Cantidad disponible: " + this.state.prenda.Cantidad + "/" + this.state.prenda.Cant_Max}
-              </Text>
-              <Text style={styles.text}>
+   
+            <Text style={styles.text}>
+              {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
+            </Text>
+            <Text style={styles.text}>
+              {"Cantidad disponible: " + this.state.prenda.Cantidad + "/" + this.state.prenda.Cant_Max}
+            </Text>
+            <Text style={styles.text}>
                 {"Cantidad de veces que se uso: " + this.state.prenda.Uso}
-              </Text>
+            </Text>
+    
+            <Divider style={{ backgroundColor: 'red' }} />
+            
+            {console.log("Window: " + window.width , window.height)}
+
+            <View style={{flex: 1 ,  }}>
+              <Image
+                source={ image }
+                resizeMode='contain'    // cover o contain seria la posta, uno renderiza para arriba y el otro achica 
+                resizeMethod='resize'
+                style={{width: '100%' ,
+                  height: '100%' ,
+                  //position:'absolute',
+                  alignSelf:'center'}}
+              />
             </View>
-            <View style={{flexDirection:'row' , alignSelf:'center' }}>
-              <TouchableOpacity
-                style = {styles.send}
-                onPress ={this.probarPrenda}  
-              >
-                <Text style={styles.sendText}>Probar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style = {styles.send}
-                onPress ={this.usarRopa}  
-                disabled={this.state.prenda.Cantidad <= 0} 
-              >
-                <Text style={styles.sendText}>Usar</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{flexDirection:'row', alignSelf:'center'}}>
-              <TouchableOpacity
-                style = {styles.send}
-                onPress ={ this.restarDisponibilidadRopa }    
-                disabled= {this.state.prenda.Cantidad == 0}
-              >
-                <Text style={styles.sendText}>Restar cantidad disponible</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style = {styles.send}
-                onPress ={ this.sumarDisponibilidadRopa}    
-                disabled= {this.state.prenda.Cantidad >= this.state.prenda.Cant_Max }  
-              >
-                <Text style={styles.sendText}>Sumar cantidad disponible</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{flexDirection:'row', alignSelf:'center'}}>  
-              <TouchableOpacity
-                style = {styles.send}
-                onPress ={ this.eliminarPrenda}   
-              >
-                <Text style={styles.sendText}>Eliminar Prenda</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style = {styles.send}
-                //onPress ={this.resetearPrenda}  // SIN IMPLEMENTAR AUN  
-                //disabled={this.state.prenda.Cantidad <= 0} 
-              >
-                <Text style={styles.sendText}>Resetear Prenda</Text>
-              </TouchableOpacity>
-              
-            </View>
-            <View style={{flexDirection:'row', alignSelf:'center'}}>  
-              <TouchableOpacity
-                style = {styles.send}
-                onPress ={ () => {this.setState({modalRopa:false})}}
-              >
-                <Text style={styles.sendText}>Cancelar</Text>
-              </TouchableOpacity>
+
+            <Divider style={{ backgroundColor: 'red' }} />
+
+            <View>
+                <View style={{flexDirection:'row' , alignSelf:'center' }}>
+                  <TouchableOpacity
+                    style = {styles.send}
+                    onPress ={this.probarPrenda}  
+                  >
+                    <Text style={styles.sendText}>Probar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style = {styles.send}
+                    onPress ={this.usarRopa}  
+                    disabled={this.state.prenda.Cantidad <= 0} 
+                  >
+                    <Text style={styles.sendText}>Usar</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{flexDirection:'row', alignSelf:'center'}}>
+                  <TouchableOpacity
+                    style = {styles.send}
+                    onPress ={ this.restarDisponibilidadRopa }    
+                    disabled= {this.state.prenda.Cantidad == 0}
+                  >
+                    <Text style={styles.sendText}>Restar cantidad disponible</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style = {styles.send}
+                    onPress ={ this.sumarDisponibilidadRopa}    
+                    disabled= {this.state.prenda.Cantidad >= this.state.prenda.Cant_Max }  
+                  >
+                    <Text style={styles.sendText}>Sumar cantidad disponible</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{flexDirection:'row', alignSelf:'center'}}>  
+                  <TouchableOpacity
+                    style = {styles.send}
+                    onPress ={ this.eliminarPrenda}   
+                  >
+                    <Text style={styles.sendText}>Eliminar Prenda</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style = {styles.send}
+                    //onPress ={this.resetearPrenda}  // SIN IMPLEMENTAR AUN  
+                    //disabled={this.state.prenda.Cantidad <= 0} 
+                  >
+                    <Text style={styles.sendText}>Resetear Prenda</Text>
+                  </TouchableOpacity>
+                  
+                </View>
+                <View style={{flexDirection:'row', alignSelf:'center'}}>  
+                  <TouchableOpacity
+                    style = {styles.send}
+                    onPress ={ () => {this.setState({modalRopa:false})}}
+                  >
+                    <Text style={styles.sendText}>Cancelar</Text>
+                  </TouchableOpacity>
+                </View>
             </View>
           </View>
         </Modal>
