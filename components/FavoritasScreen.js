@@ -3,6 +3,7 @@ import { ListItem , Divider } from 'react-native-elements';
 import React from 'react';
 import { updateClothes } from '../actions/ropaActions'
 import { connect } from 'react-redux';
+import firebase from 'react-native-firebase';
 
 
 console.ignoredYellowBox=true;
@@ -19,6 +20,7 @@ class FavoritasScreen extends React.Component {
 
   constructor(props){
     super(props)
+    this.ref = firebase.firestore().collection('prendas').doc("codigo");
     this.state = {
       modalRopa: false , 
       ropa: [], 
@@ -283,6 +285,43 @@ class FavoritasScreen extends React.Component {
 
   }
 
+  probarPrenda = () => {
+
+
+    firebase.firestore().runTransaction(async transaction => {
+      const doc = await transaction.get(this.ref);
+  
+      // if it does not exist set the population to one //(NO DEBERIA ENTRAR ACA)
+      if (!doc.exists) {
+        transaction.set(this.ref, { codigoPrenda: "pase por donde no debia" });
+        // return the new value so we know what the new population is
+        return 1;
+      }
+  
+      // exists already so lets increment it + 1
+      //const newPopulation = doc.data().codigoPrenda + 1;
+      nuevoCodigoPrenda = this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
+
+      transaction.update(this.ref, {
+        codigoPrenda: nuevoCodigoPrenda,
+      });
+  
+      // return the new value so we know what the new population is
+      return nuevoCodigoPrenda;
+    })
+    .then(nuevoCodigoPrenda => {
+      console.log(`Transaction successfully committed, codigoPrenda es : '${nuevoCodigoPrenda}'.`  );
+      this.setState({modalRopa:false});
+    })
+    .catch(error => {
+      console.log('Transaction failed: ', error);
+      Alert.alert("Falla en la comunicacion con la aplicacion de escritorio")
+      this.setState({modalRopa:false});
+    });
+
+
+  }
+
 
   keyExtractor = (item, index) => index;
   
@@ -369,27 +408,30 @@ class FavoritasScreen extends React.Component {
               <Text style={styles.text}>
                 {"Cantidad de veces que se uso: " + this.state.prenda.Uso}
               </Text>
-              <TouchableOpacity
-                style = {styles.send}
-                //onPress ={this.usarRopa}   
-                disabled={this.state.prenda.Cantidad <= 0} 
-              >
-                <Text style={styles.sendText}>Probar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style = {styles.send}
-                onPress ={this.usarRopa}   
-                disabled={this.state.prenda.Cantidad <= 0} 
-              >
-                <Text style={styles.sendText}>Usar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style = {styles.send}
-                onPress ={ () => {this.setState({modalRopa:false})}}
-              >
-                <Text style={styles.sendText}>Cancelar</Text>
-              </TouchableOpacity>
-              
+              <View style={{flexDirection:'row' , alignSelf:'center' }}>
+                <TouchableOpacity
+                  style = {styles.send}
+                  onPress ={this.probarPrenda}    
+                >
+                  <Text style={styles.sendText}>Probar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style = {styles.send}
+                  onPress ={this.usarRopa}   
+                  disabled={this.state.prenda.Cantidad <= 0} 
+                >
+                  <Text style={styles.sendText}>Usar</Text>
+                
+                </TouchableOpacity>
+              </View>
+              <View style={{flexDirection:'row' , alignSelf:'center' }}>
+                <TouchableOpacity
+                  style = {styles.send}
+                  onPress ={ () => {this.setState({modalRopa:false})}}
+                >
+                  <Text style={styles.sendText}>Cancelar</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </Modal>
         </View>

@@ -1,8 +1,18 @@
-import {  Text, View , TouchableOpacity ,   PermissionsAndroid , Alert , FlatList , Modal , StyleSheet } from 'react-native';
+import {  Text, View , TouchableOpacity ,   PermissionsAndroid , Alert , FlatList , Modal , StyleSheet , Image , Dimensions } from 'react-native';
 import React from 'react';
 import { ListItem , Divider} from 'react-native-elements';
 //import { updateClothes } from '../actions/ropaActions'
 import { connect } from 'react-redux';
+import firebase from 'react-native-firebase';
+
+// PATH DE PRENDAS
+
+var RemeraBlancoPre = require('../assets/RemeraBlancaPre.jpg');
+var PantalonBlancoPre = require('../assets/PantalonBlancoPre.png');
+var VestidoBlancoPre = require('../assets/VestidoBlancoPre.png');
+
+
+const window = Dimensions.get('window');
 
 
 
@@ -18,10 +28,16 @@ class PrecargadasScreen extends React.Component {
 
     constructor(props){
     super(props)
+
+    this.ref = firebase.firestore().collection('prendas').doc("codigo");
+
+    
+
     this.state = {
       modalRopa: false , 
       ropa: [], 
-      prenda: {}
+      prenda: {},
+      image:''
     
     }
 
@@ -146,14 +162,15 @@ class PrecargadasScreen extends React.Component {
 
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (1, 2 , 1 , -1 , 8 , 0, "Blanco", 0);');
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (2, 1 , 1 , -1 , 8 , 0, "Blanco", 0);');
-              
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (3, 4 , 1 , -1 , 8 , 0, "Blanco", 0);');
               
               // Normales para Testing
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (3, 2 , 0 , 0 , 4 , 0, "Verde", 3);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (4, 1 , 0 , 0 , 5 , 0, "Amarillo", 3);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (5, 1 , 0 , 0 , 3 , 5, "Rojo", 3);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (6, 3 , 0 , 1 , 7 , 2, "Gris", 3);');
-              
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (3, 2 , 0 , 1 , 4 , 0, "Verde", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (4, 1 , 0 , 1 , 5 , 0, "Amarillo", 2);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (5, 1 , 0 , 1 , 3 , 5, "Rojo", 4);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (6, 3 , 0 , 1 , 7 , 2, "Gris", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (7, 2 , 0 , 1 , 6 , 5, "Azul", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (8, 2 , 0 , 1 , 1 , 2, "Gris", 1);');
 
               //el 5 seria remera, el 6 pantalon por ahora en processing por suponer algo
 
@@ -227,18 +244,73 @@ class PrecargadasScreen extends React.Component {
         <Text style={styles.lista}> {item.Name} color {item.Color} </Text> 
         }
         onPress={() => {
-          this.setState({ modalRopa: true , prenda : item });
+          //this.setState({ modalRopa: true , prenda : item });
+          this.determinarImagenPrenda(item);
         }}
       />
     );
 
-    usarRopa = () => {
+    
 
-      this.setState({modalRopa:false})
-  
+    determinarImagenPrenda = (item) =>{
+
+      console.log(item)
+
+      
+      if(item.Name == 'Pantalon' && item.Color=='Blanco' )
+        this.setState({image: PantalonBlancoPre  , modalRopa:true , prenda: item })
+      else if(item.Name ==  'Remera' && item.Color=='Blanco' )
+        this.setState({image: RemeraBlancoPre , modalRopa:true , prenda: item })
+      else if(item.Name ==  'Vestido' && item.Color=='Blanco' )
+        this.setState({image: VestidoBlancoPre , modalRopa:true , prenda: item })
+      else
+        this.setState({image: '', modalRopa:true , prenda: item })
+      
+
     }
 
+    probarPrenda = () => {
+
+
+      firebase.firestore().runTransaction(async transaction => {
+        const doc = await transaction.get(this.ref);
+    
+        // if it does not exist set the population to one //(NO DEBERIA ENTRAR ACA)
+        if (!doc.exists) {
+          transaction.set(this.ref, { codigoPrenda: "pase por donde no debia" });
+          // return the new value so we know what the new population is
+          return 1;
+        }
+    
+        // exists already so lets increment it + 1
+        //const newPopulation = doc.data().codigoPrenda + 1;
+        nuevoCodigoPrenda = this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
+
+        transaction.update(this.ref, {
+          codigoPrenda: nuevoCodigoPrenda,
+        });
+    
+        // return the new value so we know what the new population is
+        return nuevoCodigoPrenda;
+      })
+      .then(nuevoCodigoPrenda => {
+        console.log(`Transaction successfully committed, codigoPrenda es : '${nuevoCodigoPrenda}'.`  );
+        this.setState({modalRopa:false});
+      })
+      .catch(error => {
+        console.log('Transaction failed: ', error);
+        Alert.alert("Falla en la comunicacion con la aplicacion de escritorio")
+        this.setState({modalRopa:false});
+      });
+
+
+    }
+
+
     render() {
+
+    image = this.state.image
+    console.log(image)
 
     let ayuda ="En esta pantalla se encuentran aquellas\n prendas de muestra que trae la aplicación"
 
@@ -258,19 +330,34 @@ class PrecargadasScreen extends React.Component {
               <Text style={styles.text}>
                 {"Nombre: " + this.state.prenda.Name + ' color ' + this.state.prenda.Color }
               </Text>
-              <TouchableOpacity
-                style = {styles.send}
-                onPress ={this.usarRopa}    // LLAMAR a una funcion que use una trasaccion para sumar 1 a USO
-              >
-                <Text style={styles.sendText}>Probar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style = {styles.send}
-                onPress ={ () => {this.setState({modalRopa:false})}}
-              >
-                <Text style={styles.sendText}>Cancelar</Text>
-              </TouchableOpacity>
-            
+
+              <View style={{flex:1}}>
+              <Image
+                source={ image }
+                resizeMode='contain'  
+                resizeMethod='resize'
+                style={{width: '100%' ,
+                  height: '100%' ,
+                  //position:'absolute',
+                  alignSelf:'center'}}
+               
+              />
+              </View>
+
+              <View style={{flexDirection:'row' , alignSelf:'center' }}>
+                <TouchableOpacity
+                  style = {styles.send}
+                  onPress ={this.probarPrenda}    
+                >
+                  <Text style={styles.sendText}>Probar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style = {styles.send}
+                  onPress ={ () => {this.setState({modalRopa:false})}}
+                >
+                  <Text style={styles.sendText}>Cancelar</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </Modal>
           </View>
