@@ -102,6 +102,9 @@ class EscanerScreen extends Component {
       case "Purpura" : {
         return 12
       }
+      case "Naranja" : {
+        return 13
+      }
     }
     return 0
   }
@@ -511,6 +514,8 @@ class EscanerScreen extends Component {
       colorname = "Rosa"
     else if(colorname.includes("Purple"))
       colorname = "Purpura"
+    else if(colorname.includes("Orange"))
+      colorname = "Naranja"
     else
       colorname = "0"
     

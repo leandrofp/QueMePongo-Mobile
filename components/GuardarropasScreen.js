@@ -20,6 +20,8 @@ const window = Dimensions.get('window');
   var RemeraHombreRojo = require('../assets/RemeraHombreRojo.png');
   var PantalonHombreNegro = require('../assets/PantalonHombreNegro.png');
   var PantalonHombreRojo = require('../assets/PantalonHombreRojo.png');
+  var VestidoMujerNaranja = require('../assets/VestidoMujerNaranja.png');
+  var VestidoMujerNegro = require('../assets/VestidoMujerNegro.png');
 
 
 var SQLite = require('react-native-sqlite-storage')
@@ -464,7 +466,9 @@ class GuardarropasScreen extends React.Component {
   
       // exists already so lets increment it + 1
       //const newPopulation = doc.data().codigoPrenda + 1;
-      nuevoCodigoPrenda = this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
+      nuevoCodigoPrenda = this.state.prenda.Tipo_Id + "," + this.state.prenda.CodColor
+
+      nuevoCodigoPrenda = JSON.stringify(nuevoCodigoPrenda)
 
       transaction.update(this.ref, {
         codigoPrenda: nuevoCodigoPrenda,
@@ -512,7 +516,11 @@ class GuardarropasScreen extends React.Component {
     else if (item.Name == 'Pantalon' && item.Color=='Rojo' )
         this.setState({image: PantalonHombreRojo , modalRopa:true , prenda: item })
     else if (item.Name == 'Pantalon' && item.Color=='Negro' )
-        this.setState({image: PantalonHombreRojo , modalRopa:true , prenda: item })
+        this.setState({image: PantalonHombreNegro , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Negro' )
+        this.setState({image: VestidoMujerNegro , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Naranja' )
+        this.setState({image: VestidoMujerNaranja , modalRopa:true , prenda: item })
     /*else if (item.Name == 'Pantalon' && item.Color=='Rojo' )
         this.setState({image: PantalonRojoM , modalRopa:true , prenda: item })*/
     else

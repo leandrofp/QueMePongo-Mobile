@@ -118,7 +118,7 @@ class PrecargadasScreen extends React.Component {
 
         var leng = results.rows.length;
         ropa.transaction(tx => {
-        
+             
               if(leng==0){
 
               console.log("REALIZANDO INSERCIONES DE PRIMERA VEZ")
@@ -153,6 +153,7 @@ class PrecargadasScreen extends React.Component {
               //   10=OCRE
               //   11=ROSA
               //   12=PURPURA
+              //   13=NARANJA
               
 
               // Precargadas
@@ -171,6 +172,12 @@ class PrecargadasScreen extends React.Component {
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (6, 3 , 0 , 1 , 7 , 2, "Gris", 1);');
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (7, 2 , 0 , 1 , 6 , 5, "Azul", 1);');
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (8, 2 , 0 , 1 , 1 , 2, "Gris", 1);');
+
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (9, 6 , 0 , 1 , 7 , 2, "Negro", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (10, 4 , 0 , 1 , 6 , 7, "Negro", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (11, 4 , 0 , 1 , 13 , 2, "Naranja", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (12, 1 , 0 , 1 , 7 , 2, "Negro", 1);');
+         
 
               //el 5 seria remera, el 6 pantalon por ahora en processing por suponer algo
 
