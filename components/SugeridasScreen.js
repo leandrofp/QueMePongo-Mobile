@@ -102,7 +102,7 @@ class SugeridasScreen extends React.Component {
 
 				/* TRADUCCION CLIMA */
 
-				if(weather == 'Rainy')
+				if(weather == 'Rainy' || weather == 'Rain')
 					weather = 'Lluvia'
 				else if(weather == 'Cloudy' || weather == 'Clouds')
 					weather = 'Nublado'
@@ -378,7 +378,7 @@ class SugeridasScreen extends React.Component {
 	cambiarAnimo = () => {
 		if(this.state.animo == 'feliz')
 			this.setState({ animo : 'triste' })
-		else if(this.setState.animo == 'triste')
+		else if(this.state.animo == 'triste')
 			this.setState({ animo : 'feliz' })
 		else
 			Alert.alert("Falló cambio de ánimo")
@@ -388,8 +388,8 @@ class SugeridasScreen extends React.Component {
   
     renderItem = ({ item, index }) => (
       <ListItem 
-        containerStyle={{ borderStyle:'solid', backgroundColor:'green', margin:3 , 
-                          borderWidth: 2 , borderBottomWidth: 2 , borderBottomColor : 'blue' ,borderColor: 'blue' }}
+				containerStyle={{ borderStyle:'solid', backgroundColor:'#E0E0E0', margin:3 , 
+													borderWidth: 2 , borderBottomWidth: 2 , borderBottomColor : '#80CBC4' ,borderColor: '#80CBC4' }}
 				title={
 					<Text style={styles.lista}> {item.Name} color {item.Color} </Text>
 				}
@@ -555,8 +555,9 @@ const styles = StyleSheet.create({
 		color:'red',
 		textAlign:'center'
 	},lista:{
-		color:'#F3EBEB',
+		color:'orange',
 		fontSize:18,
+		fontWeight:'bold'
 	}
   });
 

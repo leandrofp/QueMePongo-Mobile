@@ -245,8 +245,8 @@ class PrecargadasScreen extends React.Component {
   
     renderItem = ({ item, index }) => (
       <ListItem 
-        containerStyle={{ borderStyle:'solid', backgroundColor:'green', margin:3 , 
-                          borderWidth: 2 , borderBottomWidth: 2 , borderBottomColor : 'blue' ,borderColor: 'blue' }}
+        containerStyle={{ borderStyle:'solid', backgroundColor:'#E0E0E0', margin:3 , 
+                          borderWidth: 2 , borderBottomWidth: 2 , borderBottomColor : '#80CBC4' ,borderColor: '#80CBC4' }}
         title={ 
         <Text style={styles.lista}> {item.Name} color {item.Color} </Text> 
         }
@@ -411,8 +411,9 @@ class PrecargadasScreen extends React.Component {
       justifyContent:'center'
     },
     lista:{
-      color:'#F3EBEB',
+      color:'orange',
       fontSize:18,
+      fontWeight:'bold'
     }
   });
 
