@@ -379,7 +379,7 @@ class FavoritasScreen extends React.Component {
          
           
           <FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
-          <Divider style={{ backgroundColor: 'red' }} />
+          {/* <Divider style={{ backgroundColor: 'red' }} /> */}
           <TouchableOpacity
                 style = {styles.reset}
                 onPress ={this.reset}   
@@ -416,7 +416,7 @@ class FavoritasScreen extends React.Component {
                   <Text style={styles.sendText}>Probar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style = {styles.send}
+                  style = {this.state.prenda.Cantidad <= 0 ? styles.sendDisable : styles.send}
                   onPress ={this.usarRopa}   
                   disabled={this.state.prenda.Cantidad <= 0} 
                 >
@@ -444,6 +444,16 @@ class FavoritasScreen extends React.Component {
     send: {
       margin: 2 ,
       backgroundColor: 'orange',
+      borderRadius: 5,
+      width: 150 ,
+      alignSelf: 'center',
+      justifyContent: 'center',
+      //fontSize:20,
+      padding : 8
+    },
+    sendDisable: {
+      margin: 2 ,
+      backgroundColor: '#9E9E9E',
       borderRadius: 5,
       width: 150 ,
       alignSelf: 'center',
@@ -484,7 +494,7 @@ class FavoritasScreen extends React.Component {
     },
     reset: {
       margin: 2 ,
-      backgroundColor: 'blue',
+      backgroundColor: '#3A51E8',
       borderRadius: 5,
       width: 180 ,
       alignSelf: 'center',

@@ -629,25 +629,28 @@ class GuardarropasScreen extends React.Component {
                     <Text style={styles.sendText}>Probar</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style = {styles.send}
+                    style = {this.state.prenda.Cantidad <= 0 ? styles.sendDisable : styles.send}
                     onPress ={this.usarRopa}  
                     disabled={this.state.prenda.Cantidad <= 0} 
+                    
                   >
                     <Text style={styles.sendText}>Usar</Text>
                   </TouchableOpacity>
                 </View>
                 <View style={{flexDirection:'row', alignSelf:'center'}}>
                   <TouchableOpacity
-                    style = {styles.send}
+                    style =  { this.state.prenda.Cantidad == 0 ? styles.sendDisable : styles.send}
                     onPress ={ this.restarDisponibilidadRopa }    
                     disabled= {this.state.prenda.Cantidad == 0}
+                    
                   >
                     <Text style={styles.sendText}>Restar cantidad disponible</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style = {styles.send}
+                    style = {this.state.prenda.Cantidad >= this.state.prenda.Cant_Max ? styles.sendDisable : styles.send}
                     onPress ={ this.sumarDisponibilidadRopa}    
-                    disabled= {this.state.prenda.Cantidad >= this.state.prenda.Cant_Max }  
+                    disabled= {this.state.prenda.Cantidad >= this.state.prenda.Cant_Max } 
+                   
                   >
                     <Text style={styles.sendText}>Sumar cantidad disponible</Text>
                   </TouchableOpacity>
@@ -689,6 +692,16 @@ class GuardarropasScreen extends React.Component {
     send: {
       margin: 2 ,
       backgroundColor: 'orange',
+      borderRadius: 5,
+      width: 150 ,
+      alignSelf: 'center',
+      justifyContent: 'center',
+      //fontSize:20,
+      padding : 8
+    },
+    sendDisable: {
+      margin: 2 ,
+      backgroundColor: '#9E9E9E',
       borderRadius: 5,
       width: 150 ,
       alignSelf: 'center',

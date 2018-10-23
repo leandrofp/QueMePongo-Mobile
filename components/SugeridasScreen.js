@@ -429,7 +429,7 @@ class SugeridasScreen extends React.Component {
 	  	<FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
 	  	
 	  	<View style={{flex: 0 }}>
-			<Divider style={{ backgroundColor: 'red' }} />
+			{/* <Divider style={{ backgroundColor: 'red' }} /> */}
 				<View style={{flexDirection:'row',alignSelf:'center'}}>
 					<TouchableOpacity
 						style = {styles.sugerencias}
@@ -479,7 +479,7 @@ class SugeridasScreen extends React.Component {
 							<Text style={styles.sendText}>Probar</Text>
 						</TouchableOpacity>
 						<TouchableOpacity
-							style = {styles.send}
+							style = {this.state.prenda.Cantidad <= 0 ? styles.sendDisable :  styles.send}
 							onPress ={this.usarRopa}   
 							disabled={this.state.prenda.Cantidad <= 0} 
 						>
@@ -512,6 +512,16 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       //fontSize:20,
       padding : 8
+		},
+		sendDisable: {
+      margin: 2 ,
+      backgroundColor: '#9E9E9E',
+      borderRadius: 5,
+      width: 150 ,
+      alignSelf: 'center',
+      justifyContent: 'center',
+      //fontSize:20,
+      padding : 8
     },
     sendText: {
 			fontSize:18,
@@ -519,7 +529,8 @@ const styles = StyleSheet.create({
       margin: 2 ,
       color: '#ffffff',
       textAlign:'center'
-    },
+		},
+		
     text:{
 			fontSize: 22,
       color: 'blue',
@@ -540,13 +551,24 @@ const styles = StyleSheet.create({
 	sugerencias: {
 		flex: 0,
 		margin: 2 ,
-		backgroundColor: 'blue',
+		backgroundColor: '#3A51E8',
 		borderRadius: 5,
 		//width: 150 ,
 		alignSelf: 'center',
 		justifyContent: 'center',
 		//fontSize:20,
-		padding : 8
+		padding : 6
+	},
+	sugerenciasDisabled: {
+		flex: 0,
+		margin: 2 ,
+		backgroundColor: '#9E9E9E',
+		borderRadius: 5,
+		//width: 150 ,
+		alignSelf: 'center',
+		justifyContent: 'center',
+		//fontSize:20,
+		padding : 6
 	},
 	vacio:{
 		fontSize:22 , 
