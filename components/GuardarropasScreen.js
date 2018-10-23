@@ -682,7 +682,7 @@ class GuardarropasScreen extends React.Component {
                 {"Cantidad de veces que se uso: " + this.state.prenda.Uso}
             </Text>
     
-            <Divider style={{ backgroundColor: 'red' }} />
+            {/* <Divider style={{ backgroundColor: 'red' }} /> */}
             
             {console.log("Window: " + window.width , window.height)}
 
@@ -698,7 +698,7 @@ class GuardarropasScreen extends React.Component {
               />
             </View>
 
-            <Divider style={{ backgroundColor: 'red' }} />
+            {/* <Divider style={{ backgroundColor: 'red' }} /> */}
 
             <View>
                 <View style={{flexDirection:'row' , alignSelf:'center' }}>
@@ -744,7 +744,7 @@ class GuardarropasScreen extends React.Component {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style = {this.state.prenda.Cantidad <= 0 || this.state.prenda.Uso == 0 ? styles.sendDisable :styles.send}
-                    onPress ={this.resetearPrenda}  // SIN IMPLEMENTAR AUN  
+                    onPress ={this.resetearPrenda}  
                     disabled={this.state.prenda.Cantidad <= 0 || this.state.prenda.Uso == 0} 
                   >
                     <Text style={styles.sendText}>Resetear Prenda</Text>
