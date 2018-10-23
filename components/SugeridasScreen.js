@@ -449,7 +449,7 @@ class SugeridasScreen extends React.Component {
 				<View>
 				{temperature != 999 &&
 					<Text style={{fontSize:22, textAlign:'center',fontWeight:'bold' , color:'green'}}>TEMPERATURA: {temperature+'º    '} { weather}  </Text>}
-					<Text> {this.state.message}</Text>
+					{/* <Text> {this.state.message}</Text> */}
 				</View>
 			</View>
       <Divider style={{ backgroundColor: 'red' }} />

@@ -490,6 +490,86 @@ class GuardarropasScreen extends React.Component {
 
   }
 
+  resetearPrenda = () => {
+
+    let arrayGuardarropas;
+    let arrayFavoritas;
+    let arraySugeridas=[];
+
+    ropa.transaction(tx => {
+      tx.executeSql(
+          `UPDATE Ropa SET Uso = 0 where Ropa_Id = ?;`,[this.state.prenda.Ropa_Id]).then(([tx,results]) => {
+          
+            console.log("Query completed");
+
+               // Tengo que volver a cargar la Ropa con los datos nuevos,  ver si puedo simplemente recargar el registro afectado y no todo
+               ropa.transaction(tx => {
+                tx.executeSql(
+                    `SELECT * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
+                    
+                      console.log("Query completed");
+          
+                      arrayGuardarropas=[]
+          
+                      var len = results.rows.length;
+                      
+                      for (let i = 0; i < len; i++) {
+                        let row = results.rows.item(i);
+                        //console.log(row)
+                        arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
+                      }
+                   
+                      this.setState({/*ropa:arrayGuardarropas,*/modalRopa:false})
+                    }).catch((error) => {
+                      this.setState({modalRopa:false})
+                      Alert.alert("Fallo la Busqueda en la Base de datos")
+                      console.log(error);
+                    });
+  
+                    tx.executeSql(
+                      `SELECT * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                      
+                        console.log("Query completed seleccion favoritas");
+            
+                        arrayFavoritas=[]
+            
+                        var len = results.rows.length;
+                        
+                        for (let i = 0; i < len; i++) {
+
+                          let row = results.rows.item(i);
+                          //console.log(row)
+                          arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+                        }
+                     
+                        //this.setState({ropa:arrayGuardarropas,modalRopa:false})
+                      }).catch((error) => {
+                        this.setState({modalRopa:false})
+                        Alert.alert("Fallo la Busqueda en la Base de datos")
+                        console.log(error);
+                      });
+  
+                  
+              }).then( () => {   
+                
+                //console.log("ARRAY FAVORITAS POST ELIMINAR:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+                //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
+                
+                const {dispatch} = this.props
+                dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+                dispatch( updateSugeridas(arraySugeridas))
+               
+              });
+
+          }).catch((error) => {
+            this.setState({modalRopa:false})
+            Alert.alert("Fallo la actualizacion en la base de datos")
+            console.log(error);
+          });      
+    });
+  }
+  
+
   determinarImagenPrenda = (item) =>{
 
     console.log(item)
@@ -663,9 +743,9 @@ class GuardarropasScreen extends React.Component {
                     <Text style={styles.sendText}>Eliminar Prenda</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style = {styles.send}
-                    //onPress ={this.resetearPrenda}  // SIN IMPLEMENTAR AUN  
-                    //disabled={this.state.prenda.Cantidad <= 0} 
+                    style = {this.state.prenda.Cantidad <= 0 || this.state.prenda.Uso == 0 ? styles.sendDisable :styles.send}
+                    onPress ={this.resetearPrenda}  // SIN IMPLEMENTAR AUN  
+                    disabled={this.state.prenda.Cantidad <= 0 || this.state.prenda.Uso == 0} 
                   >
                     <Text style={styles.sendText}>Resetear Prenda</Text>
                   </TouchableOpacity>
