@@ -102,6 +102,9 @@ class EscanerScreen extends Component {
       case "Purpura" : {
         return 12
       }
+      case "Naranja" : {
+        return 13
+      }
     }
     return 0
   }
@@ -511,6 +514,8 @@ class EscanerScreen extends Component {
       colorname = "Rosa"
     else if(colorname.includes("Purple"))
       colorname = "Purpura"
+    else if(colorname.includes("Orange"))
+      colorname = "Naranja"
     else
       colorname = "0"
     
@@ -548,7 +553,7 @@ class EscanerScreen extends Component {
         <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center',}}>
           <TouchableOpacity
               onPress={this.takePicture.bind(this)}
-              style = {styles.capture}
+              style = { this.state.loading ? styles.captureDisabled : styles.capture}
               disabled= {this.state.loading}
           >
               <Text style={{fontSize: 16, color:'#fff', fontWeight:'bold'}}> Escanear prenda </Text>
@@ -610,6 +615,17 @@ const styles = StyleSheet.create({
     //fontWeight:'bold',
     flex: 0,
     backgroundColor: 'blue',
+    borderRadius: 5,
+    padding: 10,
+    paddingHorizontal: 10,
+    alignSelf: 'center',
+    margin: 10
+  },
+  captureDisabled: {
+    //fontSize:20,
+    //fontWeight:'bold',
+    flex: 0,
+    backgroundColor: '#9E9E9E',
     borderRadius: 5,
     padding: 10,
     paddingHorizontal: 10,

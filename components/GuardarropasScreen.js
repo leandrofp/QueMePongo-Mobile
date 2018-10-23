@@ -20,6 +20,8 @@ const window = Dimensions.get('window');
   var RemeraHombreRojo = require('../assets/RemeraHombreRojo.png');
   var PantalonHombreNegro = require('../assets/PantalonHombreNegro.png');
   var PantalonHombreRojo = require('../assets/PantalonHombreRojo.png');
+  var VestidoMujerNaranja = require('../assets/VestidoMujerNaranja.png');
+  var VestidoMujerNegro = require('../assets/VestidoMujerNegro.png');
 
 
 var SQLite = require('react-native-sqlite-storage')
@@ -464,7 +466,9 @@ class GuardarropasScreen extends React.Component {
   
       // exists already so lets increment it + 1
       //const newPopulation = doc.data().codigoPrenda + 1;
-      nuevoCodigoPrenda = this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
+      nuevoCodigoPrenda = this.state.prenda.Tipo_Id + "," + this.state.prenda.CodColor
+
+      nuevoCodigoPrenda = JSON.stringify(nuevoCodigoPrenda)
 
       transaction.update(this.ref, {
         codigoPrenda: nuevoCodigoPrenda,
@@ -485,6 +489,86 @@ class GuardarropasScreen extends React.Component {
 
 
   }
+
+  resetearPrenda = () => {
+
+    let arrayGuardarropas;
+    let arrayFavoritas;
+    let arraySugeridas=[];
+
+    ropa.transaction(tx => {
+      tx.executeSql(
+          `UPDATE Ropa SET Uso = 0 where Ropa_Id = ?;`,[this.state.prenda.Ropa_Id]).then(([tx,results]) => {
+          
+            console.log("Query completed");
+
+               // Tengo que volver a cargar la Ropa con los datos nuevos,  ver si puedo simplemente recargar el registro afectado y no todo
+               ropa.transaction(tx => {
+                tx.executeSql(
+                    `SELECT * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0;`).then(([tx,results]) => {
+                    
+                      console.log("Query completed");
+          
+                      arrayGuardarropas=[]
+          
+                      var len = results.rows.length;
+                      
+                      for (let i = 0; i < len; i++) {
+                        let row = results.rows.item(i);
+                        //console.log(row)
+                        arrayGuardarropas.push(row)      // GUARDO SOLO NOMBRE
+                      }
+                   
+                      this.setState({/*ropa:arrayGuardarropas,*/modalRopa:false})
+                    }).catch((error) => {
+                      this.setState({modalRopa:false})
+                      Alert.alert("Fallo la Busqueda en la Base de datos")
+                      console.log(error);
+                    });
+  
+                    tx.executeSql(
+                      `SELECT * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Uso > 4;`).then(([tx,results]) => {
+                      
+                        console.log("Query completed seleccion favoritas");
+            
+                        arrayFavoritas=[]
+            
+                        var len = results.rows.length;
+                        
+                        for (let i = 0; i < len; i++) {
+
+                          let row = results.rows.item(i);
+                          //console.log(row)
+                          arrayFavoritas.push(row)      // GUARDO SOLO NOMBRE
+                        }
+                     
+                        //this.setState({ropa:arrayGuardarropas,modalRopa:false})
+                      }).catch((error) => {
+                        this.setState({modalRopa:false})
+                        Alert.alert("Fallo la Busqueda en la Base de datos")
+                        console.log(error);
+                      });
+  
+                  
+              }).then( () => {   
+                
+                //console.log("ARRAY FAVORITAS POST ELIMINAR:   "  , arrayFavoritas);        // aca pega luego de las 3 transacciones
+                //console.log("ARRAY PRECARGADAS:   "  , arrayPrecargadas) 
+                
+                const {dispatch} = this.props
+                dispatch( updateClothes(arrayFavoritas,arrayGuardarropas) );
+                dispatch( updateSugeridas(arraySugeridas))
+               
+              });
+
+          }).catch((error) => {
+            this.setState({modalRopa:false})
+            Alert.alert("Fallo la actualizacion en la base de datos")
+            console.log(error);
+          });      
+    });
+  }
+  
 
   determinarImagenPrenda = (item) =>{
 
@@ -512,7 +596,11 @@ class GuardarropasScreen extends React.Component {
     else if (item.Name == 'Pantalon' && item.Color=='Rojo' )
         this.setState({image: PantalonHombreRojo , modalRopa:true , prenda: item })
     else if (item.Name == 'Pantalon' && item.Color=='Negro' )
-        this.setState({image: PantalonHombreRojo , modalRopa:true , prenda: item })
+        this.setState({image: PantalonHombreNegro , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Negro' )
+        this.setState({image: VestidoMujerNegro , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Naranja' )
+        this.setState({image: VestidoMujerNaranja , modalRopa:true , prenda: item })
     /*else if (item.Name == 'Pantalon' && item.Color=='Rojo' )
         this.setState({image: PantalonRojoM , modalRopa:true , prenda: item })*/
     else
@@ -524,8 +612,8 @@ class GuardarropasScreen extends React.Component {
   
     renderItem = ({ item, index }) => (
       <ListItem 
-        containerStyle={{ borderStyle:'solid', backgroundColor:'green', margin:3 , 
-                          borderWidth: 2 , borderBottomWidth: 2 , borderBottomColor : 'blue' ,borderColor: 'blue' }}
+        containerStyle={{ borderStyle:'solid', backgroundColor:'#E0E0E0', margin:3 , 
+                          borderWidth: 2 , borderBottomWidth: 2 , borderBottomColor : '#80CBC4' ,borderColor: '#80CBC4' }}
         title={
           <Text style={styles.lista}> {item.Name} color {item.Color} </Text>
           }
@@ -621,25 +709,28 @@ class GuardarropasScreen extends React.Component {
                     <Text style={styles.sendText}>Probar</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style = {styles.send}
+                    style = {this.state.prenda.Cantidad <= 0 ? styles.sendDisable : styles.send}
                     onPress ={this.usarRopa}  
                     disabled={this.state.prenda.Cantidad <= 0} 
+                    
                   >
                     <Text style={styles.sendText}>Usar</Text>
                   </TouchableOpacity>
                 </View>
                 <View style={{flexDirection:'row', alignSelf:'center'}}>
                   <TouchableOpacity
-                    style = {styles.send}
+                    style =  { this.state.prenda.Cantidad == 0 ? styles.sendDisable : styles.send}
                     onPress ={ this.restarDisponibilidadRopa }    
                     disabled= {this.state.prenda.Cantidad == 0}
+                    
                   >
                     <Text style={styles.sendText}>Restar cantidad disponible</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style = {styles.send}
+                    style = {this.state.prenda.Cantidad >= this.state.prenda.Cant_Max ? styles.sendDisable : styles.send}
                     onPress ={ this.sumarDisponibilidadRopa}    
-                    disabled= {this.state.prenda.Cantidad >= this.state.prenda.Cant_Max }  
+                    disabled= {this.state.prenda.Cantidad >= this.state.prenda.Cant_Max } 
+                   
                   >
                     <Text style={styles.sendText}>Sumar cantidad disponible</Text>
                   </TouchableOpacity>
@@ -652,9 +743,9 @@ class GuardarropasScreen extends React.Component {
                     <Text style={styles.sendText}>Eliminar Prenda</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style = {styles.send}
-                    //onPress ={this.resetearPrenda}  // SIN IMPLEMENTAR AUN  
-                    //disabled={this.state.prenda.Cantidad <= 0} 
+                    style = {this.state.prenda.Cantidad <= 0 || this.state.prenda.Uso == 0 ? styles.sendDisable :styles.send}
+                    onPress ={this.resetearPrenda}  // SIN IMPLEMENTAR AUN  
+                    disabled={this.state.prenda.Cantidad <= 0 || this.state.prenda.Uso == 0} 
                   >
                     <Text style={styles.sendText}>Resetear Prenda</Text>
                   </TouchableOpacity>
@@ -681,6 +772,16 @@ class GuardarropasScreen extends React.Component {
     send: {
       margin: 2 ,
       backgroundColor: 'orange',
+      borderRadius: 5,
+      width: 150 ,
+      alignSelf: 'center',
+      justifyContent: 'center',
+      //fontSize:20,
+      padding : 8
+    },
+    sendDisable: {
+      margin: 2 ,
+      backgroundColor: '#9E9E9E',
       borderRadius: 5,
       width: 150 ,
       alignSelf: 'center',
@@ -721,8 +822,9 @@ class GuardarropasScreen extends React.Component {
       textAlign:'center'
     },
     lista:{
-      color:'#F3EBEB',
+      color:'orange',
       fontSize:18,
+      fontWeight:'bold'
     }
   });
 

@@ -102,7 +102,7 @@ class SugeridasScreen extends React.Component {
 
 				/* TRADUCCION CLIMA */
 
-				if(weather == 'Rainy')
+				if(weather == 'Rainy' || weather == 'Rain')
 					weather = 'Lluvia'
 				else if(weather == 'Cloudy' || weather == 'Clouds')
 					weather = 'Nublado'
@@ -378,7 +378,7 @@ class SugeridasScreen extends React.Component {
 	cambiarAnimo = () => {
 		if(this.state.animo == 'feliz')
 			this.setState({ animo : 'triste' })
-		else if(this.setState.animo == 'triste')
+		else if(this.state.animo == 'triste')
 			this.setState({ animo : 'feliz' })
 		else
 			Alert.alert("Falló cambio de ánimo")
@@ -388,8 +388,8 @@ class SugeridasScreen extends React.Component {
   
     renderItem = ({ item, index }) => (
       <ListItem 
-        containerStyle={{ borderStyle:'solid', backgroundColor:'green', margin:3 , 
-                          borderWidth: 2 , borderBottomWidth: 2 , borderBottomColor : 'blue' ,borderColor: 'blue' }}
+				containerStyle={{ borderStyle:'solid', backgroundColor:'#E0E0E0', margin:3 , 
+													borderWidth: 2 , borderBottomWidth: 2 , borderBottomColor : '#80CBC4' ,borderColor: '#80CBC4' }}
 				title={
 					<Text style={styles.lista}> {item.Name} color {item.Color} </Text>
 				}
@@ -429,7 +429,7 @@ class SugeridasScreen extends React.Component {
 	  	<FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
 	  	
 	  	<View style={{flex: 0 }}>
-			<Divider style={{ backgroundColor: 'red' }} />
+			{/* <Divider style={{ backgroundColor: 'red' }} /> */}
 				<View style={{flexDirection:'row',alignSelf:'center'}}>
 					<TouchableOpacity
 						style = {styles.sugerencias}
@@ -449,7 +449,7 @@ class SugeridasScreen extends React.Component {
 				<View>
 				{temperature != 999 &&
 					<Text style={{fontSize:22, textAlign:'center',fontWeight:'bold' , color:'green'}}>TEMPERATURA: {temperature+'º    '} { weather}  </Text>}
-					<Text> {this.state.message}</Text>
+					{/* <Text> {this.state.message}</Text> */}
 				</View>
 			</View>
       <Divider style={{ backgroundColor: 'red' }} />
@@ -479,7 +479,7 @@ class SugeridasScreen extends React.Component {
 							<Text style={styles.sendText}>Probar</Text>
 						</TouchableOpacity>
 						<TouchableOpacity
-							style = {styles.send}
+							style = {this.state.prenda.Cantidad <= 0 ? styles.sendDisable :  styles.send}
 							onPress ={this.usarRopa}   
 							disabled={this.state.prenda.Cantidad <= 0} 
 						>
@@ -512,6 +512,16 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       //fontSize:20,
       padding : 8
+		},
+		sendDisable: {
+      margin: 2 ,
+      backgroundColor: '#9E9E9E',
+      borderRadius: 5,
+      width: 150 ,
+      alignSelf: 'center',
+      justifyContent: 'center',
+      //fontSize:20,
+      padding : 8
     },
     sendText: {
 			fontSize:18,
@@ -519,7 +529,8 @@ const styles = StyleSheet.create({
       margin: 2 ,
       color: '#ffffff',
       textAlign:'center'
-    },
+		},
+		
     text:{
 			fontSize: 22,
       color: 'blue',
@@ -540,13 +551,24 @@ const styles = StyleSheet.create({
 	sugerencias: {
 		flex: 0,
 		margin: 2 ,
-		backgroundColor: 'blue',
+		backgroundColor: '#3A51E8',
 		borderRadius: 5,
 		//width: 150 ,
 		alignSelf: 'center',
 		justifyContent: 'center',
 		//fontSize:20,
-		padding : 8
+		padding : 6
+	},
+	sugerenciasDisabled: {
+		flex: 0,
+		margin: 2 ,
+		backgroundColor: '#9E9E9E',
+		borderRadius: 5,
+		//width: 150 ,
+		alignSelf: 'center',
+		justifyContent: 'center',
+		//fontSize:20,
+		padding : 6
 	},
 	vacio:{
 		fontSize:22 , 
@@ -555,8 +577,9 @@ const styles = StyleSheet.create({
 		color:'red',
 		textAlign:'center'
 	},lista:{
-		color:'#F3EBEB',
+		color:'orange',
 		fontSize:18,
+		fontWeight:'bold'
 	}
   });
 
