@@ -3,6 +3,7 @@ import React from 'react';
 import { ListItem , Divider} from 'react-native-elements';
 //import { updateClothes } from '../actions/ropaActions'
 import { connect } from 'react-redux';
+
 import firebase from 'react-native-firebase';
 
 // PATH DE PRENDAS
@@ -29,7 +30,7 @@ class PrecargadasScreen extends React.Component {
     constructor(props){
     super(props)
 
-    this.ref = firebase.firestore().collection('prendas').doc("codigo");
+    // this.ref = firebase.firestore().collection('prendas').doc("codigo");
 
     
 
@@ -141,19 +142,19 @@ class PrecargadasScreen extends React.Component {
 
               // INSERCION  DE ROPA ACA ------------------------
               // CANTIDAD = -1 es porque es precargada, no se puede modificar
-              //   1=GRIS
-              //   2=MARRON
-              //   3=ROJO
-              //   4=VERDE
-              //   5=AMARILLO
-              //   6=AZUL
-              //   7=NEGRO
-              //   8=BLANCO
-              //   9=VIOLETA
-              //   10=OCRE
-              //   11=ROSA
-              //   12=PURPURA
-              //   13=NARANJA
+                // 1=GRIS
+                // 2=MARRON
+                // 3=ROJO
+                // 4=VERDE
+                // 5=AMARILLO
+                // 6=AZUL
+                // 7=NEGRO
+                // 8=BLANCO
+                // 9=VIOLETA
+                // 10=OCRE
+                // 11=ROSA
+                // 12=PURPURA
+                // 13=NARANJA
               
 
               // Precargadas
@@ -278,37 +279,51 @@ class PrecargadasScreen extends React.Component {
 
     probarPrenda = () => {
 
+       let codigoApp = this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
 
-      firebase.firestore().runTransaction(async transaction => {
-        const doc = await transaction.get(this.ref);
-    
-        // if it does not exist set the population to one //(NO DEBERIA ENTRAR ACA)
-        if (!doc.exists) {
-          transaction.set(this.ref, { codigoPrenda: "pase por donde no debia" });
-          // return the new value so we know what the new population is
-          return 1;
-        }
-    
-        // exists already so lets increment it + 1
-        //const newPopulation = doc.data().codigoPrenda + 1;
-        nuevoCodigoPrenda = this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
-
-        transaction.update(this.ref, {
-          codigoPrenda: nuevoCodigoPrenda,
-        });
-    
-        // return the new value so we know what the new population is
-        return nuevoCodigoPrenda;
-      })
-      .then(nuevoCodigoPrenda => {
-        console.log(`Transaction successfully committed, codigoPrenda es : '${nuevoCodigoPrenda}'.`  );
+      firebase.database().ref().set({
+        codigoApp,     
+      }).then((data)=>{
+        //console.log(`Transaction successfully committed, codigoPrenda es : '${nuevoCodigoPrenda}'.`  );
         this.setState({modalRopa:false});
-      })
-      .catch(error => {
+      }).catch((error)=>{
         console.log('Transaction failed: ', error);
         Alert.alert("Falla en la comunicacion con la aplicacion de escritorio")
         this.setState({modalRopa:false});
-      });
+      })
+      
+
+
+      // firebase.firestore().runTransaction(async transaction => {
+      //   const doc = await transaction.get(this.ref);
+    
+      //   // if it does not exist set the population to one //(NO DEBERIA ENTRAR ACA)
+      //   if (!doc.exists) {
+      //     transaction.set(this.ref, { codigoPrenda: "pase por donde no debia" });
+      //     // return the new value so we know what the new population is
+      //     return 1;
+      //   }
+    
+      //   // exists already so lets increment it + 1
+      //   //const newPopulation = doc.data().codigoPrenda + 1;
+      //   nuevoCodigoPrenda = this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
+
+      //   transaction.update(this.ref, {
+      //     codigoPrenda: nuevoCodigoPrenda,
+      //   });
+    
+      //   // return the new value so we know what the new population is
+      //   return nuevoCodigoPrenda;
+      // })
+      // .then(nuevoCodigoPrenda => {
+      //   console.log(`Transaction successfully committed, codigoPrenda es : '${nuevoCodigoPrenda}'.`  );
+      //   this.setState({modalRopa:false});
+      // })
+      // .catch(error => {
+      //   console.log('Transaction failed: ', error);
+      //   Alert.alert("Falla en la comunicacion con la aplicacion de escritorio")
+      //   this.setState({modalRopa:false});
+      // });
 
 
     }
