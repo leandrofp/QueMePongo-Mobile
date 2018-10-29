@@ -225,17 +225,17 @@ class PrecargadasScreen extends React.Component {
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (23, 4 , 1 , -1 , 9 , 0, "Violeta", 0);');
         
               // Normales para Testing
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (3, 2 , 0 , 1 , 4 , 0, "Verde", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (4, 1 , 0 , 1 , 5 , 0, "Amarillo", 2);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (5, 1 , 0 , 1 , 3 , 5, "Rojo", 4);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (6, 3 , 0 , 1 , 7 , 2, "Gris", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (7, 2 , 0 , 1 , 6 , 5, "Azul", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (8, 2 , 0 , 1 , 1 , 2, "Gris", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (24, 2 , 0 , 1 , 4 , 0, "Verde", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (25, 1 , 0 , 1 , 5 , 0, "Amarillo", 2);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (26, 1 , 0 , 1 , 3 , 5, "Rojo", 4);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (27, 3 , 0 , 1 , 7 , 2, "Gris", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (28, 2 , 0 , 1 , 6 , 5, "Azul", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (29, 2 , 0 , 1 , 1 , 2, "Gris", 1);');
 
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (9, 6 , 0 , 1 , 7 , 2, "Negro", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (10, 4 , 0 , 1 , 6 , 7, "Negro", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (11, 4 , 0 , 1 , 13 , 2, "Naranja", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (12, 1 , 0 , 1 , 7 , 2, "Negro", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (30, 6 , 0 , 1 , 7 , 2, "Negro", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (31, 4 , 0 , 1 , 6 , 7, "Negro", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (32, 4 , 0 , 1 , 13 , 2, "Naranja", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (33, 1 , 0 , 1 , 7 , 2, "Negro", 1);');
          
 
               //el 5 seria remera, el 6 pantalon por ahora en processing por suponer algo
