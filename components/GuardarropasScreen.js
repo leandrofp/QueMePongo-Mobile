@@ -9,18 +9,30 @@ console.ignoredYellowBox=true;
 
 const window = Dimensions.get('window');
 
-//var PantalonBlancoPre = require('../assets/PantalonBlancoPre.png');
-// var PantalonRojoM = require('../assets/PantalonRojoM.jpg');
-// var RemeraVerdeM = require('../assets/RemeraVerdeM.jpg');
-  var RemeraHombreGris = require('../assets/RemeraHombreGris.png');
-  var RemeraHombreAmarillo = require('../assets/RemeraHombreAmarillo.png');
-  var RemeraHombreAzul = require('../assets/RemeraHombreAzul.png');
-  var RemeraHombreNaranja = require('../assets/RemeraHombreNaranja.png');
-  var RemeraHombreNegro = require('../assets/RemeraHombreNegro.png');
-  var RemeraHombreRojo = require('../assets/RemeraHombreRojo.png');
-  var PantalonHombreNegro = require('../assets/PantalonHombreNegro.png');
-  var VestidoMujerNaranja = require('../assets/VestidoMujerNaranja.png');
-  var VestidoMujerNegro = require('../assets/VestidoMujerNegro.png');
+
+var PantalonHombreAmarillo = require('../assets/PantalonHombreAmarillo.png');
+var PantalonHombreAzul = require('../assets/PantalonHombreAzul.png');
+var PantalonHombreGris = require('../assets/PantalonHombreGris.png');
+var PantalonHombreNegro = require('../assets/PantalonHombreNegro.png');
+
+var RemeraHombreAmarillo = require('../assets/RemeraHombreAmarillo.png');
+var RemeraHombreAzul = require('../assets/RemeraHombreAzul.png');
+var RemeraHombreGris = require('../assets/RemeraHombreGris.png');
+var RemeraHombreNaranja = require('../assets/RemeraHombreNaranja.png');
+var RemeraHombreNegro = require('../assets/RemeraHombreNegro.png');
+var RemeraHombreRojo = require('../assets/RemeraHombreRojo.png');
+var RemeraHombreVerde = require('../assets/RemeraHombreVerde.png')
+
+
+var VestidoMujerAmarillo = require('../assets/VestidoMujerAmarillo.png');
+var VestidoMujerAzul = require('../assets/VestidoMujerAzul.png');
+var VestidoMujerBlanco = require('../assets/VestidoMujerBlanco.png');
+var VestidoMujerNaranja = require('../assets/VestidoMujerNaranja.png');
+var VestidoMujerNegro = require('../assets/VestidoMujerNegro.png');
+var VestidoMujerRojo = require('../assets/VestidoMujerRojo.png');
+var VestidoMujerRosa = require('../assets/VestidoMujerRosa.png');
+var VestidoMujerVioleta = require('../assets/VestidoMujerVioleta.png');
+
 
 
 var SQLite = require('react-native-sqlite-storage')
@@ -580,24 +592,46 @@ class GuardarropasScreen extends React.Component {
     //   this.setState({image: RemeraBlancoPre , modalRopa:true , prenda: item })
     // NO PRECARGADAS
     //else 
-    if(item.Name == 'Remera' && item.Color=='Amarillo' )
+    if (item.Name == 'Pantalon' && item.Color=='Amarillo' )
+        this.setState({image: PantalonHombreAmarillo , modalRopa:true , prenda: item })
+    else if (item.Name == 'Pantalon' && item.Color=='Azul' )
+        this.setState({image: PantalonHombreAzul , modalRopa:true , prenda: item })
+    else if (item.Name == 'Pantalon' && item.Color=='Gris' )
+        this.setState({image: PantalonHombreGris , modalRopa:true , prenda: item })
+    else if (item.Name == 'Pantalon' && item.Color=='Negro' )
+        this.setState({image: PantalonHombreNegro , modalRopa:true , prenda: item })
+    
+    else if(item.Name == 'Remera' && item.Color=='Amarillo' )
         this.setState({image: RemeraHombreAmarillo , modalRopa:true , prenda: item })
     else if (item.Name == 'Remera' && item.Color=='Azul' )
         this.setState({image: RemeraHombreAzul , modalRopa:true , prenda: item })
     else if (item.Name == 'Remera' && item.Color=='Gris' )
         this.setState({image: RemeraHombreGris , modalRopa:true , prenda: item })
-    else if (item.Name == 'Remera' && item.Color=='Rojo' )
-        this.setState({image: RemeraHombreRojo , modalRopa:true , prenda: item })
     else if (item.Name == 'Remera' && item.Color=='Naranja' )
         this.setState({image: RemeraHombreNaranja , modalRopa:true , prenda: item })
     else if (item.Name == 'Remera' && item.Color=='Negro' )
         this.setState({image: RemeraHombreNegro , modalRopa:true , prenda: item })
-    else if (item.Name == 'Pantalon' && item.Color=='Negro' )
-        this.setState({image: PantalonHombreNegro , modalRopa:true , prenda: item })
-    else if (item.Name == 'Vestido' && item.Color=='Negro' )
-        this.setState({image: VestidoMujerNegro , modalRopa:true , prenda: item })
+    else if (item.Name == 'Remera' && item.Color=='Rojo' )
+        this.setState({image: RemeraHombreRojo , modalRopa:true , prenda: item })
+    else if (item.Name == 'Remera' && item.Color=='Verde' )
+        this.setState({image: RemeraHombreVerde , modalRopa:true , prenda: item })
+    
+    else if (item.Name == 'Vestido' && item.Color=='Amarillo' )
+        this.setState({image: VestidoMujerAmarillo , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Azul' )
+        this.setState({image: VestidoMujerAzul , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Blanco' )
+        this.setState({image: VestidoMujerBlanco , modalRopa:true , prenda: item })
     else if (item.Name == 'Vestido' && item.Color=='Naranja' )
         this.setState({image: VestidoMujerNaranja , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Negro' )
+        this.setState({image: VestidoMujerNegro , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Rojo' )
+        this.setState({image: VestidoMujerRojo , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Rosa' )
+        this.setState({image: VestidoMujerRosa , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Violeta' )
+        this.setState({image: VestidoMujerVioleta , modalRopa:true , prenda: item })
     /*else if (item.Name == 'Pantalon' && item.Color=='Rojo' )
         this.setState({image: PantalonRojoM , modalRopa:true , prenda: item })*/
     else
