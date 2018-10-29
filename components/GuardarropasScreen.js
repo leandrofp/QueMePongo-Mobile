@@ -13,13 +13,12 @@ const window = Dimensions.get('window');
 // var PantalonRojoM = require('../assets/PantalonRojoM.jpg');
 // var RemeraVerdeM = require('../assets/RemeraVerdeM.jpg');
   var RemeraHombreGris = require('../assets/RemeraHombreGris.png');
-  var RemeraHombreOcre = require('../assets/RemeraHombreOcre.png');
+  var RemeraHombreAmarillo = require('../assets/RemeraHombreAmarillo.png');
   var RemeraHombreAzul = require('../assets/RemeraHombreAzul.png');
-  var RemeraHombreMarron = require('../assets/RemeraHombreMarron.png');
+  var RemeraHombreNaranja = require('../assets/RemeraHombreNaranja.png');
   var RemeraHombreNegro = require('../assets/RemeraHombreNegro.png');
   var RemeraHombreRojo = require('../assets/RemeraHombreRojo.png');
   var PantalonHombreNegro = require('../assets/PantalonHombreNegro.png');
-  var PantalonHombreRojo = require('../assets/PantalonHombreRojo.png');
   var VestidoMujerNaranja = require('../assets/VestidoMujerNaranja.png');
   var VestidoMujerNegro = require('../assets/VestidoMujerNegro.png');
 
@@ -581,20 +580,18 @@ class GuardarropasScreen extends React.Component {
     //   this.setState({image: RemeraBlancoPre , modalRopa:true , prenda: item })
     // NO PRECARGADAS
     //else 
-    if(item.Name == 'Remera' && item.Color=='Ocre' )
-        this.setState({image: RemeraHombreOcre , modalRopa:true , prenda: item })
+    if(item.Name == 'Remera' && item.Color=='Amarillo' )
+        this.setState({image: RemeraHombreAmarillo , modalRopa:true , prenda: item })
     else if (item.Name == 'Remera' && item.Color=='Azul' )
         this.setState({image: RemeraHombreAzul , modalRopa:true , prenda: item })
     else if (item.Name == 'Remera' && item.Color=='Gris' )
         this.setState({image: RemeraHombreGris , modalRopa:true , prenda: item })
     else if (item.Name == 'Remera' && item.Color=='Rojo' )
         this.setState({image: RemeraHombreRojo , modalRopa:true , prenda: item })
-    else if (item.Name == 'Remera' && item.Color=='Marron' )
-        this.setState({image: RemeraHombreMarron , modalRopa:true , prenda: item })
+    else if (item.Name == 'Remera' && item.Color=='Naranja' )
+        this.setState({image: RemeraHombreNaranja , modalRopa:true , prenda: item })
     else if (item.Name == 'Remera' && item.Color=='Negro' )
         this.setState({image: RemeraHombreNegro , modalRopa:true , prenda: item })
-    else if (item.Name == 'Pantalon' && item.Color=='Rojo' )
-        this.setState({image: PantalonHombreRojo , modalRopa:true , prenda: item })
     else if (item.Name == 'Pantalon' && item.Color=='Negro' )
         this.setState({image: PantalonHombreNegro , modalRopa:true , prenda: item })
     else if (item.Name == 'Vestido' && item.Color=='Negro' )

@@ -212,7 +212,7 @@ class SugeridasScreen extends React.Component {
 			
       ropa.transaction(tx => {
         tx.executeSql(
-						'select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0 and t.name IN (' + queryTipo +  ') and r.Color IN (' +
+						'select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada == 0 and Cantidad > 0 and t.name IN (' + queryTipo +  ') and r.Color IN (' +
 						 queryColor + ') ;').then(([tx,results]) => {
             
               console.log("Query completed");
