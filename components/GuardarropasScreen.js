@@ -462,44 +462,28 @@ class GuardarropasScreen extends React.Component {
     });
   }
 
-  probarPrenda = () => {
+ 
 
 
-    firebase.firestore().runTransaction(async transaction => {
-      const doc = await transaction.get(this.ref);
-  
-      // if it does not exist set the population to one //(NO DEBERIA ENTRAR ACA)
-      if (!doc.exists) {
-        transaction.set(this.ref, { codigoPrenda: "pase por donde no debia" });
-        // return the new value so we know what the new population is
-        return 1;
-      }
-  
-      // exists already so lets increment it + 1
-      //const newPopulation = doc.data().codigoPrenda + 1;
-      nuevoCodigoPrenda = this.state.prenda.Tipo_Id + "," + this.state.prenda.CodColor
+    probarPrenda = () => {
 
-      nuevoCodigoPrenda = JSON.stringify(nuevoCodigoPrenda)
-
-      transaction.update(this.ref, {
-        codigoPrenda: nuevoCodigoPrenda,
-      });
-  
-      // return the new value so we know what the new population is
-      return nuevoCodigoPrenda;
-    })
-    .then(nuevoCodigoPrenda => {
-      console.log(`Transaction successfully committed, codigoPrenda es : '${nuevoCodigoPrenda}'.`  );
-      this.setState({modalRopa:false});
-    })
-    .catch(error => {
-      console.log('Transaction failed: ', error);
-      Alert.alert("Falla en la comunicacion con la aplicacion de escritorio")
-      this.setState({modalRopa:false});
-    });
+      let NumeroPrenda 
+      
+      NumeroPrenda = this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
 
 
-  }
+     firebase.database().ref().set({
+       NumeroPrenda,     
+     }).then((data)=>{
+       //console.log(`Transaction successfully committed, codigoPrenda es : '${nuevoCodigoPrenda}'.`  );
+       this.setState({modalRopa:false});
+     }).catch((error)=>{
+       console.log('Transaction failed: ', error);
+       Alert.alert("Falla en la comunicacion con la aplicacion de escritorio")
+       this.setState({modalRopa:false});
+     })
+     
+   }
 
   resetearPrenda = () => {
 
@@ -585,13 +569,6 @@ class GuardarropasScreen extends React.Component {
 
     console.log(item)
 
-    // PRECARGADAS
-    // if(item.Name == 'Pantalon' && item.Color=='Blanco' )
-    //   this.setState({image: PantalonBlancoPre  , modalRopa:true , prenda: item })
-    // else if(item.Name ==  'Remera' && item.Color=='Blanco' )
-    //   this.setState({image: RemeraBlancoPre , modalRopa:true , prenda: item })
-    // NO PRECARGADAS
-    //else 
     if (item.Name == 'Pantalon' && item.Color=='Amarillo' )
         this.setState({image: PantalonHombreAmarillo , modalRopa:true , prenda: item })
     else if (item.Name == 'Pantalon' && item.Color=='Azul' )
@@ -662,7 +639,7 @@ class GuardarropasScreen extends React.Component {
 
     // console.log( "ARRAY FAVORITAS:  " + this.props.ropa.prendasGuardarropas)
     // console.log( "LENGHT:  " + this.props.ropa.prendasGuardarropas.length)
-    image = this.state.image
+    let image = this.state.image
    
     let ayuda ="En esta pantalla se encuentran\n todas tus prendas cargadas"
     let vacio = false
