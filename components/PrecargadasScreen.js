@@ -213,7 +213,7 @@ class PrecargadasScreen extends React.Component {
               //VESTIDOS 4
               //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (12, 4 , 1 , -1 , 5 , 0, "Amarillo", 0);');
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (13, 4 , 1 , -1 , 6 , 0, "Azul", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (14, 4 , 1 , -1 , 8 , 0, "Blanco", 0);');
+              //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (14, 4 , 1 , -1 , 8 , 0, "Blanco", 0);');
               //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (15, 4 , 1 , -1 , 14 , 0, "Lavanda", 0);');
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (16, 4 , 1 , -1 , 14 , 0, "Lavanda", 0);');
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (17, 4 , 1 , -1 , 13 , 0, "Naranja", 0);');
@@ -391,7 +391,7 @@ class PrecargadasScreen extends React.Component {
         NumeroPrenda = '1.' + this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
       else if(this.state.prenda.Tipo_Id == 2)
         NumeroPrenda = '2.' + this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor 
-      else if(this.state.prenda.Ropa_Id == 15)   // vestido lavanda 1
+      else if(this.state.prenda.Ropa_Id == 15 || this.state.prenda.CodColor == 16 )   // vestido lavanda 1 y puntos solo
         NumeroPrenda = '4.' + this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
       else if(this.state.prenda.Tipo_Id == 4)
         NumeroPrenda = '6.' + this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
