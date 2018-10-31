@@ -9,19 +9,30 @@ console.ignoredYellowBox=true;
 
 const window = Dimensions.get('window');
 
-//var PantalonBlancoPre = require('../assets/PantalonBlancoPre.png');
-// var PantalonRojoM = require('../assets/PantalonRojoM.jpg');
-// var RemeraVerdeM = require('../assets/RemeraVerdeM.jpg');
-  var RemeraHombreGris = require('../assets/RemeraHombreGris.png');
-  var RemeraHombreOcre = require('../assets/RemeraHombreOcre.png');
-  var RemeraHombreAzul = require('../assets/RemeraHombreAzul.png');
-  var RemeraHombreMarron = require('../assets/RemeraHombreMarron.png');
-  var RemeraHombreNegro = require('../assets/RemeraHombreNegro.png');
-  var RemeraHombreRojo = require('../assets/RemeraHombreRojo.png');
-  var PantalonHombreNegro = require('../assets/PantalonHombreNegro.png');
-  var PantalonHombreRojo = require('../assets/PantalonHombreRojo.png');
-  var VestidoMujerNaranja = require('../assets/VestidoMujerNaranja.png');
-  var VestidoMujerNegro = require('../assets/VestidoMujerNegro.png');
+
+var PantalonHombreAmarillo = require('../assets/PantalonHombreAmarillo.png');
+var PantalonHombreAzul = require('../assets/PantalonHombreAzul.png');
+var PantalonHombreGris = require('../assets/PantalonHombreGris.png');
+var PantalonHombreNegro = require('../assets/PantalonHombreNegro.png');
+
+var RemeraHombreAmarillo = require('../assets/RemeraHombreAmarillo.png');
+var RemeraHombreAzul = require('../assets/RemeraHombreAzul.png');
+var RemeraHombreGris = require('../assets/RemeraHombreGris.png');
+var RemeraHombreNaranja = require('../assets/RemeraHombreNaranja.png');
+var RemeraHombreNegro = require('../assets/RemeraHombreNegro.png');
+var RemeraHombreRojo = require('../assets/RemeraHombreRojo.png');
+var RemeraHombreVerde = require('../assets/RemeraHombreVerde.png')
+
+
+var VestidoMujerAmarillo = require('../assets/VestidoMujerAmarillo.png');
+var VestidoMujerAzul = require('../assets/VestidoMujerAzul.png');
+var VestidoMujerBlanco = require('../assets/VestidoMujerBlanco.png');
+var VestidoMujerNaranja = require('../assets/VestidoMujerNaranja.png');
+var VestidoMujerNegro = require('../assets/VestidoMujerNegro.png');
+var VestidoMujerRojo = require('../assets/VestidoMujerRojo.png');
+var VestidoMujerRosa = require('../assets/VestidoMujerRosa.png');
+var VestidoMujerVioleta = require('../assets/VestidoMujerVioleta.png');
+
 
 
 var SQLite = require('react-native-sqlite-storage')
@@ -451,44 +462,28 @@ class GuardarropasScreen extends React.Component {
     });
   }
 
-  probarPrenda = () => {
+ 
 
 
-    firebase.firestore().runTransaction(async transaction => {
-      const doc = await transaction.get(this.ref);
-  
-      // if it does not exist set the population to one //(NO DEBERIA ENTRAR ACA)
-      if (!doc.exists) {
-        transaction.set(this.ref, { codigoPrenda: "pase por donde no debia" });
-        // return the new value so we know what the new population is
-        return 1;
-      }
-  
-      // exists already so lets increment it + 1
-      //const newPopulation = doc.data().codigoPrenda + 1;
-      nuevoCodigoPrenda = this.state.prenda.Tipo_Id + "," + this.state.prenda.CodColor
+    probarPrenda = () => {
 
-      nuevoCodigoPrenda = JSON.stringify(nuevoCodigoPrenda)
-
-      transaction.update(this.ref, {
-        codigoPrenda: nuevoCodigoPrenda,
-      });
-  
-      // return the new value so we know what the new population is
-      return nuevoCodigoPrenda;
-    })
-    .then(nuevoCodigoPrenda => {
-      console.log(`Transaction successfully committed, codigoPrenda es : '${nuevoCodigoPrenda}'.`  );
-      this.setState({modalRopa:false});
-    })
-    .catch(error => {
-      console.log('Transaction failed: ', error);
-      Alert.alert("Falla en la comunicacion con la aplicacion de escritorio")
-      this.setState({modalRopa:false});
-    });
+      let NumeroPrenda 
+      
+      NumeroPrenda = this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
 
 
-  }
+     firebase.database().ref().set({
+       NumeroPrenda,     
+     }).then((data)=>{
+       //console.log(`Transaction successfully committed, codigoPrenda es : '${nuevoCodigoPrenda}'.`  );
+       this.setState({modalRopa:false});
+     }).catch((error)=>{
+       console.log('Transaction failed: ', error);
+       Alert.alert("Falla en la comunicacion con la aplicacion de escritorio")
+       this.setState({modalRopa:false});
+     })
+     
+   }
 
   resetearPrenda = () => {
 
@@ -574,33 +569,46 @@ class GuardarropasScreen extends React.Component {
 
     console.log(item)
 
-    // PRECARGADAS
-    // if(item.Name == 'Pantalon' && item.Color=='Blanco' )
-    //   this.setState({image: PantalonBlancoPre  , modalRopa:true , prenda: item })
-    // else if(item.Name ==  'Remera' && item.Color=='Blanco' )
-    //   this.setState({image: RemeraBlancoPre , modalRopa:true , prenda: item })
-    // NO PRECARGADAS
-    //else 
-    if(item.Name == 'Remera' && item.Color=='Ocre' )
-        this.setState({image: RemeraHombreOcre , modalRopa:true , prenda: item })
+    if (item.Name == 'Pantalon' && item.Color=='Amarillo' )
+        this.setState({image: PantalonHombreAmarillo , modalRopa:true , prenda: item })
+    else if (item.Name == 'Pantalon' && item.Color=='Azul' )
+        this.setState({image: PantalonHombreAzul , modalRopa:true , prenda: item })
+    else if (item.Name == 'Pantalon' && item.Color=='Gris' )
+        this.setState({image: PantalonHombreGris , modalRopa:true , prenda: item })
+    else if (item.Name == 'Pantalon' && item.Color=='Negro' )
+        this.setState({image: PantalonHombreNegro , modalRopa:true , prenda: item })
+    
+    else if(item.Name == 'Remera' && item.Color=='Amarillo' )
+        this.setState({image: RemeraHombreAmarillo , modalRopa:true , prenda: item })
     else if (item.Name == 'Remera' && item.Color=='Azul' )
         this.setState({image: RemeraHombreAzul , modalRopa:true , prenda: item })
     else if (item.Name == 'Remera' && item.Color=='Gris' )
         this.setState({image: RemeraHombreGris , modalRopa:true , prenda: item })
-    else if (item.Name == 'Remera' && item.Color=='Rojo' )
-        this.setState({image: RemeraHombreRojo , modalRopa:true , prenda: item })
-    else if (item.Name == 'Remera' && item.Color=='Marron' )
-        this.setState({image: RemeraHombreMarron , modalRopa:true , prenda: item })
+    else if (item.Name == 'Remera' && item.Color=='Naranja' )
+        this.setState({image: RemeraHombreNaranja , modalRopa:true , prenda: item })
     else if (item.Name == 'Remera' && item.Color=='Negro' )
         this.setState({image: RemeraHombreNegro , modalRopa:true , prenda: item })
-    else if (item.Name == 'Pantalon' && item.Color=='Rojo' )
-        this.setState({image: PantalonHombreRojo , modalRopa:true , prenda: item })
-    else if (item.Name == 'Pantalon' && item.Color=='Negro' )
-        this.setState({image: PantalonHombreNegro , modalRopa:true , prenda: item })
-    else if (item.Name == 'Vestido' && item.Color=='Negro' )
-        this.setState({image: VestidoMujerNegro , modalRopa:true , prenda: item })
+    else if (item.Name == 'Remera' && item.Color=='Rojo' )
+        this.setState({image: RemeraHombreRojo , modalRopa:true , prenda: item })
+    else if (item.Name == 'Remera' && item.Color=='Verde' )
+        this.setState({image: RemeraHombreVerde , modalRopa:true , prenda: item })
+    
+    else if (item.Name == 'Vestido' && item.Color=='Amarillo' )
+        this.setState({image: VestidoMujerAmarillo , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Azul' )
+        this.setState({image: VestidoMujerAzul , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Blanco' )
+        this.setState({image: VestidoMujerBlanco , modalRopa:true , prenda: item })
     else if (item.Name == 'Vestido' && item.Color=='Naranja' )
         this.setState({image: VestidoMujerNaranja , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Negro' )
+        this.setState({image: VestidoMujerNegro , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Rojo' )
+        this.setState({image: VestidoMujerRojo , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Rosa' )
+        this.setState({image: VestidoMujerRosa , modalRopa:true , prenda: item })
+    else if (item.Name == 'Vestido' && item.Color=='Violeta' )
+        this.setState({image: VestidoMujerVioleta , modalRopa:true , prenda: item })
     /*else if (item.Name == 'Pantalon' && item.Color=='Rojo' )
         this.setState({image: PantalonRojoM , modalRopa:true , prenda: item })*/
     else
@@ -631,7 +639,7 @@ class GuardarropasScreen extends React.Component {
 
     // console.log( "ARRAY FAVORITAS:  " + this.props.ropa.prendasGuardarropas)
     // console.log( "LENGHT:  " + this.props.ropa.prendasGuardarropas.length)
-    image = this.state.image
+    let image = this.state.image
    
     let ayuda ="En esta pantalla se encuentran\n todas tus prendas cargadas"
     let vacio = false
@@ -682,7 +690,7 @@ class GuardarropasScreen extends React.Component {
                 {"Cantidad de veces que se uso: " + this.state.prenda.Uso}
             </Text>
     
-            <Divider style={{ backgroundColor: 'red' }} />
+            {/* <Divider style={{ backgroundColor: 'red' }} /> */}
             
             {console.log("Window: " + window.width , window.height)}
 
@@ -698,7 +706,7 @@ class GuardarropasScreen extends React.Component {
               />
             </View>
 
-            <Divider style={{ backgroundColor: 'red' }} />
+            {/* <Divider style={{ backgroundColor: 'red' }} /> */}
 
             <View>
                 <View style={{flexDirection:'row' , alignSelf:'center' }}>
@@ -744,7 +752,7 @@ class GuardarropasScreen extends React.Component {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style = {this.state.prenda.Cantidad <= 0 || this.state.prenda.Uso == 0 ? styles.sendDisable :styles.send}
-                    onPress ={this.resetearPrenda}  // SIN IMPLEMENTAR AUN  
+                    onPress ={this.resetearPrenda}  
                     disabled={this.state.prenda.Cantidad <= 0 || this.state.prenda.Uso == 0} 
                   >
                     <Text style={styles.sendText}>Resetear Prenda</Text>

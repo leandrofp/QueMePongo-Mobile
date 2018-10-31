@@ -28,6 +28,15 @@ const instructions = Platform.select({
 });
 
 
+import firebase from 'react-native-firebase';
+
+var config = {
+  databaseURL: "https://quemepongo-71d08.firebaseio.com/",
+  projectId: "quemepongo-71d08",
+};
+if (!firebase.apps.length) {
+  firebase.initializeApp(config);
+}
 
 //type Props = {};
 export default class App extends Component {
