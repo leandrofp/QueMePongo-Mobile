@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 
 // PATH DE PRENDAS
-
+//aa
 var PantalonHombrePrecargadaGris = require('../assets/PantalonHombrePrecargadaGris.png');
 var PantalonHombrePrecargadaLavanda = require('../assets/PantalonHombrePrecargadaLavanda.png');
 var PantalonHombrePrecargadaRojo = require('../assets/PantalonHombrePrecargadaRojo.png');
