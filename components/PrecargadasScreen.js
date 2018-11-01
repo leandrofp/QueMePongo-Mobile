@@ -8,6 +8,7 @@ import firebase from 'react-native-firebase';
 
 // PATH DE PRENDAS
 //aa
+//aa
 var PantalonHombrePrecargadaGris = require('../assets/PantalonHombrePrecargadaGris.png');
 var PantalonHombrePrecargadaLavanda = require('../assets/PantalonHombrePrecargadaLavanda.png');
 var PantalonHombrePrecargadaRojo = require('../assets/PantalonHombrePrecargadaRojo.png');
