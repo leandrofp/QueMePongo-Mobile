@@ -16,17 +16,27 @@ var RemeraHombrePrecargadaAmarillo = require('../assets/RemeraHombrePrecargadaAm
 var RemeraHombrePrecargadaAzul = require('../assets/RemeraHombrePrecargadaAzul.png')
 var RemeraHombrePrecargadaGris = require('../assets/RemeraHombrePrecargadaGris.png')
 var RemeraHombrePrecargadaLavanda = require('../assets/RemeraHombrePrecargadaLavanda.png')
-var RemeraHombrePrecargadaLavanda2 = require('../assets/RemeraHombrePrecargadaLavanda2.png')
+
 var RemeraHombrePrecargadaNaranja = require('../assets/RemeraHombrePrecargadaNaranja.png')
 var RemeraHombrePrecargadaNegro = require('../assets/RemeraHombrePrecargadaNegro.png')
 var RemeraHombrePrecargadaRojo = require('../assets/RemeraHombrePrecargadaRojo.png')
 var RemeraHombrePrecargadaVerde = require('../assets/RemeraHombrePrecargadaVerde.png')
 
+
+var RemeraMujerPrecargadaAzul = require('../assets/RemeraMujerPrecargadaAzul.png')
+var RemeraMujerPrecargadaLavanda = require('../assets/RemeraMujerPrecargadaLavanda.png')
+var RemeraMujerPrecargadaNaranja = require('../assets/RemeraMujerPrecargadaNaranja.png')
+var RemeraMujerPrecargadaRojo = require('../assets/RemeraMujerPrecargadaRojo.png')
+var RemeraMujerPrecargadaRosa = require('../assets/RemeraMujerPrecargadaRosa.png')
+var RemeraMujerPrecargadaVerde = require('../assets/RemeraMujerPrecargadaVerde.png')
+var RemeraMujerPrecargadaVioleta = require('../assets/RemeraMujerPrecargadaVioleta.png')
+
+
 var VestidoMujerPrecargadaAmarillo = require('../assets/VestidoMujerPrecargadaAmarillo.png')
 var VestidoMujerPrecargadaAzul = require('../assets/VestidoMujerPrecargadaAzul.png')
 var VestidoMujerPrecargadaBlanco = require('../assets/VestidoMujerPrecargadaBlanco.png')
 var VestidoMujerPrecargadaLavanda = require('../assets/VestidoMujerPrecargadaLavanda.png')
-var VestidoMujerPrecargadaLavanda2 = require('../assets/VestidoMujerPrecargadaLavanda2.png')
+
 var VestidoMujerPrecargadaNaranja = require('../assets/VestidoMujerPrecargadaNaranja.png')
 var VestidoMujerPrecargadaNegro = require('../assets/VestidoMujerPrecargadaNegro.png')
 var VestidoMujerPrecargadaPuntosBlancos = require('../assets/VestidoMujerPrecargadaPuntosBlancos.png')
@@ -168,6 +178,7 @@ class PrecargadasScreen extends React.Component {
               tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (8,"Pollera");');
               tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (9,"Saco");');
               tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (10,"Short");');
+              tx.executeSql('INSERT OR IGNORE INTO Tipo_ropa (Tipo_id, Name) VALUES (11,"Remera Femenina");');
               //-----------------------------------------------------------------------------------//
 
 
@@ -197,51 +208,74 @@ class PrecargadasScreen extends React.Component {
               //  TODO: EVALUAR COLORES REPETIDOS CON DISTINTA FORMA 
              
               //PANTALONES 1
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (1, 1 , 1 , -1 , 15 , 0, "Textura Roja", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (2, 1 , 1 , -1 , 14 , 0, "Lavanda", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (2, 1 , 1 , -1 , 18 , 0, "Textura Gris", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 1 , 1 , -1 , 15 , 0, "Textura Roja", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 1 , 1 , -1 , 14 , 0, "Lavanda", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 1 , 1 , -1 , 18 , 0, "Textura Gris", 0);');
               //REMERAS 2
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (3, 2 , 1 , -1 , 5 , 0, "Amarillo", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (4, 2 , 1 , -1 , 6 , 0, "Azul", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (5, 2 , 1 , -1 , 1 , 0, "Gris", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (6, 2 , 1 , -1 , 14 , 0, "Lavanda", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (7, 2 , 1 , -1 , 14 , 0, "Lavanda", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (8, 2 , 1 , -1 , 13 , 0, "Naranja", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (9, 2 , 1 , -1 , 7 , 0, "Negro", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (10, 2 , 1 , -1 , 3 , 0, "Rojo", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (11, 2 , 1 , -1 , 4 , 0, "Verde", 0);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 5 , 0, "Amarillo", 0);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 6 , 0, "Azul", 0);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 1 , 0, "Gris", 0);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 14 , 0, "Lavanda", 0);');
+              
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 13 , 0, "Naranja", 0);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 7 , 0, "Negro", 0);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 3 , 0, "Rojo", 0);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 4 , 0, "Verde", 0);');
+              
+              
+              
+              
+              
+              
               //VESTIDOS 4
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (12, 4 , 1 , -1 , 5 , 0, "Amarillo", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (13, 4 , 1 , -1 , 6 , 0, "Azul", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (14, 4 , 1 , -1 , 8 , 0, "Blanco", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (15, 4 , 1 , -1 , 14 , 0, "Lavanda", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (16, 4 , 1 , -1 , 14 , 0, "Lavanda", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (17, 4 , 1 , -1 , 13 , 0, "Naranja", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (18, 4 , 1 , -1 , 7 , 0, "Negro", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (19, 4 , 1 , -1 , 16 , 0, "Puntos Blancos", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (20, 4 , 1 , -1 , 17 , 0, "Rayas", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (21, 4 , 1 , -1 , 3 , 0, "Rojo", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (22, 4 , 1 , -1 , 11 , 0, "Rosa", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (23, 4 , 1 , -1 , 9 , 0, "Violeta", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 1 , -1 , 5 , 0, "Amarillo", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 1 , -1 , 6 , 0, "Azul", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 1 , -1 , 8 , 0, "Blanco", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 1 , -1 , 14 , 0, "Lavanda", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 1 , -1 , 14 , 0, "Lavanda", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 1 , -1 , 13 , 0, "Naranja", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 1 , -1 , 7 , 0, "Negro", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 1 , -1 , 16 , 0, "Puntos Blancos", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 1 , -1 , 17 , 0, "Rayas", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 1 , -1 , 3 , 0, "Rojo", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 1 , -1 , 11 , 0, "Rosa", 0);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 1 , -1 , 9 , 0, "Violeta", 0);');
         
 
               // Normales para Testing
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (24, 2 , 0 , 1 , 4 , 0, "Verde", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (25, 1 , 0 , 1 , 5 , 0, "Amarillo", 2);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (26, 1 , 0 , 1 , 3 , 5, "Rojo", 4);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (27, 3 , 0 , 1 , 7 , 2, "Gris", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (28, 2 , 0 , 1 , 6 , 5, "Azul", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (29, 2 , 0 , 1 , 1 , 2, "Gris", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 0 , 1 , 4 , 0, "Verde", 1);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 1 , 0 , 1 , 5 , 0, "Amarillo", 2);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 1 , 0 , 1 , 3 , 5, "Rojo", 4);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 3 , 0 , 1 , 7 , 2, "Gris", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 0 , 1 , 6 , 5, "Azul", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 0 , 1 , 1 , 2, "Gris", 1);');
 
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (30, 6 , 0 , 1 , 7 , 2, "Negro", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (31, 4 , 0 , 1 , 6 , 7, "Negro", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (32, 4 , 0 , 1 , 3 , 7, "Rojo", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (33, 4 , 0 , 1 , 11 , 7, "Rosa", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (34, 4 , 0 , 1 , 13 , 2, "Naranja", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (35, 1 , 0 , 1 , 7 , 2, "Negro", 1);');
-         
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 6 , 0 , 1 , 7 , 2, "Negro", 1);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 0 , 1 , 6 , 7, "Negro", 1);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 0 , 1 , 3 , 7, "Rojo", 1);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 0 , 1 , 11 , 7, "Rosa", 1);');
+              // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 4 , 0 , 1 , 13 , 2, "Naranja", 1);');
+              //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 1 , 0 , 1 , 7 , 2, "Negro", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 0 , 1 , 1 , 2, "Gris", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 0 , 1 , 6 , 5, "Azul", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 5 , 0 , 1 , 1 , 2, "Gris", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 5 , 0 , 1 , 6 , 5, "Azul", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 3 , 0 , 1 , 1 , 2, "Gris", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 3 , 0 , 1 , 6 , 5, "Azul", 1);');
 
-              //el 5 seria remera, el 6 pantalon por ahora en processing por suponer algo
+                // ID 20 DE ACA PARA ABAJO
+
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (20, 11 , 1 , -1 , 6 , 0, "Azul", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (21, 11 , 1 , -1 , 14 , 0, "Lavanda", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (22, 11 , 1 , -1 , 13 , 0, "Naranja", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (23, 11 , 1 , -1 , 3 , 0, "Rojo", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (24, 11 , 1 , -1 , 11 , 0, "Rosa", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (25, 11 , 1 , -1 , 4 , 0, "Verde", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (26, 11 , 1 , -1 , 9 , 0, "Violeta", 1);');
+              
+
+
+
 
               tx.executeSql(
                 `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada = 1;`).then(([tx,results]) => {
@@ -270,6 +304,10 @@ class PrecargadasScreen extends React.Component {
 
             }
             else{
+
+
+
+
             tx.executeSql(
               `select * from Ropa r INNER JOIN Tipo_Ropa t on r.Tipo_Id = t.Tipo_Id where Precargada = 1;`).then(([tx,results]) => {
               
@@ -332,7 +370,7 @@ class PrecargadasScreen extends React.Component {
       else if(item.Name ==  'Pantalon' && item.Color=='Textura Roja' )
         this.setState({image: PantalonHombrePrecargadaRojo , modalRopa:true , prenda: item })
       
-        else if(item.Name ==  'Remera' && item.Color=='Amarillo' )
+      else if(item.Name ==  'Remera' && item.Color=='Amarillo' )
         this.setState({image: RemeraHombrePrecargadaAmarillo , modalRopa:true , prenda: item })
       else if(item.Name ==  'Remera' && item.Color=='Azul' )
         this.setState({image: RemeraHombrePrecargadaAzul , modalRopa:true , prenda: item })
@@ -340,8 +378,6 @@ class PrecargadasScreen extends React.Component {
         this.setState({image: RemeraHombrePrecargadaGris , modalRopa:true , prenda: item })
       else if(item.Name ==  'Remera' && item.Color=='Lavanda' )
         this.setState({image: RemeraHombrePrecargadaLavanda , modalRopa:true , prenda: item })
-      else if(item.Name ==  'Remera' && item.Color=='Lavanda2' )
-        this.setState({image: RemeraHombrePrecargadaLavanda2 , modalRopa:true , prenda: item })
       else if(item.Name ==  'Remera' && item.Color=='Naranja' )
         this.setState({image: RemeraHombrePrecargadaNaranja , modalRopa:true , prenda: item })
       else if(item.Name ==  'Remera' && item.Color=='Negro' )
@@ -351,6 +387,23 @@ class PrecargadasScreen extends React.Component {
       else if(item.Name ==  'Remera' && item.Color=='Verde' )
         this.setState({image: RemeraHombrePrecargadaVerde , modalRopa:true , prenda: item })
       
+      else if(item.Name ==  'Remera Femenina' && item.Color=='Azul' )
+        this.setState({image: RemeraMujerPrecargadaAzul , modalRopa:true , prenda: item })
+      else if(item.Name ==  'Remera Femenina' && item.Color=='Lavanda' )
+        this.setState({image: RemeraMujerPrecargadaLavanda , modalRopa:true , prenda: item })
+      else if(item.Name ==  'Remera Femenina' && item.Color=='Naranja' )
+        this.setState({image: RemeraMujerPrecargadaNaranja , modalRopa:true , prenda: item })
+      else if(item.Name ==  'Remera Femenina' && item.Color=='Rojo' )
+        this.setState({image: RemeraMujerPrecargadaRojo , modalRopa:true , prenda: item })
+      else if(item.Name ==  'Remera Femenina' && item.Color=='Rosa' )
+        this.setState({image: RemeraMujerPrecargadaRosa , modalRopa:true , prenda: item })
+      else if(item.Name ==  'Remera Femenina' && item.Color=='Verde' )
+        this.setState({image: RemeraMujerPrecargadaVerde , modalRopa:true , prenda: item })
+      else if(item.Name ==  'Remera Femenina' && item.Color=='Violeta' )
+        this.setState({image: RemeraMujerPrecargadaVioleta , modalRopa:true , prenda: item })
+     
+      
+      
       else if(item.Name ==  'Vestido' && item.Color=='Amarillo' )
         this.setState({image: VestidoMujerPrecargadaAmarillo , modalRopa:true , prenda: item })
       else if(item.Name ==  'Vestido' && item.Color=='Azul' )
@@ -359,8 +412,7 @@ class PrecargadasScreen extends React.Component {
         this.setState({image: VestidoMujerPrecargadaBlanco , modalRopa:true , prenda: item })
       else if(item.Name ==  'Vestido' && item.Color=='Lavanda' )
         this.setState({image: VestidoMujerPrecargadaLavanda , modalRopa:true , prenda: item })
-      else if(item.Name ==  'Vestido' && item.Color=='Lavanda2' )
-        this.setState({image: VestidoMujerPrecargadaLavanda2 , modalRopa:true , prenda: item })
+     
       else if(item.Name ==  'Vestido' && item.Color=='Naranja' )
         this.setState({image: VestidoMujerPrecargadaNaranja , modalRopa:true , prenda: item })
       else if(item.Name ==  'Vestido' && item.Color=='Negro' )
@@ -387,12 +439,14 @@ class PrecargadasScreen extends React.Component {
        
       if(this.state.prenda.Tipo_Id == 1)
         NumeroPrenda = '9.' + this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
-      else if(this.state.prenda.Ropa_Id == 6)    // remera lavanda 1
-        NumeroPrenda = '1.' + this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
+      else if(this.state.prenda.Tipo_Id == 11)  
+        NumeroPrenda = '3.' + this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
+      // else if(this.state.prenda.Ropa_Id == 6)    // remera lavanda 1
+      //   NumeroPrenda = '1.' + this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
       else if(this.state.prenda.Tipo_Id == 2)
         NumeroPrenda = '2.' + this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor 
-      else if(this.state.prenda.Ropa_Id == 15)   // vestido lavanda 1
-        NumeroPrenda = '4.' + this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
+      // else if(this.state.prenda.Ropa_Id == 15)   // vestido lavanda 1
+      //   NumeroPrenda = '4.' + this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
       else if(this.state.prenda.Tipo_Id == 4)
         NumeroPrenda = '6.' + this.state.prenda.Tipo_Id + ":" + this.state.prenda.CodColor
 

@@ -205,7 +205,7 @@ class SugeridasScreen extends React.Component {
 			
 			switch (animo){
 				case 'feliz':{
-						colores=["Rojo","Azul","Verde","Amarillo","Rosa"]
+						colores=["Rojo","Azul","Verde","Amarillo","Rosa","Naranja","Violeta"]
 						break;
 				}
 				case 'triste':{
