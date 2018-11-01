@@ -508,13 +508,13 @@ class EscanerScreen extends Component {
       colorname = "Blanco"
     else if(colorname.includes("Violet"))
       colorname = "Violeta"
-    else if(colorname.includes("Tan"))
+    else if(colorname.includes("Tan") || colorname.includes("Sienna") )
       colorname = "Ocre"
     else if(colorname.includes("Pink"))
       colorname = "Rosa"
     else if(colorname.includes("Purple"))
       colorname = "Purpura"
-    else if(colorname.includes("Orange"))
+    else if(colorname.includes("Orange") || colorname.includes("Coral"))
       colorname = "Naranja"
     else
       colorname = "0"
