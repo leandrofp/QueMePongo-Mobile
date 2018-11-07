@@ -188,7 +188,7 @@ class SugeridasScreen extends React.Component {
 
 			switch (tiempo){
 				case 'calor':{
-						arrayTipo=["Short","Remera","Pollera","Camisa"]
+						arrayTipo=["Short","Remera","Pollera","Camisa","Vestido"]
 						break;
 				}
 				case 'fresco':{
