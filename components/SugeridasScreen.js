@@ -464,6 +464,28 @@ class SugeridasScreen extends React.Component {
 		this.setState({getAnimo:false})
 	}
 
+	/*
+	readFile(filePath) {
+		return RNFetchBlob.fs.readFile(filePath, 'base64').then(data => new Buffer(data, 'base64'));
+	}
+
+	uploadPhoto = (data) => {
+			console.log("Upload")
+			console.log(data)
+
+			
+			this.readFile(data.uri).then(buffer => {
+					Storage.put( 'image.png', buffer, {
+							contentType: 'image/png'
+					})
+			}).catch(e => {
+					console.log(e);
+			});
+
+
+	}
+	*/
+
 	//TODO: ARREGLAR ESTE
 	takePicture = async function() {
     if (this.camera) {
@@ -487,9 +509,32 @@ class SugeridasScreen extends React.Component {
       ImgToBase64.getBase64String( 
           data).then( (cadena) => {
 
+						// LE QUITE EL RETURN FACEID
+
+						/*RNFetchBlob.fetch('POST', 'https://api.projectoxford.ai/face/v1.0/detect?returnFaceAttributes=age,gender,emotion,smile', {
+							'Accept': 'application/json',
+							'Content-Type': 'application/octet-stream',
+							'Ocp-Apim-Subscription-Key': this.props.apiKey}, this.state.data ).then((res) => {
+								return res.json();      
+								}).then((json) => {	
+									if(json.length){
+											this.setState({
+													face_data: json
+											});
+									}else{
+											alert("No se detecto rostro en la foto");
+									}
+									
+									return json;
+								}).catch (function (error) {
+								console.log(error);
+								alert('Fallo reconocimiento de expresion facial' + JSON.stringify(error));
+						});
+						*/
+						// EL HANDLE VA DENTRO DEL THEN DEL JSON DEL FACEPI EXITOSO JUNTO CON EL SETSTATE DE ANIMO
 						this.handleLocation()
 						console.log("ACA DEBERIA LLAMAR A FACEAPI PERO NO HAY KEY :( ")
-						// LLAMAR A FACEAPI ACA!!!!
+					
           
           
       });
