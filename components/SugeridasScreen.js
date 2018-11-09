@@ -5,6 +5,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { updateClothes , updateSugeridas } from '../actions/ropaActions'
 import firebase from 'react-native-firebase';
+import { RNCamera } from 'react-native-camera';
+import ImageRotate from 'react-native-image-rotate';
+import ImgToBase64 from 'react-native-image-base64';
 
 console.ignoredYellowBox=true;
 
@@ -59,7 +62,10 @@ class SugeridasScreen extends React.Component {
 			modalRopa: false, 
 			ropa: [], 
 			prenda: {},
-			animo:'feliz'
+			animo:'feliz',
+			focusedScreen: true,
+			getAnimo: false
+
 		};
 	}
 	
@@ -75,11 +81,20 @@ class SugeridasScreen extends React.Component {
       console.log(error);
     
     });
+	}
+	
+	componentDidMount() {
+    const { navigation } = this.props;
+    navigation.addListener('willFocus', () =>
+      this.setState({ focusedScreen: true })
+    );
+    navigation.addListener('willBlur', () =>
+      this.setState({ focusedScreen: false })
+    );
   }
 
   handleLocation = async () => {
 	
-			if(!this.state.loading){
 				try {
 					this.setState({loading : true})
 
@@ -99,10 +114,7 @@ class SugeridasScreen extends React.Component {
 					});
 				}
 			}
-			else{
-				Alert.alert("La aplicacion esta cargando la informacion y no esta lista")
-			}
-	}
+			
 
 	fetchLocation = async () => {
 
@@ -255,20 +267,20 @@ class SugeridasScreen extends React.Component {
 								Alert.alert("No hay prendas en el guardarropas para clima actual y estado de animo" )
 													
               // TODO: BORRE ALGO ACA
-              //this.setState({modalRopa:false})
+              this.setState({loading:false})
             }).catch((error) => {
-              //this.setState({modalRopa:false})
+              this.setState({loading:false})
               Alert.alert("Fallo la busqueda de sugeridas en la base de datos")
               console.log(error);
             });
           
       }).then( () => {   
-              
+        this.setState({getAnimo:false})  
         const {dispatch} = this.props
         dispatch( updateSugeridas(arraySugeridas) );
              
       }).catch((error) => {
-      //this.setState({modalRopa:false})
+      this.setState({loading:false})
       Alert.alert("Fallo la busqueda de sugeridas en la base de datos")
       console.log(error);
     });      
@@ -438,6 +450,58 @@ class SugeridasScreen extends React.Component {
         this.setState({image: PantalonRojoM , modalRopa:true , prenda: item })*/
     else
         this.setState({image: '', modalRopa:true , prenda: item })
+	}
+
+	getAnimo = () =>{
+		this.setState({getAnimo:true})
+	}
+	
+	changeFlash = () => {
+    this.setState({flash: !(this.state.flash)})
+	}
+
+	closeCameraModal = () =>{
+		this.setState({getAnimo:false})
+	}
+
+	//TODO: ARREGLAR ESTE
+	takePicture = async function() {
+    if (this.camera) {
+			this.setState({ loading:true })
+      const options = { quality: 0.5, base64: true };
+      const data = await this.camera.takePictureAsync(options)
+      //console.log(data)                 // DATA ES LA FOTO TOMADA, URI ES LA UBICACION EN CACHE DONDE LA GUARDA
+      this.setState({data:data.uri, /* MODAL DE SUGERENCIAS O ALGO  , */ })
+
+      //console.log("MI FOTO ES :" + data.uri)
+
+      ImageRotate.rotateImage( data.uri, 90, (uri) => {
+
+        console.log("uri: " , uri)
+
+        let data = uri
+        this.setState({
+        data: uri,
+        });
+
+      ImgToBase64.getBase64String( 
+          data).then( (cadena) => {
+
+						this.handleLocation()
+						console.log("ACA DEBERIA LLAMAR A FACEAPI PERO NO HAY KEY :( ")
+						// LLAMAR A FACEAPI ACA!!!!
+          
+          
+      });
+
+      },
+      (error) => {
+				this.setState({loading:false})
+        console.error(error);
+      });
+
+      
+    }
   }
 
 	keyExtractor = (item, index) => index;
@@ -455,11 +519,12 @@ class SugeridasScreen extends React.Component {
           this.determinarImagenPrenda(item);
         }}
       />
-  );
+	);
 
 
   render() {
 
+	const {  focusedScreen } = this.state;
 	let ayuda ="Pantalla donde se pueden solicitar\n las sugerencias de ropa de Que Me Pongo"
 
 	if(this.props.ropa.prendasSugeridas.length)		
@@ -491,7 +556,7 @@ class SugeridasScreen extends React.Component {
 				<View style={{flexDirection:'row',alignSelf:'center'}}>
 					<TouchableOpacity
 						style = {styles.sugerencias}
-						onPress ={this.handleLocation}
+						onPress ={this.getAnimo}
 					>
 						<Text style={styles.sendText}>Pedir sugerencias</Text>
 					</TouchableOpacity>
@@ -515,6 +580,54 @@ class SugeridasScreen extends React.Component {
 			<View style={styles.ayudaContainer} >
     		<Text style={styles.ayuda}>{ayuda}</Text>
     	</View>
+
+			<Modal visible={this.state.getAnimo}>
+			<View style={styles.container}>
+			  <Text style={styles.ayuda}>Apunte a su cara para detectar estado de animo</Text>
+				{ focusedScreen &&
+					
+					<RNCamera
+						ref={ref => {
+							this.camera = ref;
+						}}
+						style = {styles.preview}
+						type={RNCamera.Constants.Type.front}
+		
+						flashMode={ this.state.flash ? RNCamera.Constants.FlashMode.on : RNCamera.Constants.FlashMode.off }
+	
+						permissionDialogTitle={'Permisos de la cámara'}
+						permissionDialogMessage={'¿Deséa permitir a Que Me Pongo utilizar la cámara del dispositivo?'}
+					/>
+				}
+				<View style={{flex: 0, flexDirection: 'row', justifyContent: 'center', alignSelf:'center'}}>
+					<TouchableOpacity
+							onPress={this.takePicture.bind(this)}
+							style = { this.state.loading ? styles.captureDisabled : styles.capture}
+							disabled= {this.state.loading}
+					>
+							<Text style={{fontSize: 16, color:'#fff', fontWeight:'bold', textAlign:'center'}}> Tomar Foto </Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+							onPress={ this.changeFlash }
+							style = {styles.capture}    
+					>
+						<Text style={{fontSize: 16, color:'#fff', fontWeight:'bold', textAlign:'center'}}> {this.state.flash? "Desactivar Flash" : "Activar Flash"} </Text>
+					</TouchableOpacity>
+				</View>
+				<View style={{flex: 0, flexDirection: 'row', justifyContent: 'center', alignSelf:'center'}}>
+					<TouchableOpacity
+							onPress={ this.closeCameraModal  }
+							style = {styles.capture}  
+							disabled= {this.state.loading}  
+					>
+							<Text style={{fontSize: 16, color:'#fff', fontWeight:'bold', textAlign:'center'}}> Cancelar </Text>
+					</TouchableOpacity>
+				</View>
+
+
+			</View>
+
+			</Modal>
 
 			<Modal visible={this.state.modalRopa}>
         <View style={{backgroundColor:'grey', flex:1}}>
@@ -651,7 +764,41 @@ const styles = StyleSheet.create({
 		color:'orange',
 		fontSize:18,
 		fontWeight:'bold'
-	}
+	},
+	container: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: 'orange'
+  },
+  preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+  capture: {
+    //fontSize:20,
+    //fontWeight:'bold',
+    flex: 0,
+    backgroundColor: '#3A51E8',
+    borderRadius: 5,
+    padding: 10,
+    paddingHorizontal: 10,
+    alignSelf: 'center',
+		margin: 5,
+		width: 120
+  },
+  captureDisabled: {
+    //fontSize:20,
+    //fontWeight:'bold',
+    flex: 0,
+    backgroundColor: '#9E9E9E',
+    borderRadius: 5,
+    padding: 10,
+    paddingHorizontal: 10,
+		alignSelf: 'center',
+    margin: 5,
+		width: 120
+  },
   });
 
 const mapStateToProps = state => {
