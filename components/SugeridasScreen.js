@@ -8,6 +8,8 @@ import firebase from 'react-native-firebase';
 import { RNCamera } from 'react-native-camera';
 import ImageRotate from 'react-native-image-rotate';
 import ImgToBase64 from 'react-native-image-base64';
+import RNFetchBlob from 'rn-fetch-blob'
+//import { Buffer } from 'buffer'
 
 console.ignoredYellowBox=true;
 
@@ -41,6 +43,8 @@ var VestidoMujerRojo = require('../assets/VestidoMujerRojo.png');
 var VestidoMujerRosa = require('../assets/VestidoMujerRosa.png');
 var VestidoMujerVioleta = require('../assets/VestidoMujerVioleta.png');
 
+var facetest = require('../assets/facetest.jpg');
+
 
 // TODO , CUANDO "ERROR" ESTA EN TRUE DEBE TIRAR ALGUN MODAL, AL CERRARLO CAMBIAR A FALSO
 
@@ -62,7 +66,7 @@ class SugeridasScreen extends React.Component {
 			modalRopa: false, 
 			ropa: [], 
 			prenda: {},
-			animo:'feliz',
+			animo:'',
 			focusedScreen: true,
 			getAnimo: false
 
@@ -464,28 +468,6 @@ class SugeridasScreen extends React.Component {
 		this.setState({getAnimo:false})
 	}
 
-	/*
-	readFile(filePath) {
-		return RNFetchBlob.fs.readFile(filePath, 'base64').then(data => new Buffer(data, 'base64'));
-	}
-
-	uploadPhoto = (data) => {
-			console.log("Upload")
-			console.log(data)
-
-			
-			this.readFile(data.uri).then(buffer => {
-					Storage.put( 'image.png', buffer, {
-							contentType: 'image/png'
-					})
-			}).catch(e => {
-					console.log(e);
-			});
-
-
-	}
-	*/
-
 	//TODO: ARREGLAR ESTE
 	takePicture = async function() {
     if (this.camera) {
@@ -507,38 +489,63 @@ class SugeridasScreen extends React.Component {
         });
 
       ImgToBase64.getBase64String( 
-          data).then( (cadena) => {
+          data ).then( (cadena) => {
 
+						
+						//console.log(facetest.url)
+
+						var key = '74a185e8e5d0455fa2c7f939d523685f'
+						//d7337f28b92f4f75bf1ae43cebc623a7
+						//console.log(cadena)
 						// LE QUITE EL RETURN FACEID
 
-						/*RNFetchBlob.fetch('POST', 'https://api.projectoxford.ai/face/v1.0/detect?returnFaceAttributes=age,gender,emotion,smile', {
+						RNFetchBlob.fetch('POST', 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceAttributes=age,gender,emotion,smile', {
 							'Accept': 'application/json',
 							'Content-Type': 'application/octet-stream',
-							'Ocp-Apim-Subscription-Key': this.props.apiKey}, this.state.data ).then((res) => {
+							'Ocp-Apim-Subscription-Key': key}, cadena ).then((res) => {
 								return res.json();      
 								}).then((json) => {	
+									this.setState({getAnimo:false})
+									console.log("ENTRE POR REVISION DE ROSTROS")
+									console.log(json)
+
 									if(json.length){
-											this.setState({
-													face_data: json
-											});
+
+										console.log(json[0].faceAttributes.emotion.happiness)
+										if(json[0].faceAttributes.emotion.happiness > 0.7)
+											this.setState({animo:'feliz',facedata:json[0].faceAttributes.emotion.happiness})
+										else
+											this.setState({animo:'triste',facedata:json[0].faceAttributes.emotion.happiness})
+
+										this.handleLocation()
+										console.log("DE FACE API TRAIGO:")
+									
+										/*this.setState({
+													face_data: json,
+													animo: animo
+											});*/
+
+
 									}else{
+											this.setState({loading:false})
 											alert("No se detecto rostro en la foto");
 									}
 									
 									return json;
 								}).catch (function (error) {
+								//this.setState({loading:false})
 								console.log(error);
 								alert('Fallo reconocimiento de expresion facial' + JSON.stringify(error));
 						});
-						*/
+						
+
 						// EL HANDLE VA DENTRO DEL THEN DEL JSON DEL FACEPI EXITOSO JUNTO CON EL SETSTATE DE ANIMO
-						this.handleLocation()
-						console.log("ACA DEBERIA LLAMAR A FACEAPI PERO NO HAY KEY :( ")
+						// handle antes estaba aca
+						//console.log("ACA DEBERIA LLAMAR A FACEAPI PERO NO HAY KEY :( ")
 					
           
           
-      });
-
+      })
       },
       (error) => {
 				this.setState({loading:false})
@@ -582,6 +589,8 @@ class SugeridasScreen extends React.Component {
 		const temperature = this.state.temperature
 		const weather = this.state.weather
 		let image = this.state.image
+		const happiness = this.state.animo 
+		const facedata = this.state.facedata
 		
 
     return (
@@ -616,8 +625,10 @@ class SugeridasScreen extends React.Component {
 				<Text>Longitude: {this.state.longitude}</Text> */}
 				<View>
 				{temperature != 999 &&
-					<Text style={{fontSize:22, textAlign:'center',fontWeight:'bold' , color:'green'}}>TEMPERATURA: {temperature+'º    '} { weather}  </Text>}
-					{/* <Text> {this.state.message}</Text> */}
+					<View>
+						<Text style={{fontSize:22, textAlign:'center',fontWeight:'bold' , color:'green'}}>TEMPERATURA: {temperature+'º    '} { weather}  </Text>
+						<Text style={{fontSize:22, textAlign:'center',fontWeight:'bold' , color:'green'}} > { "felicidad : " + happiness + "  " + facedata}</Text> 
+				</View> }
 				</View>
 			</View>
       <Divider style={{ backgroundColor: 'red' }} />
