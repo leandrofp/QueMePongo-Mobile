@@ -68,7 +68,8 @@ class SugeridasScreen extends React.Component {
 			prenda: {},
 			animo:'',
 			focusedScreen: true,
-			getAnimo: false
+			getAnimo: false,
+			frontal: true
 
 		};
 	}
@@ -147,10 +148,10 @@ class SugeridasScreen extends React.Component {
 					weather = 'Nublado'
 				else if(weather == 'Clear' || weather == 'Sunny')
 					weather = 'Despejado'
-				else if(weather == 'Haze')
-					weather = 'Neblina'		// nublado ponele
+				else if(weather == 'Haze' || weather == 'Mist')
+					weather = 'Neblina'	
 				else if(weather == 'Thunderstorm')
-					weather = 'Tormenta Electrica'		// nublado ponele
+					weather = 'Tormenta Eléctrica'		
 			
 
 				this.setState({
@@ -164,7 +165,7 @@ class SugeridasScreen extends React.Component {
 
 			},
 			(error) => { console.log("ERROR") , this.setState({ message : error.message , error : true , loading:false }),
-									 Alert.alert("Error al obtener ubicacion actual")} , 
+									 Alert.alert("Error al obtener ubicación actual")} , 
 			{ enableHighAccuracy: false, timeout: 10000, maximumAge: 1000 },		// parametros 
 		);
 		
@@ -460,8 +461,8 @@ class SugeridasScreen extends React.Component {
 		this.setState({getAnimo:true})
 	}
 	
-	changeFlash = () => {
-    this.setState({flash: !(this.state.flash)})
+	changeCamera = () => {
+    this.setState({frontal: !(this.state.frontal)})
 	}
 
 	closeCameraModal = () =>{
@@ -614,12 +615,12 @@ class SugeridasScreen extends React.Component {
 					>
 						<Text style={styles.sendText}>Pedir sugerencias</Text>
 					</TouchableOpacity>
-					<TouchableOpacity
+					{/* <TouchableOpacity
 						style = {styles.sugerencias}
 						onPress ={this.cambiarAnimo}
 					>
 						<Text style={styles.sendText}> {this.state.animo=='feliz' ? "Cambiar a triste" : "Cambiar a felíz"}</Text>
-					</TouchableOpacity>
+					</TouchableOpacity> */}
 				</View>
 				{/* <Text>Latitude: {this.state.latitude}</Text>
 				<Text>Longitude: {this.state.longitude}</Text> */}
@@ -647,9 +648,10 @@ class SugeridasScreen extends React.Component {
 							this.camera = ref;
 						}}
 						style = {styles.preview}
-						type={RNCamera.Constants.Type.front}
+						type={ this.state.frontal ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back}
 		
-						flashMode={ this.state.flash ? RNCamera.Constants.FlashMode.on : RNCamera.Constants.FlashMode.off }
+				
+						flashMode={ RNCamera.Constants.FlashMode.off }
 	
 						permissionDialogTitle={'Permisos de la cámara'}
 						permissionDialogMessage={'¿Deséa permitir a Que Me Pongo utilizar la cámara del dispositivo?'}
@@ -664,10 +666,10 @@ class SugeridasScreen extends React.Component {
 							<Text style={{fontSize: 16, color:'#fff', fontWeight:'bold', textAlign:'center'}}> Tomar Foto </Text>
 					</TouchableOpacity>
 					<TouchableOpacity
-							onPress={ this.changeFlash }
+							onPress={ this.changeCamera }
 							style = {styles.capture}    
 					>
-						<Text style={{fontSize: 16, color:'#fff', fontWeight:'bold', textAlign:'center'}}> {this.state.flash? "Desactivar Flash" : "Activar Flash"} </Text>
+						<Text style={{fontSize: 16, color:'#fff', fontWeight:'bold', textAlign:'center'}}> {this.state.frontal? "Común" : "Frontal"} </Text>
 					</TouchableOpacity>
 				</View>
 				<View style={{flex: 0, flexDirection: 'row', justifyContent: 'center', alignSelf:'center'}}>
