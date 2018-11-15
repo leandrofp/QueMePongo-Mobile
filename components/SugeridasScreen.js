@@ -480,7 +480,7 @@ class SugeridasScreen extends React.Component {
 
       //console.log("MI FOTO ES :" + data.uri)
 
-      ImageRotate.rotateImage( data.uri, 90, (uri) => {
+      ImageRotate.rotateImage( data.uri,	this.state.frontal ? -90 :90 	, (uri) => {
 
         console.log("uri: " , uri)
 
@@ -605,6 +605,19 @@ class SugeridasScreen extends React.Component {
 		</View> */}
 		
 	  	<FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
+
+			{/* <View style={{flex: 1 ,  }}>
+              <Image
+                source={{uri: this.state.data}}
+                resizeMode='contain'    // cover o contain seria la posta, uno renderiza para arriba y el otro achica 
+                resizeMethod='resize'
+                style={{width: '100%' ,
+                  height: '100%' ,
+                  //position:'absolute',
+                  alignSelf:'center'}}
+              />
+          </View> */}
+
 	  	
 	  	<View style={{flex: 0 }}>
 			{/* <Divider style={{ backgroundColor: 'red' }} /> */}
