@@ -513,7 +513,7 @@ class SugeridasScreen extends React.Component {
 									if(json.length){
 
 										console.log(json[0].faceAttributes.emotion.happiness)
-										if(json[0].faceAttributes.emotion.happiness > 0.7)
+										if(json[0].faceAttributes.emotion.happiness > 0.6)
 											this.setState({animo:'feliz',facedata:json[0].faceAttributes.emotion.happiness})
 										else
 											this.setState({animo:'triste',facedata:json[0].faceAttributes.emotion.happiness})
@@ -641,7 +641,7 @@ class SugeridasScreen extends React.Component {
 				{temperature != 999 &&
 					<View>
 						<Text style={{fontSize:22, textAlign:'center',fontWeight:'bold' , color:'green'}}>TEMPERATURA: {temperature+'º    '} { weather}  </Text>
-						<Text style={{fontSize:22, textAlign:'center',fontWeight:'bold' , color:'green'}} > { "felicidad : " + happiness + "  " + facedata}</Text> 
+						<Text style={{fontSize:22, textAlign:'center',fontWeight:'bold' , color:'green'}} > { "estado de animo : " + happiness /*+ "  " + facedata*/}</Text> 
 				</View> }
 				</View>
 			</View>
