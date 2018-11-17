@@ -5,6 +5,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { updateClothes , updateSugeridas } from '../actions/ropaActions'
 import firebase from 'react-native-firebase';
+import { RNCamera } from 'react-native-camera';
+import ImageRotate from 'react-native-image-rotate';
+import ImgToBase64 from 'react-native-image-base64';
+import RNFetchBlob from 'rn-fetch-blob'
+//import { Buffer } from 'buffer'
 
 console.ignoredYellowBox=true;
 
@@ -38,6 +43,8 @@ var VestidoMujerRojo = require('../assets/VestidoMujerRojo.png');
 var VestidoMujerRosa = require('../assets/VestidoMujerRosa.png');
 var VestidoMujerVioleta = require('../assets/VestidoMujerVioleta.png');
 
+var facetest = require('../assets/facetest.jpg');
+
 
 // TODO , CUANDO "ERROR" ESTA EN TRUE DEBE TIRAR ALGUN MODAL, AL CERRARLO CAMBIAR A FALSO
 
@@ -59,7 +66,11 @@ class SugeridasScreen extends React.Component {
 			modalRopa: false, 
 			ropa: [], 
 			prenda: {},
-			animo:'feliz'
+			animo:'',
+			focusedScreen: true,
+			getAnimo: false,
+			frontal: true
+
 		};
 	}
 	
@@ -75,11 +86,20 @@ class SugeridasScreen extends React.Component {
       console.log(error);
     
     });
+	}
+	
+	componentDidMount() {
+    const { navigation } = this.props;
+    navigation.addListener('willFocus', () =>
+      this.setState({ focusedScreen: true })
+    );
+    navigation.addListener('willBlur', () =>
+      this.setState({ focusedScreen: false })
+    );
   }
 
   handleLocation = async () => {
 	
-			if(!this.state.loading){
 				try {
 					this.setState({loading : true})
 
@@ -99,10 +119,7 @@ class SugeridasScreen extends React.Component {
 					});
 				}
 			}
-			else{
-				Alert.alert("La aplicacion esta cargando la informacion y no esta lista")
-			}
-	}
+			
 
 	fetchLocation = async () => {
 
@@ -131,10 +148,10 @@ class SugeridasScreen extends React.Component {
 					weather = 'Nublado'
 				else if(weather == 'Clear' || weather == 'Sunny')
 					weather = 'Despejado'
-				else if(weather == 'Haze')
-					weather = 'Neblina'		// nublado ponele
+				else if(weather == 'Haze' || weather == 'Mist')
+					weather = 'Neblina'	
 				else if(weather == 'Thunderstorm')
-					weather = 'Tormenta Electrica'		// nublado ponele
+					weather = 'Tormenta Eléctrica'		
 			
 
 				this.setState({
@@ -148,7 +165,7 @@ class SugeridasScreen extends React.Component {
 
 			},
 			(error) => { console.log("ERROR") , this.setState({ message : error.message , error : true , loading:false }),
-									 Alert.alert("Error al obtener ubicacion actual")} , 
+									 Alert.alert("Error al obtener ubicación actual")} , 
 			{ enableHighAccuracy: false, timeout: 10000, maximumAge: 1000 },		// parametros 
 		);
 		
@@ -188,7 +205,7 @@ class SugeridasScreen extends React.Component {
 
 			switch (tiempo){
 				case 'calor':{
-						arrayTipo=["Short","Remera","Pollera","Camisa"]
+						arrayTipo=["Short","Remera","Pollera","Camisa","Vestido"]
 						break;
 				}
 				case 'fresco':{
@@ -255,20 +272,20 @@ class SugeridasScreen extends React.Component {
 								Alert.alert("No hay prendas en el guardarropas para clima actual y estado de animo" )
 													
               // TODO: BORRE ALGO ACA
-              //this.setState({modalRopa:false})
+              this.setState({loading:false})
             }).catch((error) => {
-              //this.setState({modalRopa:false})
+              this.setState({loading:false})
               Alert.alert("Fallo la busqueda de sugeridas en la base de datos")
               console.log(error);
             });
           
       }).then( () => {   
-              
+        this.setState({getAnimo:false})  
         const {dispatch} = this.props
         dispatch( updateSugeridas(arraySugeridas) );
              
       }).catch((error) => {
-      //this.setState({modalRopa:false})
+      this.setState({loading:false})
       Alert.alert("Fallo la busqueda de sugeridas en la base de datos")
       console.log(error);
     });      
@@ -438,6 +455,106 @@ class SugeridasScreen extends React.Component {
         this.setState({image: PantalonRojoM , modalRopa:true , prenda: item })*/
     else
         this.setState({image: '', modalRopa:true , prenda: item })
+	}
+
+	getAnimo = () =>{
+		this.setState({getAnimo:true})
+	}
+	
+	changeCamera = () => {
+    this.setState({frontal: !(this.state.frontal)})
+	}
+
+	closeCameraModal = () =>{
+		this.setState({getAnimo:false})
+	}
+
+	//TODO: ARREGLAR ESTE
+	takePicture = async function() {
+    if (this.camera) {
+			this.setState({ loading:true })
+      const options = { quality: 0.5, base64: true };
+      const data = await this.camera.takePictureAsync(options)
+      //console.log(data)                 // DATA ES LA FOTO TOMADA, URI ES LA UBICACION EN CACHE DONDE LA GUARDA
+      this.setState({data:data.uri, /* MODAL DE SUGERENCIAS O ALGO  , */ })
+
+      //console.log("MI FOTO ES :" + data.uri)
+
+      ImageRotate.rotateImage( data.uri,	this.state.frontal ? -90 :90 	, (uri) => {
+
+        console.log("uri: " , uri)
+
+        let data = uri
+        this.setState({
+        data: uri,
+        });
+
+      ImgToBase64.getBase64String( 
+          data ).then( (cadena) => {
+
+						
+						//console.log(facetest.url)
+
+						var key = '74a185e8e5d0455fa2c7f939d523685f'
+						//d7337f28b92f4f75bf1ae43cebc623a7
+						//console.log(cadena)
+						// LE QUITE EL RETURN FACEID
+
+						RNFetchBlob.fetch('POST', 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceAttributes=age,gender,emotion,smile', {
+							'Accept': 'application/json',
+							'Content-Type': 'application/octet-stream',
+							'Ocp-Apim-Subscription-Key': key}, cadena ).then((res) => {
+								return res.json();      
+								}).then((json) => {	
+									this.setState({getAnimo:false})
+									console.log("ENTRE POR REVISION DE ROSTROS")
+									console.log(json)
+
+									if(json.length){
+
+										console.log(json[0].faceAttributes.emotion.happiness)
+										if(json[0].faceAttributes.emotion.happiness > 0.6)
+											this.setState({animo:'feliz',facedata:json[0].faceAttributes.emotion.happiness})
+										else
+											this.setState({animo:'triste',facedata:json[0].faceAttributes.emotion.happiness})
+
+										this.handleLocation()
+										console.log("DE FACE API TRAIGO:")
+									
+										/*this.setState({
+													face_data: json,
+													animo: animo
+											});*/
+
+
+									}else{
+											this.setState({loading:false})
+											alert("No se detecto rostro en la foto");
+									}
+									
+									return json;
+								}).catch (function (error) {
+								//this.setState({loading:false})
+								console.log(error);
+								alert('Fallo reconocimiento de expresion facial' + JSON.stringify(error));
+						});
+						
+
+						// EL HANDLE VA DENTRO DEL THEN DEL JSON DEL FACEPI EXITOSO JUNTO CON EL SETSTATE DE ANIMO
+						// handle antes estaba aca
+						//console.log("ACA DEBERIA LLAMAR A FACEAPI PERO NO HAY KEY :( ")
+					
+          
+          
+      })
+      },
+      (error) => {
+				this.setState({loading:false})
+        console.error(error);
+      });
+
+      
+    }
   }
 
 	keyExtractor = (item, index) => index;
@@ -455,11 +572,12 @@ class SugeridasScreen extends React.Component {
           this.determinarImagenPrenda(item);
         }}
       />
-  );
+	);
 
 
   render() {
 
+	const {  focusedScreen } = this.state;
 	let ayuda ="Pantalla donde se pueden solicitar\n las sugerencias de ropa de Que Me Pongo"
 
 	if(this.props.ropa.prendasSugeridas.length)		
@@ -472,6 +590,8 @@ class SugeridasScreen extends React.Component {
 		const temperature = this.state.temperature
 		const weather = this.state.weather
 		let image = this.state.image
+		const happiness = this.state.animo 
+		const facedata = this.state.facedata
 		
 
     return (
@@ -485,29 +605,44 @@ class SugeridasScreen extends React.Component {
 		</View> */}
 		
 	  	<FlatList keyExtractor={this.keyExtractor} data={data} renderItem={this.renderItem} />
+
+			{/* <View style={{flex: 1 ,  }}>
+              <Image
+                source={{uri: this.state.data}}
+                resizeMode='contain'    // cover o contain seria la posta, uno renderiza para arriba y el otro achica 
+                resizeMethod='resize'
+                style={{width: '100%' ,
+                  height: '100%' ,
+                  //position:'absolute',
+                  alignSelf:'center'}}
+              />
+          </View> */}
+
 	  	
 	  	<View style={{flex: 0 }}>
 			{/* <Divider style={{ backgroundColor: 'red' }} /> */}
 				<View style={{flexDirection:'row',alignSelf:'center'}}>
 					<TouchableOpacity
 						style = {styles.sugerencias}
-						onPress ={this.handleLocation}
+						onPress ={this.getAnimo}
 					>
 						<Text style={styles.sendText}>Pedir sugerencias</Text>
 					</TouchableOpacity>
-					<TouchableOpacity
+					{/* <TouchableOpacity
 						style = {styles.sugerencias}
 						onPress ={this.cambiarAnimo}
 					>
 						<Text style={styles.sendText}> {this.state.animo=='feliz' ? "Cambiar a triste" : "Cambiar a felíz"}</Text>
-					</TouchableOpacity>
+					</TouchableOpacity> */}
 				</View>
 				{/* <Text>Latitude: {this.state.latitude}</Text>
 				<Text>Longitude: {this.state.longitude}</Text> */}
 				<View>
 				{temperature != 999 &&
-					<Text style={{fontSize:22, textAlign:'center',fontWeight:'bold' , color:'green'}}>TEMPERATURA: {temperature+'º    '} { weather}  </Text>}
-					{/* <Text> {this.state.message}</Text> */}
+					<View>
+						<Text style={{fontSize:22, textAlign:'center',fontWeight:'bold' , color:'green'}}>TEMPERATURA: {temperature+'º    '} { weather}  </Text>
+						<Text style={{fontSize:22, textAlign:'center',fontWeight:'bold' , color:'green'}} > { "estado de animo : " + happiness /*+ "  " + facedata*/}</Text> 
+				</View> }
 				</View>
 			</View>
       <Divider style={{ backgroundColor: 'red' }} />
@@ -515,6 +650,55 @@ class SugeridasScreen extends React.Component {
 			<View style={styles.ayudaContainer} >
     		<Text style={styles.ayuda}>{ayuda}</Text>
     	</View>
+
+			<Modal visible={this.state.getAnimo}>
+			<View style={styles.container}>
+			  <Text style={styles.ayuda}>Apunte a su cara para detectar estado de animo</Text>
+				{ focusedScreen &&
+					
+					<RNCamera
+						ref={ref => {
+							this.camera = ref;
+						}}
+						style = {styles.preview}
+						type={ this.state.frontal ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back}
+		
+				
+						flashMode={ RNCamera.Constants.FlashMode.off }
+	
+						permissionDialogTitle={'Permisos de la cámara'}
+						permissionDialogMessage={'¿Deséa permitir a Que Me Pongo utilizar la cámara del dispositivo?'}
+					/>
+				}
+				<View style={{flex: 0, flexDirection: 'row', justifyContent: 'center', alignSelf:'center'}}>
+					<TouchableOpacity
+							onPress={this.takePicture.bind(this)}
+							style = { this.state.loading ? styles.captureDisabled : styles.capture}
+							disabled= {this.state.loading}
+					>
+							<Text style={{fontSize: 16, color:'#fff', fontWeight:'bold', textAlign:'center'}}> Tomar Foto </Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+							onPress={ this.changeCamera }
+							style = {styles.capture}    
+					>
+						<Text style={{fontSize: 16, color:'#fff', fontWeight:'bold', textAlign:'center'}}> {this.state.frontal? "Común" : "Frontal"} </Text>
+					</TouchableOpacity>
+				</View>
+				<View style={{flex: 0, flexDirection: 'row', justifyContent: 'center', alignSelf:'center'}}>
+					<TouchableOpacity
+							onPress={ this.closeCameraModal  }
+							style = {styles.capture}  
+							disabled= {this.state.loading}  
+					>
+							<Text style={{fontSize: 16, color:'#fff', fontWeight:'bold', textAlign:'center'}}> Cancelar </Text>
+					</TouchableOpacity>
+				</View>
+
+
+			</View>
+
+			</Modal>
 
 			<Modal visible={this.state.modalRopa}>
         <View style={{backgroundColor:'grey', flex:1}}>
@@ -651,7 +835,41 @@ const styles = StyleSheet.create({
 		color:'orange',
 		fontSize:18,
 		fontWeight:'bold'
-	}
+	},
+	container: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: 'orange'
+  },
+  preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+  capture: {
+    //fontSize:20,
+    //fontWeight:'bold',
+    flex: 0,
+    backgroundColor: '#3A51E8',
+    borderRadius: 5,
+    padding: 10,
+    paddingHorizontal: 10,
+    alignSelf: 'center',
+		margin: 5,
+		width: 120
+  },
+  captureDisabled: {
+    //fontSize:20,
+    //fontWeight:'bold',
+    flex: 0,
+    backgroundColor: '#9E9E9E',
+    borderRadius: 5,
+    padding: 10,
+    paddingHorizontal: 10,
+		alignSelf: 'center',
+    margin: 5,
+		width: 120
+  },
   });
 
 const mapStateToProps = state => {

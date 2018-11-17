@@ -214,22 +214,22 @@ class PrecargadasScreen extends React.Component {
               // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 1 , 1 , -1 , 14 , 0, "Lavanda", 0);');
               // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 1 , 1 , -1 , 18 , 0, "Textura Gris", 0);');
               //REMERAS 2
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 5 , 0, "Amarillo", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 6 , 0, "Azul", 0);');
+              //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 5 , 0, "Amarillo", 0);');
+              //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 6 , 0, "Azul", 0);');
               // tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 1 , 0, "Gris", 0);');
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 14 , 0, "Lavanda", 0);');
               
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 13 , 0, "Naranja", 0);');
               //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 7 , 0, "Negro", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 3 , 0, "Rojo", 0);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 4 , 0, "Verde", 0);');
+              //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 3 , 0, "Rojo", 0);');
+              //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 1 , -1 , 4 , 0, "Verde", 0);');
               
               
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 11 , 1 , -1 , 6 , 0, "Azul", 1);');
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 11 , 1 , -1 , 14 , 0, "Lavanda", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 11 , 1 , -1 , 14 , 0, "Lavanda 2", 1);');  // nombre harcodeado
+              //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 11 , 1 , -1 , 14 , 0, "Lavanda 2", 1);');  // nombre harcodeado
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 11 , 1 , -1 , 13 , 0, "Naranja", 1);');
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 11 , 1 , -1 , 13 , 0, "Naranja 2", 1);'); // nombre harcodeado
+              //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 11 , 1 , -1 , 13 , 0, "Naranja 2", 1);'); // nombre harcodeado
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 11 , 1 , -1 , 3 , 0, "Rojo", 1);');
               //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 11 , 1 , -1 , 11 , 0, "Rosa", 1);');
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 11 , 1 , -1 , 4 , 0, "Verde", 1);');
@@ -269,6 +269,7 @@ class PrecargadasScreen extends React.Component {
               
               //pantalones
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 1 , 0 , 1 , 1 , 2, "Gris", 1);');
+              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 1 , 0 , 1 , 6 , 2, "Azul", 1);');
               
               //remeras
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 2 , 0 , 1 , 1 , 2, "Gris", 1);');
@@ -279,7 +280,7 @@ class PrecargadasScreen extends React.Component {
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 5 , 0 , 1 , 1 , 2, "Gris", 1);');
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 5 , 0 , 1 , 6 , 5, "Azul", 1);');
               //buzo
-              tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 3 , 0 , 1 , 1 , 2, "Gris", 1);');
+              //tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 3 , 0 , 1 , 1 , 2, "Gris", 1);');
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 3 , 0 , 1 , 6 , 5, "Azul", 1);');
               tx.executeSql('INSERT OR IGNORE INTO Ropa (Ropa_Id , Tipo_Id , Precargada , Cantidad , CodColor , Uso , Color , Cant_Max)  VALUES (null, 3 , 0 , 1 , 7 , 2, "Negro", 1);');
               

@@ -574,7 +574,7 @@ class EscanerScreen extends Component {
               />
 
               <View style={{borderStyle:'solid', borderWidth: 2 , borderColor: 'red' , margin:3 }} >
-                <Text style={styles.text}> Usted escaneo:  {this.state.prendaEscaneadaNombre + ' color ' + this.state.colorPrendaEscaneadaNombre}</Text>
+                <Text style={styles.text}> Resultado escaneo:  {this.state.prendaEscaneadaNombre + ' color ' + this.state.colorPrendaEscaneadaNombre}</Text>
                 <Text style={styles.text}>¿Deséa Agregarla al Guardarropas?</Text>
               </View>
               
@@ -614,7 +614,7 @@ const styles = StyleSheet.create({
     //fontSize:20,
     //fontWeight:'bold',
     flex: 0,
-    backgroundColor: 'blue',
+    backgroundColor: '#3A51E8',
     borderRadius: 5,
     padding: 10,
     paddingHorizontal: 10,
